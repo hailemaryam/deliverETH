@@ -2,6 +2,14 @@
     "name": "TelegramUser",
     "fields": [
         {
+            "fieldName": "firstName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastName",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "userName",
             "fieldType": "String"
         },

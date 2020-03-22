@@ -17,6 +17,8 @@ export class TelegramUserUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
+    firstName: [],
+    lastName: [],
     userName: [],
     chatId: [],
     phone: []
@@ -33,6 +35,8 @@ export class TelegramUserUpdateComponent implements OnInit {
   updateForm(telegramUser: ITelegramUser): void {
     this.editForm.patchValue({
       id: telegramUser.id,
+      firstName: telegramUser.firstName,
+      lastName: telegramUser.lastName,
       userName: telegramUser.userName,
       chatId: telegramUser.chatId,
       phone: telegramUser.phone
@@ -57,6 +61,8 @@ export class TelegramUserUpdateComponent implements OnInit {
     return {
       ...new TelegramUser(),
       id: this.editForm.get(['id'])!.value,
+      firstName: this.editForm.get(['firstName'])!.value,
+      lastName: this.editForm.get(['lastName'])!.value,
       userName: this.editForm.get(['userName'])!.value,
       chatId: this.editForm.get(['chatId'])!.value,
       phone: this.editForm.get(['phone'])!.value

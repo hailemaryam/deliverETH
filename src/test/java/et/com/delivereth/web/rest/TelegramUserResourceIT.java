@@ -36,6 +36,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class TelegramUserResourceIT {
 
+    private static final String DEFAULT_FIRST_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_FIRST_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_LAST_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_LAST_NAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_USER_NAME = "AAAAAAAAAA";
     private static final String UPDATED_USER_NAME = "BBBBBBBBBB";
 
@@ -73,6 +79,8 @@ public class TelegramUserResourceIT {
      */
     public static TelegramUser createEntity(EntityManager em) {
         TelegramUser telegramUser = new TelegramUser()
+            .firstName(DEFAULT_FIRST_NAME)
+            .lastName(DEFAULT_LAST_NAME)
             .userName(DEFAULT_USER_NAME)
             .chatId(DEFAULT_CHAT_ID)
             .phone(DEFAULT_PHONE);
@@ -86,6 +94,8 @@ public class TelegramUserResourceIT {
      */
     public static TelegramUser createUpdatedEntity(EntityManager em) {
         TelegramUser telegramUser = new TelegramUser()
+            .firstName(UPDATED_FIRST_NAME)
+            .lastName(UPDATED_LAST_NAME)
             .userName(UPDATED_USER_NAME)
             .chatId(UPDATED_CHAT_ID)
             .phone(UPDATED_PHONE);
@@ -113,6 +123,8 @@ public class TelegramUserResourceIT {
         List<TelegramUser> telegramUserList = telegramUserRepository.findAll();
         assertThat(telegramUserList).hasSize(databaseSizeBeforeCreate + 1);
         TelegramUser testTelegramUser = telegramUserList.get(telegramUserList.size() - 1);
+        assertThat(testTelegramUser.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
+        assertThat(testTelegramUser.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testTelegramUser.getUserName()).isEqualTo(DEFAULT_USER_NAME);
         assertThat(testTelegramUser.getChatId()).isEqualTo(DEFAULT_CHAT_ID);
         assertThat(testTelegramUser.getPhone()).isEqualTo(DEFAULT_PHONE);
@@ -150,6 +162,8 @@ public class TelegramUserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(telegramUser.getId().intValue())))
+            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
+            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)));
@@ -166,6 +180,8 @@ public class TelegramUserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(telegramUser.getId().intValue()))
+            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
+            .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
             .andExpect(jsonPath("$.userName").value(DEFAULT_USER_NAME))
             .andExpect(jsonPath("$.chatId").value(DEFAULT_CHAT_ID))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE));
@@ -188,6 +204,162 @@ public class TelegramUserResourceIT {
 
         defaultTelegramUserShouldBeFound("id.lessThanOrEqual=" + id);
         defaultTelegramUserShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByFirstNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where firstName equals to DEFAULT_FIRST_NAME
+        defaultTelegramUserShouldBeFound("firstName.equals=" + DEFAULT_FIRST_NAME);
+
+        // Get all the telegramUserList where firstName equals to UPDATED_FIRST_NAME
+        defaultTelegramUserShouldNotBeFound("firstName.equals=" + UPDATED_FIRST_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByFirstNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where firstName not equals to DEFAULT_FIRST_NAME
+        defaultTelegramUserShouldNotBeFound("firstName.notEquals=" + DEFAULT_FIRST_NAME);
+
+        // Get all the telegramUserList where firstName not equals to UPDATED_FIRST_NAME
+        defaultTelegramUserShouldBeFound("firstName.notEquals=" + UPDATED_FIRST_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByFirstNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where firstName in DEFAULT_FIRST_NAME or UPDATED_FIRST_NAME
+        defaultTelegramUserShouldBeFound("firstName.in=" + DEFAULT_FIRST_NAME + "," + UPDATED_FIRST_NAME);
+
+        // Get all the telegramUserList where firstName equals to UPDATED_FIRST_NAME
+        defaultTelegramUserShouldNotBeFound("firstName.in=" + UPDATED_FIRST_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByFirstNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where firstName is not null
+        defaultTelegramUserShouldBeFound("firstName.specified=true");
+
+        // Get all the telegramUserList where firstName is null
+        defaultTelegramUserShouldNotBeFound("firstName.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllTelegramUsersByFirstNameContainsSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where firstName contains DEFAULT_FIRST_NAME
+        defaultTelegramUserShouldBeFound("firstName.contains=" + DEFAULT_FIRST_NAME);
+
+        // Get all the telegramUserList where firstName contains UPDATED_FIRST_NAME
+        defaultTelegramUserShouldNotBeFound("firstName.contains=" + UPDATED_FIRST_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByFirstNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where firstName does not contain DEFAULT_FIRST_NAME
+        defaultTelegramUserShouldNotBeFound("firstName.doesNotContain=" + DEFAULT_FIRST_NAME);
+
+        // Get all the telegramUserList where firstName does not contain UPDATED_FIRST_NAME
+        defaultTelegramUserShouldBeFound("firstName.doesNotContain=" + UPDATED_FIRST_NAME);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByLastNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where lastName equals to DEFAULT_LAST_NAME
+        defaultTelegramUserShouldBeFound("lastName.equals=" + DEFAULT_LAST_NAME);
+
+        // Get all the telegramUserList where lastName equals to UPDATED_LAST_NAME
+        defaultTelegramUserShouldNotBeFound("lastName.equals=" + UPDATED_LAST_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByLastNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where lastName not equals to DEFAULT_LAST_NAME
+        defaultTelegramUserShouldNotBeFound("lastName.notEquals=" + DEFAULT_LAST_NAME);
+
+        // Get all the telegramUserList where lastName not equals to UPDATED_LAST_NAME
+        defaultTelegramUserShouldBeFound("lastName.notEquals=" + UPDATED_LAST_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByLastNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where lastName in DEFAULT_LAST_NAME or UPDATED_LAST_NAME
+        defaultTelegramUserShouldBeFound("lastName.in=" + DEFAULT_LAST_NAME + "," + UPDATED_LAST_NAME);
+
+        // Get all the telegramUserList where lastName equals to UPDATED_LAST_NAME
+        defaultTelegramUserShouldNotBeFound("lastName.in=" + UPDATED_LAST_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByLastNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where lastName is not null
+        defaultTelegramUserShouldBeFound("lastName.specified=true");
+
+        // Get all the telegramUserList where lastName is null
+        defaultTelegramUserShouldNotBeFound("lastName.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllTelegramUsersByLastNameContainsSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where lastName contains DEFAULT_LAST_NAME
+        defaultTelegramUserShouldBeFound("lastName.contains=" + DEFAULT_LAST_NAME);
+
+        // Get all the telegramUserList where lastName contains UPDATED_LAST_NAME
+        defaultTelegramUserShouldNotBeFound("lastName.contains=" + UPDATED_LAST_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByLastNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where lastName does not contain DEFAULT_LAST_NAME
+        defaultTelegramUserShouldNotBeFound("lastName.doesNotContain=" + DEFAULT_LAST_NAME);
+
+        // Get all the telegramUserList where lastName does not contain UPDATED_LAST_NAME
+        defaultTelegramUserShouldBeFound("lastName.doesNotContain=" + UPDATED_LAST_NAME);
     }
 
 
@@ -452,6 +624,8 @@ public class TelegramUserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(telegramUser.getId().intValue())))
+            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
+            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)));
@@ -502,6 +676,8 @@ public class TelegramUserResourceIT {
         // Disconnect from session so that the updates on updatedTelegramUser are not directly saved in db
         em.detach(updatedTelegramUser);
         updatedTelegramUser
+            .firstName(UPDATED_FIRST_NAME)
+            .lastName(UPDATED_LAST_NAME)
             .userName(UPDATED_USER_NAME)
             .chatId(UPDATED_CHAT_ID)
             .phone(UPDATED_PHONE);
@@ -516,6 +692,8 @@ public class TelegramUserResourceIT {
         List<TelegramUser> telegramUserList = telegramUserRepository.findAll();
         assertThat(telegramUserList).hasSize(databaseSizeBeforeUpdate);
         TelegramUser testTelegramUser = telegramUserList.get(telegramUserList.size() - 1);
+        assertThat(testTelegramUser.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
+        assertThat(testTelegramUser.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testTelegramUser.getUserName()).isEqualTo(UPDATED_USER_NAME);
         assertThat(testTelegramUser.getChatId()).isEqualTo(UPDATED_CHAT_ID);
         assertThat(testTelegramUser.getPhone()).isEqualTo(UPDATED_PHONE);

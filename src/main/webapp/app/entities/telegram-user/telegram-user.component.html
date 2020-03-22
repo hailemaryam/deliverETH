@@ -23,6 +23,8 @@
             <thead>
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
                     <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="firstName"><span>First Name</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="lastName"><span>Last Name</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="userName"><span>User Name</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="chatId"><span>Chat Id</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="phone"><span>Phone</span> <fa-icon icon="sort"></fa-icon></th>
@@ -32,6 +34,8 @@
             <tbody>
                 <tr *ngFor="let telegramUser of telegramUsers ;trackBy: trackId">
                     <td><a [routerLink]="['/telegram-user', telegramUser.id, 'view']">{{ telegramUser.id }}</a></td>
+                    <td>{{ telegramUser.firstName }}</td>
+                    <td>{{ telegramUser.lastName }}</td>
                     <td>{{ telegramUser.userName }}</td>
                     <td>{{ telegramUser.chatId }}</td>
                     <td>{{ telegramUser.phone }}</td>

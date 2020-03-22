@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(TelegramUserService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new TelegramUser(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new TelegramUser(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -54,6 +54,8 @@ describe('Service Tests', () => {
       it('should update a TelegramUser', () => {
         const returnedFromService = Object.assign(
           {
+            firstName: 'BBBBBB',
+            lastName: 'BBBBBB',
             userName: 'BBBBBB',
             chatId: 'BBBBBB',
             phone: 'BBBBBB'
@@ -73,6 +75,8 @@ describe('Service Tests', () => {
       it('should return a list of TelegramUser', () => {
         const returnedFromService = Object.assign(
           {
+            firstName: 'BBBBBB',
+            lastName: 'BBBBBB',
             userName: 'BBBBBB',
             chatId: 'BBBBBB',
             phone: 'BBBBBB'

@@ -26,6 +26,10 @@ public class TelegramUserCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter firstName;
+
+    private StringFilter lastName;
+
     private StringFilter userName;
 
     private StringFilter chatId;
@@ -39,6 +43,8 @@ public class TelegramUserCriteria implements Serializable, Criteria {
 
     public TelegramUserCriteria(TelegramUserCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.firstName = other.firstName == null ? null : other.firstName.copy();
+        this.lastName = other.lastName == null ? null : other.lastName.copy();
         this.userName = other.userName == null ? null : other.userName.copy();
         this.chatId = other.chatId == null ? null : other.chatId.copy();
         this.phone = other.phone == null ? null : other.phone.copy();
@@ -56,6 +62,22 @@ public class TelegramUserCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(StringFilter firstName) {
+        this.firstName = firstName;
+    }
+
+    public StringFilter getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(StringFilter lastName) {
+        this.lastName = lastName;
     }
 
     public StringFilter getUserName() {
@@ -102,6 +124,8 @@ public class TelegramUserCriteria implements Serializable, Criteria {
         final TelegramUserCriteria that = (TelegramUserCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(firstName, that.firstName) &&
+            Objects.equals(lastName, that.lastName) &&
             Objects.equals(userName, that.userName) &&
             Objects.equals(chatId, that.chatId) &&
             Objects.equals(phone, that.phone) &&
@@ -112,6 +136,8 @@ public class TelegramUserCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        firstName,
+        lastName,
         userName,
         chatId,
         phone,
@@ -123,6 +149,8 @@ public class TelegramUserCriteria implements Serializable, Criteria {
     public String toString() {
         return "TelegramUserCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (firstName != null ? "firstName=" + firstName + ", " : "") +
+                (lastName != null ? "lastName=" + lastName + ", " : "") +
                 (userName != null ? "userName=" + userName + ", " : "") +
                 (chatId != null ? "chatId=" + chatId + ", " : "") +
                 (phone != null ? "phone=" + phone + ", " : "") +

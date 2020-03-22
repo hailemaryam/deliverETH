@@ -91,6 +91,12 @@ public class TelegramUserQueryService extends QueryService<TelegramUser> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), TelegramUser_.id));
             }
+            if (criteria.getFirstName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFirstName(), TelegramUser_.firstName));
+            }
+            if (criteria.getLastName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLastName(), TelegramUser_.lastName));
+            }
             if (criteria.getUserName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getUserName(), TelegramUser_.userName));
             }

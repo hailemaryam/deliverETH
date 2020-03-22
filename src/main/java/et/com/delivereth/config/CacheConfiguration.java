@@ -42,6 +42,15 @@ public class CacheConfiguration {
             createCache(cm, et.com.delivereth.domain.User.class.getName());
             createCache(cm, et.com.delivereth.domain.Authority.class.getName());
             createCache(cm, et.com.delivereth.domain.User.class.getName() + ".authorities");
+            createCache(cm, et.com.delivereth.domain.TelegramUser.class.getName());
+            createCache(cm, et.com.delivereth.domain.TelegramUser.class.getName() + ".orders");
+            createCache(cm, et.com.delivereth.domain.Restorant.class.getName());
+            createCache(cm, et.com.delivereth.domain.Restorant.class.getName() + ".foods");
+            createCache(cm, et.com.delivereth.domain.Food.class.getName());
+            createCache(cm, et.com.delivereth.domain.Food.class.getName() + ".orderedFoods");
+            createCache(cm, et.com.delivereth.domain.Order.class.getName());
+            createCache(cm, et.com.delivereth.domain.Order.class.getName() + ".orderedFoods");
+            createCache(cm, et.com.delivereth.domain.OrderedFood.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

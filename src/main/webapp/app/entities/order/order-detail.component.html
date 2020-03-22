@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="order">
+            <h2><span>Order</span> {{ order.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Latitude</span></dt>
+                <dd>
+                    <span>{{ order.latitude }}</span>
+                </dd>
+                <dt><span>Longtude</span></dt>
+                <dd>
+                    <span>{{ order.longtude }}</span>
+                </dd>
+                <dt><span>Total Price</span></dt>
+                <dd>
+                    <span>{{ order.totalPrice }}</span>
+                </dd>
+                <dt><span>Date</span></dt>
+                <dd>
+                    <span>{{ order.date }}</span>
+                </dd>
+                <dt><span>Telegram User</span></dt>
+                <dd>
+                    <div *ngIf="order.telegramUserId">
+                        <a [routerLink]="['/telegram-user', order.telegramUserId, 'view']">{{ order.telegramUserUserName }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/order', order.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

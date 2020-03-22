@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="orderedFood">
+            <h2><span>Ordered Food</span> {{ orderedFood.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Quantity</span></dt>
+                <dd>
+                    <span>{{ orderedFood.quantity }}</span>
+                </dd>
+                <dt><span>Food</span></dt>
+                <dd>
+                    <div *ngIf="orderedFood.foodId">
+                        <a [routerLink]="['/food', orderedFood.foodId, 'view']">{{ orderedFood.foodName }}</a>
+                    </div>
+                </dd>
+                <dt><span>Order</span></dt>
+                <dd>
+                    <div *ngIf="orderedFood.orderId">
+                        <a [routerLink]="['/order', orderedFood.orderId, 'view']">{{ orderedFood.orderDate }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/ordered-food', orderedFood.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

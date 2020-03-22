@@ -1,0 +1,49 @@
+{
+    "name": "Food",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "iconImage",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
+            "fieldName": "price",
+            "fieldType": "Double"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "orderedFood",
+            "otherEntityRelationshipName": "food",
+            "relationshipName": "orderedFood"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "restorant",
+            "otherEntityRelationshipName": "food",
+            "relationshipName": "restorant",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20200322153000",
+    "entityTableName": "food",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

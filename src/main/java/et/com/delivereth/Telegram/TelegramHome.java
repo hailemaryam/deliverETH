@@ -22,8 +22,10 @@ public class TelegramHome extends TelegramLongPollingBot {
 
     @Value("${bot.username}")
     private String username;
+    private final ResponseBuilder responseBuilder;
 
-    public TelegramHome() {
+    public TelegramHome(ResponseBuilder responseBuilder) {
+        this.responseBuilder = responseBuilder;
     }
 
     @Override
@@ -39,17 +41,12 @@ public class TelegramHome extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
-            Message message = update.getMessage();
-            SendMessage response = new SendMessage();
-            Long chatId = message.getChatId();
-            response.setChatId(chatId);
-            String text = message.getText();
-            response.setText(text);
+            SendMessage response = responseBuilder.getResponse(update.getMessage());
             try {
                 execute(response);
-                logger.info("Sent message \"{}\" to {}", text, chatId);
+                logger.info("Sent message \"{}\" to {}", update, update.getMessage().getChatId());
             } catch (TelegramApiException e) {
-                logger.error("Failed to send message \"{}\" to {} due to error: {}", text, chatId, e.getMessage());
+                logger.error("Failed to send message \"{}\" to {} due to error: {}", update, update.getMessage().getChatId(), e.getMessage());
             }
         }
     }

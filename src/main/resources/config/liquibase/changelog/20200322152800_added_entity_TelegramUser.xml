@@ -23,7 +23,7 @@
                 <constraints nullable="true" />
             </column>
             <column name="user_name" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_telegram_user_user_name" />
             </column>
             <column name="chat_id" type="varchar(255)">
                 <constraints nullable="true" />

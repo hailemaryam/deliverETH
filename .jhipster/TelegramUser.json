@@ -11,7 +11,10 @@
         },
         {
             "fieldName": "userName",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "unique"
+            ]
         },
         {
             "fieldName": "chatId",

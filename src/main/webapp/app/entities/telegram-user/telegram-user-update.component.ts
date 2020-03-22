@@ -19,7 +19,7 @@ export class TelegramUserUpdateComponent implements OnInit {
     id: [],
     firstName: [],
     lastName: [],
-    userName: [],
+    userName: [null, []],
     chatId: [],
     phone: []
   });

@@ -1,5 +1,6 @@
 package et.com.delivereth.service.dto;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,6 +15,7 @@ public class TelegramUserDTO implements Serializable {
 
     private String lastName;
 
+    
     private String userName;
 
     private String chatId;

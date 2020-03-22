@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -30,7 +31,8 @@ public class TelegramUser implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "user_name")
+    
+    @Column(name = "user_name", unique = true)
     private String userName;
 
     @Column(name = "chat_id")

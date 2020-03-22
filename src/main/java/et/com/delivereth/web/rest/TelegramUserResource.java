@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -56,7 +57,7 @@ public class TelegramUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/telegram-users")
-    public ResponseEntity<TelegramUserDTO> createTelegramUser(@RequestBody TelegramUserDTO telegramUserDTO) throws URISyntaxException {
+    public ResponseEntity<TelegramUserDTO> createTelegramUser(@Valid @RequestBody TelegramUserDTO telegramUserDTO) throws URISyntaxException {
         log.debug("REST request to save TelegramUser : {}", telegramUserDTO);
         if (telegramUserDTO.getId() != null) {
             throw new BadRequestAlertException("A new telegramUser cannot already have an ID", ENTITY_NAME, "idexists");
@@ -77,7 +78,7 @@ public class TelegramUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/telegram-users")
-    public ResponseEntity<TelegramUserDTO> updateTelegramUser(@RequestBody TelegramUserDTO telegramUserDTO) throws URISyntaxException {
+    public ResponseEntity<TelegramUserDTO> updateTelegramUser(@Valid @RequestBody TelegramUserDTO telegramUserDTO) throws URISyntaxException {
         log.debug("REST request to update TelegramUser : {}", telegramUserDTO);
         if (telegramUserDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

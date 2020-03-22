@@ -23,8 +23,6 @@ public class TelegramHome extends TelegramLongPollingBot {
     @Value("${bot.username}")
     private String username;
 
-    pr
-
     public TelegramHome() {
     }
 

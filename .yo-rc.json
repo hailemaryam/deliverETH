@@ -1,0 +1,40 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "et.com.delivereth"
+    },
+    "jhipsterVersion": "6.8.0",
+    "applicationType": "monolith",
+    "baseName": "deliverEth",
+    "packageName": "et.com.delivereth",
+    "packageFolder": "et/com/delivereth",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MzEzMTgzMjFlOGI4MGM3NzAxY2FiMDc5ZWY4YTA3ZmY2ZGMxYTM0YTQxMjZmYzY1NTM2MjNlMjZkY2RjNjMyOTg4ZThhNWZiNGRiYzI0OTJjNTgxOWEzODViZDE3NjZlYTQyZDY0MDU1MzkzYTU2MjZmNzg4MmRlMWQ4OWNiNGY=",
+    "embeddableLaunchScript": false,
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "cyborg",
+    "clientThemeVariant": "dark",
+    "creationTimestamp": 1584884495898,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "blueprints": []
+  }
+}

@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(KeyValuPairHolderService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new KeyValuPairHolder(0, 'AAAAAAA', 'AAAAAAA', 0, 'image/png', 'AAAAAAA', 'image/png', 'AAAAAAA');
+      elemDefault = new KeyValuPairHolder(0, 'AAAAAAA', 'AAAAAAA', 0, 'image/png', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -57,8 +57,7 @@ describe('Service Tests', () => {
             key: 'BBBBBB',
             valueString: 'BBBBBB',
             valueNumber: 1,
-            valueImage: 'BBBBBB',
-            valueBlob: 'BBBBBB'
+            valueImage: 'BBBBBB'
           },
           elemDefault
         );
@@ -78,8 +77,7 @@ describe('Service Tests', () => {
             key: 'BBBBBB',
             valueString: 'BBBBBB',
             valueNumber: 1,
-            valueImage: 'BBBBBB',
-            valueBlob: 'BBBBBB'
+            valueImage: 'BBBBBB'
           },
           elemDefault
         );

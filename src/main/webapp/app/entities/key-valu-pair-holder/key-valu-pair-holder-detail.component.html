@@ -29,13 +29,6 @@
                         {{ keyValuPairHolder.valueImageContentType }}, {{ byteSize(keyValuPairHolder.valueImage) }}
                     </div>
                 </dd>
-                <dt><span>Value Blob</span></dt>
-                <dd>
-                    <div *ngIf="keyValuPairHolder.valueBlob">
-                        <a (click)="openFile(keyValuPairHolder?.valueBlobContentType!, keyValuPairHolder?.valueBlob)">open</a>
-                        {{ keyValuPairHolder.valueBlobContentType }}, {{ byteSize(keyValuPairHolder.valueBlob) }}
-                    </div>
-                </dd>
             </dl>
 
             <button type="submit"

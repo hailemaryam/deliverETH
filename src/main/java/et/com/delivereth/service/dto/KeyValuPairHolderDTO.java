@@ -21,10 +21,6 @@ public class KeyValuPairHolderDTO implements Serializable {
     private byte[] valueImage;
 
     private String valueImageContentType;
-    @Lob
-    private byte[] valueBlob;
-
-    private String valueBlobContentType;
     
     public Long getId() {
         return id;
@@ -74,22 +70,6 @@ public class KeyValuPairHolderDTO implements Serializable {
         this.valueImageContentType = valueImageContentType;
     }
 
-    public byte[] getValueBlob() {
-        return valueBlob;
-    }
-
-    public void setValueBlob(byte[] valueBlob) {
-        this.valueBlob = valueBlob;
-    }
-
-    public String getValueBlobContentType() {
-        return valueBlobContentType;
-    }
-
-    public void setValueBlobContentType(String valueBlobContentType) {
-        this.valueBlobContentType = valueBlobContentType;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -119,7 +99,6 @@ public class KeyValuPairHolderDTO implements Serializable {
             ", valueString='" + getValueString() + "'" +
             ", valueNumber=" + getValueNumber() +
             ", valueImage='" + getValueImage() + "'" +
-            ", valueBlob='" + getValueBlob() + "'" +
             "}";
     }
 }

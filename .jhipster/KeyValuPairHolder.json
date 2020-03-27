@@ -17,11 +17,6 @@
             "fieldName": "valueImage",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image"
-        },
-        {
-            "fieldName": "valueBlob",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "any"
         }
     ],
     "relationships": [],

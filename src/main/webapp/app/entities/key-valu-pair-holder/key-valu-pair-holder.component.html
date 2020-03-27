@@ -27,7 +27,6 @@
                     <th scope="col"  jhiSortBy="valueString"><span>Value String</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="valueNumber"><span>Value Number</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="valueImage"><span>Value Image</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="valueBlob"><span>Value Blob</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -42,10 +41,6 @@
                             <img [src]="'data:' + keyValuPairHolder.valueImageContentType + ';base64,' + keyValuPairHolder.valueImage" style="max-height: 30px;" alt="keyValuPairHolder image"/>
                         </a>
                         <span *ngIf="keyValuPairHolder.valueImage">{{ keyValuPairHolder.valueImageContentType }}, {{ byteSize(keyValuPairHolder.valueImage) }}</span>
-                    </td>
-                    <td>
-                        <a *ngIf="keyValuPairHolder.valueBlob" (click)="openFile(keyValuPairHolder.valueBlobContentType, keyValuPairHolder.valueBlob)">open</a>
-                        <span *ngIf="keyValuPairHolder.valueBlob">{{ keyValuPairHolder.valueBlobContentType }}, {{ byteSize(keyValuPairHolder.valueBlob) }}</span>
                     </td>
                     <td class="text-right">
                         <div class="btn-group">

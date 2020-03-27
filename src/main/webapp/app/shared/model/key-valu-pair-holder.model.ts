@@ -5,8 +5,6 @@ export interface IKeyValuPairHolder {
   valueNumber?: number;
   valueImageContentType?: string;
   valueImage?: any;
-  valueBlobContentType?: string;
-  valueBlob?: any;
 }
 
 export class KeyValuPairHolder implements IKeyValuPairHolder {
@@ -16,8 +14,6 @@ export class KeyValuPairHolder implements IKeyValuPairHolder {
     public valueString?: string,
     public valueNumber?: number,
     public valueImageContentType?: string,
-    public valueImage?: any,
-    public valueBlobContentType?: string,
-    public valueBlob?: any
+    public valueImage?: any
   ) {}
 }

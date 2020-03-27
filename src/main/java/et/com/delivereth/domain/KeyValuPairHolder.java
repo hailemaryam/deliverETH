@@ -38,13 +38,6 @@ public class KeyValuPairHolder implements Serializable {
     @Column(name = "value_image_content_type")
     private String valueImageContentType;
 
-    @Lob
-    @Column(name = "value_blob")
-    private byte[] valueBlob;
-
-    @Column(name = "value_blob_content_type")
-    private String valueBlobContentType;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -118,32 +111,6 @@ public class KeyValuPairHolder implements Serializable {
     public void setValueImageContentType(String valueImageContentType) {
         this.valueImageContentType = valueImageContentType;
     }
-
-    public byte[] getValueBlob() {
-        return valueBlob;
-    }
-
-    public KeyValuPairHolder valueBlob(byte[] valueBlob) {
-        this.valueBlob = valueBlob;
-        return this;
-    }
-
-    public void setValueBlob(byte[] valueBlob) {
-        this.valueBlob = valueBlob;
-    }
-
-    public String getValueBlobContentType() {
-        return valueBlobContentType;
-    }
-
-    public KeyValuPairHolder valueBlobContentType(String valueBlobContentType) {
-        this.valueBlobContentType = valueBlobContentType;
-        return this;
-    }
-
-    public void setValueBlobContentType(String valueBlobContentType) {
-        this.valueBlobContentType = valueBlobContentType;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -171,8 +138,6 @@ public class KeyValuPairHolder implements Serializable {
             ", valueNumber=" + getValueNumber() +
             ", valueImage='" + getValueImage() + "'" +
             ", valueImageContentType='" + getValueImageContentType() + "'" +
-            ", valueBlob='" + getValueBlob() + "'" +
-            ", valueBlobContentType='" + getValueBlobContentType() + "'" +
             "}";
     }
 }

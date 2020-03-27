@@ -23,9 +23,7 @@ export class KeyValuPairHolderUpdateComponent implements OnInit {
     valueString: [],
     valueNumber: [],
     valueImage: [],
-    valueImageContentType: [],
-    valueBlob: [],
-    valueBlobContentType: []
+    valueImageContentType: []
   });
 
   constructor(
@@ -50,9 +48,7 @@ export class KeyValuPairHolderUpdateComponent implements OnInit {
       valueString: keyValuPairHolder.valueString,
       valueNumber: keyValuPairHolder.valueNumber,
       valueImage: keyValuPairHolder.valueImage,
-      valueImageContentType: keyValuPairHolder.valueImageContentType,
-      valueBlob: keyValuPairHolder.valueBlob,
-      valueBlobContentType: keyValuPairHolder.valueBlobContentType
+      valueImageContentType: keyValuPairHolder.valueImageContentType
     });
   }
 
@@ -104,9 +100,7 @@ export class KeyValuPairHolderUpdateComponent implements OnInit {
       valueString: this.editForm.get(['valueString'])!.value,
       valueNumber: this.editForm.get(['valueNumber'])!.value,
       valueImageContentType: this.editForm.get(['valueImageContentType'])!.value,
-      valueImage: this.editForm.get(['valueImage'])!.value,
-      valueBlobContentType: this.editForm.get(['valueBlobContentType'])!.value,
-      valueBlob: this.editForm.get(['valueBlob'])!.value
+      valueImage: this.editForm.get(['valueImage'])!.value
     };
   }
 

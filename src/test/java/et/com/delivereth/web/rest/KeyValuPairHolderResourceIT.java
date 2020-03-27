@@ -51,11 +51,6 @@ public class KeyValuPairHolderResourceIT {
     private static final String DEFAULT_VALUE_IMAGE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_VALUE_IMAGE_CONTENT_TYPE = "image/png";
 
-    private static final byte[] DEFAULT_VALUE_BLOB = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_VALUE_BLOB = TestUtil.createByteArray(1, "1");
-    private static final String DEFAULT_VALUE_BLOB_CONTENT_TYPE = "image/jpg";
-    private static final String UPDATED_VALUE_BLOB_CONTENT_TYPE = "image/png";
-
     @Autowired
     private KeyValuPairHolderRepository keyValuPairHolderRepository;
 
@@ -88,9 +83,7 @@ public class KeyValuPairHolderResourceIT {
             .valueString(DEFAULT_VALUE_STRING)
             .valueNumber(DEFAULT_VALUE_NUMBER)
             .valueImage(DEFAULT_VALUE_IMAGE)
-            .valueImageContentType(DEFAULT_VALUE_IMAGE_CONTENT_TYPE)
-            .valueBlob(DEFAULT_VALUE_BLOB)
-            .valueBlobContentType(DEFAULT_VALUE_BLOB_CONTENT_TYPE);
+            .valueImageContentType(DEFAULT_VALUE_IMAGE_CONTENT_TYPE);
         return keyValuPairHolder;
     }
     /**
@@ -105,9 +98,7 @@ public class KeyValuPairHolderResourceIT {
             .valueString(UPDATED_VALUE_STRING)
             .valueNumber(UPDATED_VALUE_NUMBER)
             .valueImage(UPDATED_VALUE_IMAGE)
-            .valueImageContentType(UPDATED_VALUE_IMAGE_CONTENT_TYPE)
-            .valueBlob(UPDATED_VALUE_BLOB)
-            .valueBlobContentType(UPDATED_VALUE_BLOB_CONTENT_TYPE);
+            .valueImageContentType(UPDATED_VALUE_IMAGE_CONTENT_TYPE);
         return keyValuPairHolder;
     }
 
@@ -137,8 +128,6 @@ public class KeyValuPairHolderResourceIT {
         assertThat(testKeyValuPairHolder.getValueNumber()).isEqualTo(DEFAULT_VALUE_NUMBER);
         assertThat(testKeyValuPairHolder.getValueImage()).isEqualTo(DEFAULT_VALUE_IMAGE);
         assertThat(testKeyValuPairHolder.getValueImageContentType()).isEqualTo(DEFAULT_VALUE_IMAGE_CONTENT_TYPE);
-        assertThat(testKeyValuPairHolder.getValueBlob()).isEqualTo(DEFAULT_VALUE_BLOB);
-        assertThat(testKeyValuPairHolder.getValueBlobContentType()).isEqualTo(DEFAULT_VALUE_BLOB_CONTENT_TYPE);
     }
 
     @Test
@@ -177,9 +166,7 @@ public class KeyValuPairHolderResourceIT {
             .andExpect(jsonPath("$.[*].valueString").value(hasItem(DEFAULT_VALUE_STRING)))
             .andExpect(jsonPath("$.[*].valueNumber").value(hasItem(DEFAULT_VALUE_NUMBER.doubleValue())))
             .andExpect(jsonPath("$.[*].valueImageContentType").value(hasItem(DEFAULT_VALUE_IMAGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].valueImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_VALUE_IMAGE))))
-            .andExpect(jsonPath("$.[*].valueBlobContentType").value(hasItem(DEFAULT_VALUE_BLOB_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].valueBlob").value(hasItem(Base64Utils.encodeToString(DEFAULT_VALUE_BLOB))));
+            .andExpect(jsonPath("$.[*].valueImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_VALUE_IMAGE))));
     }
     
     @Test
@@ -197,9 +184,7 @@ public class KeyValuPairHolderResourceIT {
             .andExpect(jsonPath("$.valueString").value(DEFAULT_VALUE_STRING))
             .andExpect(jsonPath("$.valueNumber").value(DEFAULT_VALUE_NUMBER.doubleValue()))
             .andExpect(jsonPath("$.valueImageContentType").value(DEFAULT_VALUE_IMAGE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.valueImage").value(Base64Utils.encodeToString(DEFAULT_VALUE_IMAGE)))
-            .andExpect(jsonPath("$.valueBlobContentType").value(DEFAULT_VALUE_BLOB_CONTENT_TYPE))
-            .andExpect(jsonPath("$.valueBlob").value(Base64Utils.encodeToString(DEFAULT_VALUE_BLOB)));
+            .andExpect(jsonPath("$.valueImage").value(Base64Utils.encodeToString(DEFAULT_VALUE_IMAGE)));
     }
 
 
@@ -494,9 +479,7 @@ public class KeyValuPairHolderResourceIT {
             .andExpect(jsonPath("$.[*].valueString").value(hasItem(DEFAULT_VALUE_STRING)))
             .andExpect(jsonPath("$.[*].valueNumber").value(hasItem(DEFAULT_VALUE_NUMBER.doubleValue())))
             .andExpect(jsonPath("$.[*].valueImageContentType").value(hasItem(DEFAULT_VALUE_IMAGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].valueImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_VALUE_IMAGE))))
-            .andExpect(jsonPath("$.[*].valueBlobContentType").value(hasItem(DEFAULT_VALUE_BLOB_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].valueBlob").value(hasItem(Base64Utils.encodeToString(DEFAULT_VALUE_BLOB))));
+            .andExpect(jsonPath("$.[*].valueImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_VALUE_IMAGE))));
 
         // Check, that the count call also returns 1
         restKeyValuPairHolderMockMvc.perform(get("/api/key-valu-pair-holders/count?sort=id,desc&" + filter))
@@ -548,9 +531,7 @@ public class KeyValuPairHolderResourceIT {
             .valueString(UPDATED_VALUE_STRING)
             .valueNumber(UPDATED_VALUE_NUMBER)
             .valueImage(UPDATED_VALUE_IMAGE)
-            .valueImageContentType(UPDATED_VALUE_IMAGE_CONTENT_TYPE)
-            .valueBlob(UPDATED_VALUE_BLOB)
-            .valueBlobContentType(UPDATED_VALUE_BLOB_CONTENT_TYPE);
+            .valueImageContentType(UPDATED_VALUE_IMAGE_CONTENT_TYPE);
         KeyValuPairHolderDTO keyValuPairHolderDTO = keyValuPairHolderMapper.toDto(updatedKeyValuPairHolder);
 
         restKeyValuPairHolderMockMvc.perform(put("/api/key-valu-pair-holders")
@@ -567,8 +548,6 @@ public class KeyValuPairHolderResourceIT {
         assertThat(testKeyValuPairHolder.getValueNumber()).isEqualTo(UPDATED_VALUE_NUMBER);
         assertThat(testKeyValuPairHolder.getValueImage()).isEqualTo(UPDATED_VALUE_IMAGE);
         assertThat(testKeyValuPairHolder.getValueImageContentType()).isEqualTo(UPDATED_VALUE_IMAGE_CONTENT_TYPE);
-        assertThat(testKeyValuPairHolder.getValueBlob()).isEqualTo(UPDATED_VALUE_BLOB);
-        assertThat(testKeyValuPairHolder.getValueBlobContentType()).isEqualTo(UPDATED_VALUE_BLOB_CONTENT_TYPE);
     }
 
     @Test

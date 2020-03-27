@@ -17,6 +17,9 @@ public class OrderDTO implements Serializable {
 
     private String longtude;
 
+    @Lob
+    private String locationDescription;
+
     private String totalPrice;
 
     private Instant date;
@@ -53,6 +56,14 @@ public class OrderDTO implements Serializable {
 
     public void setLongtude(String longtude) {
         this.longtude = longtude;
+    }
+
+    public String getLocationDescription() {
+        return locationDescription;
+    }
+
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
     }
 
     public String getTotalPrice() {
@@ -130,6 +141,7 @@ public class OrderDTO implements Serializable {
             "id=" + getId() +
             ", latitude='" + getLatitude() + "'" +
             ", longtude='" + getLongtude() + "'" +
+            ", locationDescription='" + getLocationDescription() + "'" +
             ", totalPrice='" + getTotalPrice() + "'" +
             ", date='" + getDate() + "'" +
             ", additionalNote='" + getAdditionalNote() + "'" +

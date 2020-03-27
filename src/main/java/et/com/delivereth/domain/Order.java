@@ -34,6 +34,10 @@ public class Order implements Serializable {
     @Column(name = "longtude")
     private String longtude;
 
+    @Lob
+    @Column(name = "location_description")
+    private String locationDescription;
+
     @Column(name = "total_price")
     private String totalPrice;
 
@@ -89,6 +93,19 @@ public class Order implements Serializable {
 
     public void setLongtude(String longtude) {
         this.longtude = longtude;
+    }
+
+    public String getLocationDescription() {
+        return locationDescription;
+    }
+
+    public Order locationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
+        return this;
+    }
+
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
     }
 
     public String getTotalPrice() {
@@ -204,6 +221,7 @@ public class Order implements Serializable {
             "id=" + getId() +
             ", latitude='" + getLatitude() + "'" +
             ", longtude='" + getLongtude() + "'" +
+            ", locationDescription='" + getLocationDescription() + "'" +
             ", totalPrice='" + getTotalPrice() + "'" +
             ", date='" + getDate() + "'" +
             ", additionalNote='" + getAdditionalNote() + "'" +

@@ -25,7 +25,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Order(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, 'AAAAAAA', OrderStatus.STARTED);
+      elemDefault = new Order(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, 'AAAAAAA', OrderStatus.STARTED);
     });
 
     describe('Service methods', () => {
@@ -72,6 +72,7 @@ describe('Service Tests', () => {
           {
             latitude: 'BBBBBB',
             longtude: 'BBBBBB',
+            locationDescription: 'BBBBBB',
             totalPrice: 'BBBBBB',
             date: currentDate.format(DATE_TIME_FORMAT),
             additionalNote: 'BBBBBB',
@@ -99,6 +100,7 @@ describe('Service Tests', () => {
           {
             latitude: 'BBBBBB',
             longtude: 'BBBBBB',
+            locationDescription: 'BBBBBB',
             totalPrice: 'BBBBBB',
             date: currentDate.format(DATE_TIME_FORMAT),
             additionalNote: 'BBBBBB',

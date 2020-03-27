@@ -6,6 +6,7 @@ export interface IOrder {
   id?: number;
   latitude?: string;
   longtude?: string;
+  locationDescription?: any;
   totalPrice?: string;
   date?: Moment;
   additionalNote?: any;
@@ -20,6 +21,7 @@ export class Order implements IOrder {
     public id?: number,
     public latitude?: string,
     public longtude?: string,
+    public locationDescription?: any,
     public totalPrice?: string,
     public date?: Moment,
     public additionalNote?: any,

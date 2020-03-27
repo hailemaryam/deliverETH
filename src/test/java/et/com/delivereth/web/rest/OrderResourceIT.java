@@ -47,6 +47,9 @@ public class OrderResourceIT {
     private static final String DEFAULT_LONGTUDE = "AAAAAAAAAA";
     private static final String UPDATED_LONGTUDE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_LOCATION_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_LOCATION_DESCRIPTION = "BBBBBBBBBB";
+
     private static final String DEFAULT_TOTAL_PRICE = "AAAAAAAAAA";
     private static final String UPDATED_TOTAL_PRICE = "BBBBBBBBBB";
 
@@ -89,6 +92,7 @@ public class OrderResourceIT {
         Order order = new Order()
             .latitude(DEFAULT_LATITUDE)
             .longtude(DEFAULT_LONGTUDE)
+            .locationDescription(DEFAULT_LOCATION_DESCRIPTION)
             .totalPrice(DEFAULT_TOTAL_PRICE)
             .date(DEFAULT_DATE)
             .additionalNote(DEFAULT_ADDITIONAL_NOTE)
@@ -105,6 +109,7 @@ public class OrderResourceIT {
         Order order = new Order()
             .latitude(UPDATED_LATITUDE)
             .longtude(UPDATED_LONGTUDE)
+            .locationDescription(UPDATED_LOCATION_DESCRIPTION)
             .totalPrice(UPDATED_TOTAL_PRICE)
             .date(UPDATED_DATE)
             .additionalNote(UPDATED_ADDITIONAL_NOTE)
@@ -135,6 +140,7 @@ public class OrderResourceIT {
         Order testOrder = orderList.get(orderList.size() - 1);
         assertThat(testOrder.getLatitude()).isEqualTo(DEFAULT_LATITUDE);
         assertThat(testOrder.getLongtude()).isEqualTo(DEFAULT_LONGTUDE);
+        assertThat(testOrder.getLocationDescription()).isEqualTo(DEFAULT_LOCATION_DESCRIPTION);
         assertThat(testOrder.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
         assertThat(testOrder.getDate()).isEqualTo(DEFAULT_DATE);
         assertThat(testOrder.getAdditionalNote()).isEqualTo(DEFAULT_ADDITIONAL_NOTE);
@@ -175,6 +181,7 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(order.getId().intValue())))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE)))
             .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE)))
+            .andExpect(jsonPath("$.[*].locationDescription").value(hasItem(DEFAULT_LOCATION_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE)))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].additionalNote").value(hasItem(DEFAULT_ADDITIONAL_NOTE.toString())))
@@ -194,6 +201,7 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.id").value(order.getId().intValue()))
             .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE))
             .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE))
+            .andExpect(jsonPath("$.locationDescription").value(DEFAULT_LOCATION_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
             .andExpect(jsonPath("$.additionalNote").value(DEFAULT_ADDITIONAL_NOTE.toString()))
@@ -607,6 +615,7 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(order.getId().intValue())))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE)))
             .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE)))
+            .andExpect(jsonPath("$.[*].locationDescription").value(hasItem(DEFAULT_LOCATION_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE)))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].additionalNote").value(hasItem(DEFAULT_ADDITIONAL_NOTE.toString())))
@@ -660,6 +669,7 @@ public class OrderResourceIT {
         updatedOrder
             .latitude(UPDATED_LATITUDE)
             .longtude(UPDATED_LONGTUDE)
+            .locationDescription(UPDATED_LOCATION_DESCRIPTION)
             .totalPrice(UPDATED_TOTAL_PRICE)
             .date(UPDATED_DATE)
             .additionalNote(UPDATED_ADDITIONAL_NOTE)
@@ -677,6 +687,7 @@ public class OrderResourceIT {
         Order testOrder = orderList.get(orderList.size() - 1);
         assertThat(testOrder.getLatitude()).isEqualTo(UPDATED_LATITUDE);
         assertThat(testOrder.getLongtude()).isEqualTo(UPDATED_LONGTUDE);
+        assertThat(testOrder.getLocationDescription()).isEqualTo(UPDATED_LOCATION_DESCRIPTION);
         assertThat(testOrder.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testOrder.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testOrder.getAdditionalNote()).isEqualTo(UPDATED_ADDITIONAL_NOTE);

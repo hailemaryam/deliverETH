@@ -10,6 +10,11 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "locationDescription",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
             "fieldName": "totalPrice",
             "fieldType": "String"
         },

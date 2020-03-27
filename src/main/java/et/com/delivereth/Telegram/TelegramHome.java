@@ -5,10 +5,13 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendInvoice;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
 
 import javax.annotation.PostConstruct;
 
@@ -40,17 +43,16 @@ public class TelegramHome extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage()) {
-            SendMessage response = responseBuilder.getResponse(update.getMessage());
+        if (update.hasMessage() || update.hasCallbackQuery()) {
+            BotApiMethod<Message> response = responseBuilder.getResponse(update);
             try {
                 execute(response);
-                logger.info("Sent message \"{}\" to {}", update, update.getMessage().getChatId());
             } catch (TelegramApiException e) {
-                logger.error("Failed to send message \"{}\" to {} due to error: {}", update, update.getMessage().getChatId(), e.getMessage());
+                logger.error("Error Sending Message {}", response);
             }
+            logger.info("Sent message \"{}\" to {}", update, update.getMessage().getChatId());
         }
     }
-
     @PostConstruct
     public void start() {
         logger.info("username: {}, token: {}", username, token);

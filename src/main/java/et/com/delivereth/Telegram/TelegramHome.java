@@ -43,14 +43,15 @@ public class TelegramHome extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        logger.info("Received message {}", update);
         if (update.hasMessage() || update.hasCallbackQuery()) {
             BotApiMethod<Message> response = responseBuilder.getResponse(update);
             try {
+                logger.info("Sent message {}", response);
                 execute(response);
             } catch (TelegramApiException e) {
                 logger.error("Error Sending Message {}", response);
             }
-            logger.info("Sent message \"{}\" to {}", update, update.getMessage().getChatId());
         }
     }
     @PostConstruct

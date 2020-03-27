@@ -31,17 +31,18 @@ public class ResponseBuilder {
     }
     public BotApiMethod<Message> getResponse(Update update) {
         TelegramUser telegramUser = dbUtility.getTelegramUser(update);
-        if (telegramUser != null) {
-            if (update.getMessage().getContact() != null) {
-                return inlineButtonTest.requestLocation(update.getMessage());
-            } else if(telegramUser.getPhone() == null) {
-                return requestContact.requestContactAgain(update.getMessage());
-            } else {
-                return requestErrorResponder.userErrorResponseResponder(update.getMessage());
-            }
-        } else {
-            dbUtility.registerTelegramUser(update);
-            return requestContact.requestContact(update.getMessage());
-        }
+//        if (telegramUser != null) {
+//            if (update.getMessage().getContact() != null) {
+//                return inlineButtonTest.requestLocation(update.getMessage());
+//            } else if(telegramUser.getPhone() == null) {
+//                return requestContact.requestContactAgain(update.getMessage());
+//            } else {
+//                return requestErrorResponder.userErrorResponseResponder(update.getMessage());
+//            }
+//        } else {
+//            dbUtility.registerTelegramUser(update);
+//            return requestContact.requestContact(update.getMessage());
+//        }
+        return requestLocation.requestLocation(update.getMessage());
     }
 }

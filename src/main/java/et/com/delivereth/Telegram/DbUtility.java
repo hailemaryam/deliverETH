@@ -1,9 +1,6 @@
 package et.com.delivereth.Telegram;
 
-import et.com.delivereth.domain.Food;
-import et.com.delivereth.domain.Order;
-import et.com.delivereth.domain.OrderedFood;
-import et.com.delivereth.domain.TelegramUser;
+import et.com.delivereth.domain.*;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.repository.*;
 import et.com.delivereth.service.TelegramUserService;
@@ -19,16 +16,16 @@ public class DbUtility {
     private final CustomTelegramUserRepository customTelegramUserRepository;
     private final CustomOrderRepository customOrderRepository;
     private final OrderedFoodRepository orderedFoodRepository;
-    public DbUtility(
-        OrderedFoodRepository orderedFoodRepository,
-        CustomOrderRepository customOrderRepository,
-        TelegramUserService telegramUserService,
-        CustomTelegramUserRepository customTelegramUserRepository) {
-        this.customOrderRepository = customOrderRepository;
-        this.orderedFoodRepository = orderedFoodRepository;
+    private final KeyValuPairHolderRepository keyValuPairHolderRepository;
+
+    public DbUtility(TelegramUserService telegramUserService, CustomTelegramUserRepository customTelegramUserRepository, CustomOrderRepository customOrderRepository, OrderedFoodRepository orderedFoodRepository, KeyValuPairHolderRepository keyValuPairHolderRepository) {
         this.telegramUserService = telegramUserService;
         this.customTelegramUserRepository = customTelegramUserRepository;
+        this.customOrderRepository = customOrderRepository;
+        this.orderedFoodRepository = orderedFoodRepository;
+        this.keyValuPairHolderRepository = keyValuPairHolderRepository;
     }
+
     public void registerTelegramUser(Update update){
         TelegramUserDTO telegramUserDTO = new TelegramUserDTO();
         if (update.hasMessage()){
@@ -77,5 +74,9 @@ public class DbUtility {
     public Order findOrder(TelegramUser telegramUser, OrderStatus orderStatus){
         Optional<Order> byOrderStatusAndTelegramUser = customOrderRepository.findByOrderStatusAndTelegramUser(orderStatus, telegramUser);
         return  byOrderStatusAndTelegramUser.isPresent()? byOrderStatusAndTelegramUser.get(): null;
+    }
+
+    public KeyValuPairHolder getKeyValuPairHolderRepository(String Key) {
+        return keyValuPairHolderRepository.getOne(1l);
     }
 }

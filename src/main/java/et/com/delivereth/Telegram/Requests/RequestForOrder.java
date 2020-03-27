@@ -3,6 +3,7 @@ package et.com.delivereth.Telegram.Requests;
 import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
+import et.com.delivereth.domain.KeyValuPairHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +40,9 @@ public class RequestForOrder {
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
         response.setChatId(message.getChatId());
+        KeyValuPairHolder orderImage = dbUtility.getKeyValuPairHolderRepository("OrderImage");
+        InputStream inputStream = new ByteArrayInputStream(orderImage.getValueImage());
+        response.setPhoto(orderImage.getKey(), inputStream);
         response.setCaption("currently we are delivering @ hayat, semit and bole");
         try {
             telegramSender.execute(response);

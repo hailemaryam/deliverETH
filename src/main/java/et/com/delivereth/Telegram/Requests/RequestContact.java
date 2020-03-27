@@ -1,4 +1,4 @@
-package et.com.delivereth.Telegram;
+package et.com.delivereth.Telegram.Requests;
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

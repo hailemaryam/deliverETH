@@ -30,6 +30,7 @@ public class DbUtility {
             if (update.getMessage().getContact() != null) {
                 telegramUserDTO.setPhone(update.getMessage().getContact().getPhoneNumber());
             }
+            telegramUserDTO.setConversationMetaData(ChatStepConstants.WAITING_FOR_CONTACT_RESPONSE);
         }
         telegramUserService.save(telegramUserDTO);
     }
@@ -39,6 +40,7 @@ public class DbUtility {
                 .findTelegramUserByUserNameEquals(update.getMessage().getFrom().getUserName());
         TelegramUser telegramUser = telegramUserByUserNameEquals.get();
         telegramUser.setPhone(update.getMessage().getContact().getPhoneNumber());
+        telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_ORDER_RESPONSE);
         telegramUserRepository.save(telegramUser);
     }
     public TelegramUser getTelegramUser(Update update) {

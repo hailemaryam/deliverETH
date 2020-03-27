@@ -23,10 +23,6 @@ import { RouterModule } from '@angular/router';
       {
         path: 'ordered-food',
         loadChildren: () => import('./ordered-food/ordered-food.module').then(m => m.DeliverEthOrderedFoodModule)
-      },
-      {
-        path: 'key-valu-pair-holer',
-        loadChildren: () => import('./key-valu-pair-holer/key-valu-pair-holer.module').then(m => m.DeliverEthKeyValuPairHolerModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

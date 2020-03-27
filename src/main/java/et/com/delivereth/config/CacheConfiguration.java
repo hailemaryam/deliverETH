@@ -51,7 +51,6 @@ public class CacheConfiguration {
             createCache(cm, et.com.delivereth.domain.Order.class.getName());
             createCache(cm, et.com.delivereth.domain.Order.class.getName() + ".orderedFoods");
             createCache(cm, et.com.delivereth.domain.OrderedFood.class.getName());
-            createCache(cm, et.com.delivereth.domain.KeyValuPairHoler.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

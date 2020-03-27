@@ -3,11 +3,20 @@ package et.com.delivereth.Telegram;
 import et.com.delivereth.domain.*;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.repository.*;
+import et.com.delivereth.service.KeyValuPairHolderService;
+import et.com.delivereth.service.RestorantQueryService;
+import et.com.delivereth.service.RestorantService;
 import et.com.delivereth.service.TelegramUserService;
+import et.com.delivereth.service.dto.KeyValuPairHolderDTO;
+import et.com.delivereth.service.dto.RestorantCriteria;
+import et.com.delivereth.service.dto.RestorantDTO;
 import et.com.delivereth.service.dto.TelegramUserDTO;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,14 +25,16 @@ public class DbUtility {
     private final CustomTelegramUserRepository customTelegramUserRepository;
     private final CustomOrderRepository customOrderRepository;
     private final OrderedFoodRepository orderedFoodRepository;
-    private final KeyValuPairHolderRepository keyValuPairHolderRepository;
+    private final KeyValuPairHolderService keyValuPairHolderService;
+    private final RestorantQueryService restorantQueryService;
 
-    public DbUtility(TelegramUserService telegramUserService, CustomTelegramUserRepository customTelegramUserRepository, CustomOrderRepository customOrderRepository, OrderedFoodRepository orderedFoodRepository, KeyValuPairHolderRepository keyValuPairHolderRepository) {
+    public DbUtility(TelegramUserService telegramUserService, CustomTelegramUserRepository customTelegramUserRepository, CustomOrderRepository customOrderRepository, OrderedFoodRepository orderedFoodRepository, KeyValuPairHolderService keyValuPairHolderService, RestorantQueryService restorantQueryService) {
         this.telegramUserService = telegramUserService;
         this.customTelegramUserRepository = customTelegramUserRepository;
         this.customOrderRepository = customOrderRepository;
         this.orderedFoodRepository = orderedFoodRepository;
-        this.keyValuPairHolderRepository = keyValuPairHolderRepository;
+        this.keyValuPairHolderService = keyValuPairHolderService;
+        this.restorantQueryService = restorantQueryService;
     }
 
     public void registerTelegramUser(Update update){
@@ -75,8 +86,13 @@ public class DbUtility {
         Optional<Order> byOrderStatusAndTelegramUser = customOrderRepository.findByOrderStatusAndTelegramUser(orderStatus, telegramUser);
         return  byOrderStatusAndTelegramUser.isPresent()? byOrderStatusAndTelegramUser.get(): null;
     }
+    public KeyValuPairHolderDTO getKeyValuPairHolderRepository(String Key) {
+        Optional<KeyValuPairHolderDTO> one = keyValuPairHolderService.findOne(1L);
+        return one.isPresent()? one.get(): null;
+    }
 
-    public KeyValuPairHolder getKeyValuPairHolderRepository(String Key) {
-        return keyValuPairHolderRepository.getOne(1l);
+    public List<RestorantDTO> getRestorantList(String latitude, String longtude) {
+        RestorantCriteria restorantCriteria = new RestorantCriteria();
+        return restorantQueryService.findByCriteria(restorantCriteria);
     }
 }

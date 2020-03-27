@@ -4,6 +4,7 @@ import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.domain.KeyValuPairHolder;
+import et.com.delivereth.service.dto.KeyValuPairHolderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class RequestForOrder {
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
         response.setChatId(message.getChatId());
-        KeyValuPairHolder orderImage = dbUtility.getKeyValuPairHolderRepository("OrderImage");
+        KeyValuPairHolderDTO orderImage = dbUtility.getKeyValuPairHolderRepository("OrderImage");
         InputStream inputStream = new ByteArrayInputStream(orderImage.getValueImage());
         response.setPhoto(orderImage.getKey(), inputStream);
         response.setCaption("currently we are delivering @ hayat, semit and bole");

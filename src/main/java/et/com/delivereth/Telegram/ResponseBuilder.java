@@ -15,20 +15,18 @@ public class ResponseBuilder {
     private final DbUtility dbUtility;
     private final RequestErrorResponder requestErrorResponder;
     private final RequestForOrder requestForOrder;
-    public ResponseBuilder(
-        RequestForOrder requestForOrder,
-        RequestErrorResponder requestErrorResponder,
-        DbUtility dbUtility,
-        InlineButtonTest inlineButtonTest,
-        RequestContact requestContact,
-        RequestLocation requestLocation) {
-        this.requestForOrder = requestForOrder;
-        this.requestErrorResponder = requestErrorResponder;
-        this.dbUtility = dbUtility;
-        this.inlineButtonTest = inlineButtonTest;
+    private final RequestRestorantSelection requestRestorantSelection;
+
+    public ResponseBuilder(RequestContact requestContact, RequestLocation requestLocation, InlineButtonTest inlineButtonTest, DbUtility dbUtility, RequestErrorResponder requestErrorResponder, RequestForOrder requestForOrder, RequestRestorantSelection requestRestorantSelection) {
         this.requestContact = requestContact;
         this.requestLocation = requestLocation;
+        this.inlineButtonTest = inlineButtonTest;
+        this.dbUtility = dbUtility;
+        this.requestErrorResponder = requestErrorResponder;
+        this.requestForOrder = requestForOrder;
+        this.requestRestorantSelection = requestRestorantSelection;
     }
+
     public BotApiMethod<Message> getResponse(Update update) {
 //        TelegramUser telegramUser = dbUtility.getTelegramUser(update);
 //        if (telegramUser != null) {
@@ -44,6 +42,7 @@ public class ResponseBuilder {
 //            return requestContact.requestContact(update.getMessage());
 //        }
         requestForOrder.requestForOrder(update);
+        requestRestorantSelection.requestRestorantSelection(update);
         return requestLocation.requestLocation(update.getMessage());
     }
 }

@@ -1,0 +1,54 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="keyValuPairHoler">
+            <h2><span>Key Valu Pair Holer</span> {{ keyValuPairHoler.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Key</span></dt>
+                <dd>
+                    <span>{{ keyValuPairHoler.key }}</span>
+                </dd>
+                <dt><span>Value String</span></dt>
+                <dd>
+                    <span>{{ keyValuPairHoler.valueString }}</span>
+                </dd>
+                <dt><span>Value Number</span></dt>
+                <dd>
+                    <span>{{ keyValuPairHoler.valueNumber }}</span>
+                </dd>
+                <dt><span>Value Image</span></dt>
+                <dd>
+                    <div *ngIf="keyValuPairHoler.valueImage">
+                        <a (click)="openFile(keyValuPairHoler?.valueImageContentType!, keyValuPairHoler?.valueImage)">
+                            <img [src]="'data:' + keyValuPairHoler.valueImageContentType + ';base64,' + keyValuPairHoler.valueImage" style="max-width: 100%;" alt="keyValuPairHoler image"/>
+                        </a>
+                        {{ keyValuPairHoler.valueImageContentType }}, {{ byteSize(keyValuPairHoler.valueImage) }}
+                    </div>
+                </dd>
+                <dt><span>Value Blob</span></dt>
+                <dd>
+                    <div *ngIf="keyValuPairHoler.valueBlob">
+                        <a (click)="openFile(keyValuPairHoler?.valueBlobContentType!, keyValuPairHoler?.valueBlob)">open</a>
+                        {{ keyValuPairHoler.valueBlobContentType }}, {{ byteSize(keyValuPairHoler.valueBlob) }}
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/key-valu-pair-holer', keyValuPairHoler.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

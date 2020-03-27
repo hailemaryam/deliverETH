@@ -19,6 +19,7 @@
     <include file="config/liquibase/changelog/20200322153000_added_entity_Food.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200322153100_added_entity_Order.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200322153200_added_entity_OrderedFood.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200327194300_added_entity_KeyValuPairHolder.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200322153000_added_entity_constraints_Food.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200322153100_added_entity_constraints_Order.xml" relativeToChangelogFile="false"/>

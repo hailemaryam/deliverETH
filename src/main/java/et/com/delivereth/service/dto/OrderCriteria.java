@@ -3,6 +3,7 @@ package et.com.delivereth.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
+import et.com.delivereth.domain.enumeration.OrderStatus;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -22,6 +23,24 @@ import io.github.jhipster.service.filter.InstantFilter;
  * fix type specific filters.
  */
 public class OrderCriteria implements Serializable, Criteria {
+    /**
+     * Class for filtering OrderStatus
+     */
+    public static class OrderStatusFilter extends Filter<OrderStatus> {
+
+        public OrderStatusFilter() {
+        }
+
+        public OrderStatusFilter(OrderStatusFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public OrderStatusFilter copy() {
+            return new OrderStatusFilter(this);
+        }
+
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -34,6 +53,8 @@ public class OrderCriteria implements Serializable, Criteria {
     private StringFilter totalPrice;
 
     private InstantFilter date;
+
+    private OrderStatusFilter orderStatus;
 
     private LongFilter orderedFoodId;
 
@@ -48,6 +69,7 @@ public class OrderCriteria implements Serializable, Criteria {
         this.longtude = other.longtude == null ? null : other.longtude.copy();
         this.totalPrice = other.totalPrice == null ? null : other.totalPrice.copy();
         this.date = other.date == null ? null : other.date.copy();
+        this.orderStatus = other.orderStatus == null ? null : other.orderStatus.copy();
         this.orderedFoodId = other.orderedFoodId == null ? null : other.orderedFoodId.copy();
         this.telegramUserId = other.telegramUserId == null ? null : other.telegramUserId.copy();
     }
@@ -97,6 +119,14 @@ public class OrderCriteria implements Serializable, Criteria {
         this.date = date;
     }
 
+    public OrderStatusFilter getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatusFilter orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public LongFilter getOrderedFoodId() {
         return orderedFoodId;
     }
@@ -129,6 +159,7 @@ public class OrderCriteria implements Serializable, Criteria {
             Objects.equals(longtude, that.longtude) &&
             Objects.equals(totalPrice, that.totalPrice) &&
             Objects.equals(date, that.date) &&
+            Objects.equals(orderStatus, that.orderStatus) &&
             Objects.equals(orderedFoodId, that.orderedFoodId) &&
             Objects.equals(telegramUserId, that.telegramUserId);
     }
@@ -141,6 +172,7 @@ public class OrderCriteria implements Serializable, Criteria {
         longtude,
         totalPrice,
         date,
+        orderStatus,
         orderedFoodId,
         telegramUserId
         );
@@ -154,6 +186,7 @@ public class OrderCriteria implements Serializable, Criteria {
                 (longtude != null ? "longtude=" + longtude + ", " : "") +
                 (totalPrice != null ? "totalPrice=" + totalPrice + ", " : "") +
                 (date != null ? "date=" + date + ", " : "") +
+                (orderStatus != null ? "orderStatus=" + orderStatus + ", " : "") +
                 (orderedFoodId != null ? "orderedFoodId=" + orderedFoodId + ", " : "") +
                 (telegramUserId != null ? "telegramUserId=" + telegramUserId + ", " : "") +
             "}";

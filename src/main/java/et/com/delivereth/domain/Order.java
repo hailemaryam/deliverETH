@@ -12,6 +12,8 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import et.com.delivereth.domain.enumeration.OrderStatus;
+
 /**
  * A Order.
  */
@@ -37,6 +39,14 @@ public class Order implements Serializable {
 
     @Column(name = "date")
     private Instant date;
+
+    @Lob
+    @Column(name = "additional_note")
+    private String additionalNote;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status")
+    private OrderStatus orderStatus;
 
     @OneToMany(mappedBy = "order")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -107,6 +117,32 @@ public class Order implements Serializable {
         this.date = date;
     }
 
+    public String getAdditionalNote() {
+        return additionalNote;
+    }
+
+    public Order additionalNote(String additionalNote) {
+        this.additionalNote = additionalNote;
+        return this;
+    }
+
+    public void setAdditionalNote(String additionalNote) {
+        this.additionalNote = additionalNote;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public Order orderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+        return this;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public Set<OrderedFood> getOrderedFoods() {
         return orderedFoods;
     }
@@ -170,6 +206,8 @@ public class Order implements Serializable {
             ", longtude='" + getLongtude() + "'" +
             ", totalPrice='" + getTotalPrice() + "'" +
             ", date='" + getDate() + "'" +
+            ", additionalNote='" + getAdditionalNote() + "'" +
+            ", orderStatus='" + getOrderStatus() + "'" +
             "}";
     }
 }

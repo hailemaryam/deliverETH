@@ -4,11 +4,6 @@
         {
             "fieldName": "quantity",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "additionalNote",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
         }
     ],
     "relationships": [

@@ -27,6 +27,8 @@
                     <th scope="col"  jhiSortBy="longtude"><span>Longtude</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="totalPrice"><span>Total Price</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="date"><span>Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="additionalNote"><span>Additional Note</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="orderStatus"><span>Order Status</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="telegramUserUserName"><span>Telegram User</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
@@ -38,6 +40,8 @@
                     <td>{{ order.longtude }}</td>
                     <td>{{ order.totalPrice }}</td>
                     <td>{{ order.date | date:'medium' }}</td>
+                    <td>{{ order.additionalNote }}</td>
+                    <td>{{ order.orderStatus }}</td>
                     <td>
                         <div *ngIf="order.telegramUserId">
                             <a [routerLink]="['/telegram-user', order.telegramUserId , 'view']" >{{ order.telegramUserUserName }}</a>

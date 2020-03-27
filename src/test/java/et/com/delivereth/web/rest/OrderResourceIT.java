@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -30,6 +31,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import et.com.delivereth.domain.enumeration.OrderStatus;
 /**
  * Integration tests for the {@link OrderResource} REST controller.
  */
@@ -50,6 +52,12 @@ public class OrderResourceIT {
 
     private static final Instant DEFAULT_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final String DEFAULT_ADDITIONAL_NOTE = "AAAAAAAAAA";
+    private static final String UPDATED_ADDITIONAL_NOTE = "BBBBBBBBBB";
+
+    private static final OrderStatus DEFAULT_ORDER_STATUS = OrderStatus.STARTED;
+    private static final OrderStatus UPDATED_ORDER_STATUS = OrderStatus.ORDERED;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -82,7 +90,9 @@ public class OrderResourceIT {
             .latitude(DEFAULT_LATITUDE)
             .longtude(DEFAULT_LONGTUDE)
             .totalPrice(DEFAULT_TOTAL_PRICE)
-            .date(DEFAULT_DATE);
+            .date(DEFAULT_DATE)
+            .additionalNote(DEFAULT_ADDITIONAL_NOTE)
+            .orderStatus(DEFAULT_ORDER_STATUS);
         return order;
     }
     /**
@@ -96,7 +106,9 @@ public class OrderResourceIT {
             .latitude(UPDATED_LATITUDE)
             .longtude(UPDATED_LONGTUDE)
             .totalPrice(UPDATED_TOTAL_PRICE)
-            .date(UPDATED_DATE);
+            .date(UPDATED_DATE)
+            .additionalNote(UPDATED_ADDITIONAL_NOTE)
+            .orderStatus(UPDATED_ORDER_STATUS);
         return order;
     }
 
@@ -125,6 +137,8 @@ public class OrderResourceIT {
         assertThat(testOrder.getLongtude()).isEqualTo(DEFAULT_LONGTUDE);
         assertThat(testOrder.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
         assertThat(testOrder.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testOrder.getAdditionalNote()).isEqualTo(DEFAULT_ADDITIONAL_NOTE);
+        assertThat(testOrder.getOrderStatus()).isEqualTo(DEFAULT_ORDER_STATUS);
     }
 
     @Test
@@ -162,7 +176,9 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE)))
             .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE)))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE)))
-            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())));
+            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].additionalNote").value(hasItem(DEFAULT_ADDITIONAL_NOTE.toString())))
+            .andExpect(jsonPath("$.[*].orderStatus").value(hasItem(DEFAULT_ORDER_STATUS.toString())));
     }
     
     @Test
@@ -179,7 +195,9 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE))
             .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE))
-            .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()));
+            .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
+            .andExpect(jsonPath("$.additionalNote").value(DEFAULT_ADDITIONAL_NOTE.toString()))
+            .andExpect(jsonPath("$.orderStatus").value(DEFAULT_ORDER_STATUS.toString()));
     }
 
 
@@ -490,6 +508,58 @@ public class OrderResourceIT {
 
     @Test
     @Transactional
+    public void getAllOrdersByOrderStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where orderStatus equals to DEFAULT_ORDER_STATUS
+        defaultOrderShouldBeFound("orderStatus.equals=" + DEFAULT_ORDER_STATUS);
+
+        // Get all the orderList where orderStatus equals to UPDATED_ORDER_STATUS
+        defaultOrderShouldNotBeFound("orderStatus.equals=" + UPDATED_ORDER_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByOrderStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where orderStatus not equals to DEFAULT_ORDER_STATUS
+        defaultOrderShouldNotBeFound("orderStatus.notEquals=" + DEFAULT_ORDER_STATUS);
+
+        // Get all the orderList where orderStatus not equals to UPDATED_ORDER_STATUS
+        defaultOrderShouldBeFound("orderStatus.notEquals=" + UPDATED_ORDER_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByOrderStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where orderStatus in DEFAULT_ORDER_STATUS or UPDATED_ORDER_STATUS
+        defaultOrderShouldBeFound("orderStatus.in=" + DEFAULT_ORDER_STATUS + "," + UPDATED_ORDER_STATUS);
+
+        // Get all the orderList where orderStatus equals to UPDATED_ORDER_STATUS
+        defaultOrderShouldNotBeFound("orderStatus.in=" + UPDATED_ORDER_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByOrderStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where orderStatus is not null
+        defaultOrderShouldBeFound("orderStatus.specified=true");
+
+        // Get all the orderList where orderStatus is null
+        defaultOrderShouldNotBeFound("orderStatus.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllOrdersByOrderedFoodIsEqualToSomething() throws Exception {
         // Initialize the database
         orderRepository.saveAndFlush(order);
@@ -538,7 +608,9 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE)))
             .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE)))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE)))
-            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())));
+            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].additionalNote").value(hasItem(DEFAULT_ADDITIONAL_NOTE.toString())))
+            .andExpect(jsonPath("$.[*].orderStatus").value(hasItem(DEFAULT_ORDER_STATUS.toString())));
 
         // Check, that the count call also returns 1
         restOrderMockMvc.perform(get("/api/orders/count?sort=id,desc&" + filter))
@@ -589,7 +661,9 @@ public class OrderResourceIT {
             .latitude(UPDATED_LATITUDE)
             .longtude(UPDATED_LONGTUDE)
             .totalPrice(UPDATED_TOTAL_PRICE)
-            .date(UPDATED_DATE);
+            .date(UPDATED_DATE)
+            .additionalNote(UPDATED_ADDITIONAL_NOTE)
+            .orderStatus(UPDATED_ORDER_STATUS);
         OrderDTO orderDTO = orderMapper.toDto(updatedOrder);
 
         restOrderMockMvc.perform(put("/api/orders")
@@ -605,6 +679,8 @@ public class OrderResourceIT {
         assertThat(testOrder.getLongtude()).isEqualTo(UPDATED_LONGTUDE);
         assertThat(testOrder.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testOrder.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testOrder.getAdditionalNote()).isEqualTo(UPDATED_ADDITIONAL_NOTE);
+        assertThat(testOrder.getOrderStatus()).isEqualTo(UPDATED_ORDER_STATUS);
     }
 
     @Test

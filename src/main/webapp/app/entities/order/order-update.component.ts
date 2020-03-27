@@ -6,9 +6,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } from 'ng-jhipster';
 
 import { IOrder, Order } from 'app/shared/model/order.model';
 import { OrderService } from './order.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
 import { ITelegramUser } from 'app/shared/model/telegram-user.model';
 import { TelegramUserService } from 'app/entities/telegram-user/telegram-user.service';
 
@@ -26,10 +28,14 @@ export class OrderUpdateComponent implements OnInit {
     longtude: [],
     totalPrice: [],
     date: [],
+    additionalNote: [],
+    orderStatus: [],
     telegramUserId: []
   });
 
   constructor(
+    protected dataUtils: JhiDataUtils,
+    protected eventManager: JhiEventManager,
     protected orderService: OrderService,
     protected telegramUserService: TelegramUserService,
     protected activatedRoute: ActivatedRoute,
@@ -56,7 +62,25 @@ export class OrderUpdateComponent implements OnInit {
       longtude: order.longtude,
       totalPrice: order.totalPrice,
       date: order.date ? order.date.format(DATE_TIME_FORMAT) : null,
+      additionalNote: order.additionalNote,
+      orderStatus: order.orderStatus,
       telegramUserId: order.telegramUserId
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(contentType: string, base64String: string): void {
+    this.dataUtils.openFile(contentType, base64String);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe(null, (err: JhiFileLoadError) => {
+      this.eventManager.broadcast(
+        new JhiEventWithContent<AlertError>('deliverEthApp.error', { message: err.message })
+      );
     });
   }
 
@@ -82,6 +106,8 @@ export class OrderUpdateComponent implements OnInit {
       longtude: this.editForm.get(['longtude'])!.value,
       totalPrice: this.editForm.get(['totalPrice'])!.value,
       date: this.editForm.get(['date'])!.value ? moment(this.editForm.get(['date'])!.value, DATE_TIME_FORMAT) : undefined,
+      additionalNote: this.editForm.get(['additionalNote'])!.value,
+      orderStatus: this.editForm.get(['orderStatus'])!.value,
       telegramUserId: this.editForm.get(['telegramUserId'])!.value
     };
   }

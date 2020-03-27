@@ -4,11 +4,9 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } from 'ng-jhipster';
 
 import { IOrderedFood, OrderedFood } from 'app/shared/model/ordered-food.model';
 import { OrderedFoodService } from './ordered-food.service';
-import { AlertError } from 'app/shared/alert/alert-error.model';
 import { IFood } from 'app/shared/model/food.model';
 import { FoodService } from 'app/entities/food/food.service';
 import { IOrder } from 'app/shared/model/order.model';
@@ -28,14 +26,11 @@ export class OrderedFoodUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     quantity: [],
-    additionalNote: [],
     foodId: [],
     orderId: []
   });
 
   constructor(
-    protected dataUtils: JhiDataUtils,
-    protected eventManager: JhiEventManager,
     protected orderedFoodService: OrderedFoodService,
     protected foodService: FoodService,
     protected orderService: OrderService,
@@ -57,25 +52,8 @@ export class OrderedFoodUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: orderedFood.id,
       quantity: orderedFood.quantity,
-      additionalNote: orderedFood.additionalNote,
       foodId: orderedFood.foodId,
       orderId: orderedFood.orderId
-    });
-  }
-
-  byteSize(base64String: string): string {
-    return this.dataUtils.byteSize(base64String);
-  }
-
-  openFile(contentType: string, base64String: string): void {
-    this.dataUtils.openFile(contentType, base64String);
-  }
-
-  setFileData(event: Event, field: string, isImage: boolean): void {
-    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe(null, (err: JhiFileLoadError) => {
-      this.eventManager.broadcast(
-        new JhiEventWithContent<AlertError>('deliverEthApp.error', { message: err.message })
-      );
     });
   }
 
@@ -98,7 +76,6 @@ export class OrderedFoodUpdateComponent implements OnInit {
       ...new OrderedFood(),
       id: this.editForm.get(['id'])!.value,
       quantity: this.editForm.get(['quantity'])!.value,
-      additionalNote: this.editForm.get(['additionalNote'])!.value,
       foodId: this.editForm.get(['foodId'])!.value,
       orderId: this.editForm.get(['orderId'])!.value
     };

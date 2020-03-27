@@ -16,6 +16,16 @@
         {
             "fieldName": "date",
             "fieldType": "Instant"
+        },
+        {
+            "fieldName": "additionalNote",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "orderStatus",
+            "fieldType": "OrderStatus",
+            "fieldValues": "STARTED,ORDERED,WAITING,DELIVERED,CANCELED_BY_RESTORANT,CANCELED_BY_USER"
         }
     ],
     "relationships": [

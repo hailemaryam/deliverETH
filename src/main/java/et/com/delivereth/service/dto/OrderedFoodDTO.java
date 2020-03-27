@@ -2,7 +2,6 @@ package et.com.delivereth.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Lob;
 
 /**
  * A DTO for the {@link et.com.delivereth.domain.OrderedFood} entity.
@@ -12,9 +11,6 @@ public class OrderedFoodDTO implements Serializable {
     private Long id;
 
     private Integer quantity;
-
-    @Lob
-    private String additionalNote;
 
 
     private Long foodId;
@@ -39,14 +35,6 @@ public class OrderedFoodDTO implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public String getAdditionalNote() {
-        return additionalNote;
-    }
-
-    public void setAdditionalNote(String additionalNote) {
-        this.additionalNote = additionalNote;
     }
 
     public Long getFoodId() {
@@ -107,7 +95,6 @@ public class OrderedFoodDTO implements Serializable {
         return "OrderedFoodDTO{" +
             "id=" + getId() +
             ", quantity=" + getQuantity() +
-            ", additionalNote='" + getAdditionalNote() + "'" +
             ", foodId=" + getFoodId() +
             ", foodName='" + getFoodName() + "'" +
             ", orderId=" + getOrderId() +

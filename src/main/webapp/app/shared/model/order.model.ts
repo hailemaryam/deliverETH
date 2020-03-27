@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { IOrderedFood } from 'app/shared/model/ordered-food.model';
+import { OrderStatus } from 'app/shared/model/enumerations/order-status.model';
 
 export interface IOrder {
   id?: number;
@@ -7,6 +8,8 @@ export interface IOrder {
   longtude?: string;
   totalPrice?: string;
   date?: Moment;
+  additionalNote?: any;
+  orderStatus?: OrderStatus;
   orderedFoods?: IOrderedFood[];
   telegramUserUserName?: string;
   telegramUserId?: number;
@@ -19,6 +22,8 @@ export class Order implements IOrder {
     public longtude?: string,
     public totalPrice?: string,
     public date?: Moment,
+    public additionalNote?: any,
+    public orderStatus?: OrderStatus,
     public orderedFoods?: IOrderedFood[],
     public telegramUserUserName?: string,
     public telegramUserId?: number

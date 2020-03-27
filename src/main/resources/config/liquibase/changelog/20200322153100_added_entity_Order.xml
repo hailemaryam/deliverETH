@@ -28,6 +28,12 @@
             <column name="date" type="datetime">
                 <constraints nullable="true" />
             </column>
+            <column name="additional_note" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="order_status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="telegram_user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -59,6 +65,8 @@
             <column name="longtude" type="string"/>
             <column name="total_price" type="string"/>
             <column name="date" type="datetime"/>
+            <column name="additional_note" type="clob"/>
+            <column name="order_status" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

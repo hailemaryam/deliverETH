@@ -3,6 +3,8 @@ package et.com.delivereth.service.dto;
 import java.time.Instant;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Lob;
+import et.com.delivereth.domain.enumeration.OrderStatus;
 
 /**
  * A DTO for the {@link et.com.delivereth.domain.Order} entity.
@@ -18,6 +20,11 @@ public class OrderDTO implements Serializable {
     private String totalPrice;
 
     private Instant date;
+
+    @Lob
+    private String additionalNote;
+
+    private OrderStatus orderStatus;
 
 
     private Long telegramUserId;
@@ -62,6 +69,22 @@ public class OrderDTO implements Serializable {
 
     public void setDate(Instant date) {
         this.date = date;
+    }
+
+    public String getAdditionalNote() {
+        return additionalNote;
+    }
+
+    public void setAdditionalNote(String additionalNote) {
+        this.additionalNote = additionalNote;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public Long getTelegramUserId() {
@@ -109,6 +132,8 @@ public class OrderDTO implements Serializable {
             ", longtude='" + getLongtude() + "'" +
             ", totalPrice='" + getTotalPrice() + "'" +
             ", date='" + getDate() + "'" +
+            ", additionalNote='" + getAdditionalNote() + "'" +
+            ", orderStatus='" + getOrderStatus() + "'" +
             ", telegramUserId=" + getTelegramUserId() +
             ", telegramUserUserName='" + getTelegramUserUserName() + "'" +
             "}";

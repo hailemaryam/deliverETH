@@ -20,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -41,9 +40,6 @@ public class OrderedFoodResourceIT {
     private static final Integer DEFAULT_QUANTITY = 1;
     private static final Integer UPDATED_QUANTITY = 2;
     private static final Integer SMALLER_QUANTITY = 1 - 1;
-
-    private static final String DEFAULT_ADDITIONAL_NOTE = "AAAAAAAAAA";
-    private static final String UPDATED_ADDITIONAL_NOTE = "BBBBBBBBBB";
 
     @Autowired
     private OrderedFoodRepository orderedFoodRepository;
@@ -73,8 +69,7 @@ public class OrderedFoodResourceIT {
      */
     public static OrderedFood createEntity(EntityManager em) {
         OrderedFood orderedFood = new OrderedFood()
-            .quantity(DEFAULT_QUANTITY)
-            .additionalNote(DEFAULT_ADDITIONAL_NOTE);
+            .quantity(DEFAULT_QUANTITY);
         return orderedFood;
     }
     /**
@@ -85,8 +80,7 @@ public class OrderedFoodResourceIT {
      */
     public static OrderedFood createUpdatedEntity(EntityManager em) {
         OrderedFood orderedFood = new OrderedFood()
-            .quantity(UPDATED_QUANTITY)
-            .additionalNote(UPDATED_ADDITIONAL_NOTE);
+            .quantity(UPDATED_QUANTITY);
         return orderedFood;
     }
 
@@ -112,7 +106,6 @@ public class OrderedFoodResourceIT {
         assertThat(orderedFoodList).hasSize(databaseSizeBeforeCreate + 1);
         OrderedFood testOrderedFood = orderedFoodList.get(orderedFoodList.size() - 1);
         assertThat(testOrderedFood.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
-        assertThat(testOrderedFood.getAdditionalNote()).isEqualTo(DEFAULT_ADDITIONAL_NOTE);
     }
 
     @Test
@@ -147,8 +140,7 @@ public class OrderedFoodResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(orderedFood.getId().intValue())))
-            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
-            .andExpect(jsonPath("$.[*].additionalNote").value(hasItem(DEFAULT_ADDITIONAL_NOTE.toString())));
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)));
     }
     
     @Test
@@ -162,8 +154,7 @@ public class OrderedFoodResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(orderedFood.getId().intValue()))
-            .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
-            .andExpect(jsonPath("$.additionalNote").value(DEFAULT_ADDITIONAL_NOTE.toString()));
+            .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY));
     }
 
 
@@ -338,8 +329,7 @@ public class OrderedFoodResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(orderedFood.getId().intValue())))
-            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
-            .andExpect(jsonPath("$.[*].additionalNote").value(hasItem(DEFAULT_ADDITIONAL_NOTE.toString())));
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)));
 
         // Check, that the count call also returns 1
         restOrderedFoodMockMvc.perform(get("/api/ordered-foods/count?sort=id,desc&" + filter))
@@ -387,8 +377,7 @@ public class OrderedFoodResourceIT {
         // Disconnect from session so that the updates on updatedOrderedFood are not directly saved in db
         em.detach(updatedOrderedFood);
         updatedOrderedFood
-            .quantity(UPDATED_QUANTITY)
-            .additionalNote(UPDATED_ADDITIONAL_NOTE);
+            .quantity(UPDATED_QUANTITY);
         OrderedFoodDTO orderedFoodDTO = orderedFoodMapper.toDto(updatedOrderedFood);
 
         restOrderedFoodMockMvc.perform(put("/api/ordered-foods")
@@ -401,7 +390,6 @@ public class OrderedFoodResourceIT {
         assertThat(orderedFoodList).hasSize(databaseSizeBeforeUpdate);
         OrderedFood testOrderedFood = orderedFoodList.get(orderedFoodList.size() - 1);
         assertThat(testOrderedFood.getQuantity()).isEqualTo(UPDATED_QUANTITY);
-        assertThat(testOrderedFood.getAdditionalNote()).isEqualTo(UPDATED_ADDITIONAL_NOTE);
     }
 
     @Test

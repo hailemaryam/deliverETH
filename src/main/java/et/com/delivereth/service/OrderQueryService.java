@@ -103,6 +103,9 @@ public class OrderQueryService extends QueryService<Order> {
             if (criteria.getDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDate(), Order_.date));
             }
+            if (criteria.getOrderStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getOrderStatus(), Order_.orderStatus));
+            }
             if (criteria.getOrderedFoodId() != null) {
                 specification = specification.and(buildSpecification(criteria.getOrderedFoodId(),
                     root -> root.join(Order_.orderedFoods, JoinType.LEFT).get(OrderedFood_.id)));

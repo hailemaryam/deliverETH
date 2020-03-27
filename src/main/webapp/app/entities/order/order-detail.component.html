@@ -24,6 +24,14 @@
                 <dd>
                     <span>{{ order.date }}</span>
                 </dd>
+                <dt><span>Additional Note</span></dt>
+                <dd>
+                    <span>{{ order.additionalNote }}</span>
+                </dd>
+                <dt><span>Order Status</span></dt>
+                <dd>
+                    <span>{{ order.orderStatus }}</span>
+                </dd>
                 <dt><span>Telegram User</span></dt>
                 <dd>
                     <div *ngIf="order.telegramUserId">

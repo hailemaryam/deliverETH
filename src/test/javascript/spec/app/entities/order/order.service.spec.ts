@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { OrderService } from 'app/entities/order/order.service';
 import { IOrder, Order } from 'app/shared/model/order.model';
+import { OrderStatus } from 'app/shared/model/enumerations/order-status.model';
 
 describe('Service Tests', () => {
   describe('Order Service', () => {
@@ -24,7 +25,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Order(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate);
+      elemDefault = new Order(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, 'AAAAAAA', OrderStatus.STARTED);
     });
 
     describe('Service methods', () => {
@@ -72,7 +73,9 @@ describe('Service Tests', () => {
             latitude: 'BBBBBB',
             longtude: 'BBBBBB',
             totalPrice: 'BBBBBB',
-            date: currentDate.format(DATE_TIME_FORMAT)
+            date: currentDate.format(DATE_TIME_FORMAT),
+            additionalNote: 'BBBBBB',
+            orderStatus: 'BBBBBB'
           },
           elemDefault
         );
@@ -97,7 +100,9 @@ describe('Service Tests', () => {
             latitude: 'BBBBBB',
             longtude: 'BBBBBB',
             totalPrice: 'BBBBBB',
-            date: currentDate.format(DATE_TIME_FORMAT)
+            date: currentDate.format(DATE_TIME_FORMAT),
+            additionalNote: 'BBBBBB',
+            orderStatus: 'BBBBBB'
           },
           elemDefault
         );

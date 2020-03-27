@@ -1,0 +1,39 @@
+{
+    "name": "KeyValuPairHolder",
+    "fields": [
+        {
+            "fieldName": "key",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "valueString",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "valueNumber",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "valueImage",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
+            "fieldName": "valueBlob",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200327194300",
+    "entityTableName": "key_valu_pair_holder",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

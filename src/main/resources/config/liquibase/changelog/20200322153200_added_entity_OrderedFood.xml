@@ -19,6 +19,9 @@
             <column name="quantity" type="integer">
                 <constraints nullable="true" />
             </column>
+            <column name="additional_note" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
             <column name="food_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -49,6 +52,7 @@
                   tableName="ordered_food">
             <column name="id" type="numeric"/>
             <column name="quantity" type="numeric"/>
+            <column name="additional_note" type="clob"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

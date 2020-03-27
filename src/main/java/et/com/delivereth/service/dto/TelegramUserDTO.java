@@ -22,6 +22,8 @@ public class TelegramUserDTO implements Serializable {
 
     private String phone;
 
+    private String conversationMetaData;
+
     
     public Long getId() {
         return id;
@@ -71,6 +73,14 @@ public class TelegramUserDTO implements Serializable {
         this.phone = phone;
     }
 
+    public String getConversationMetaData() {
+        return conversationMetaData;
+    }
+
+    public void setConversationMetaData(String conversationMetaData) {
+        this.conversationMetaData = conversationMetaData;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -101,6 +111,7 @@ public class TelegramUserDTO implements Serializable {
             ", userName='" + getUserName() + "'" +
             ", chatId='" + getChatId() + "'" +
             ", phone='" + getPhone() + "'" +
+            ", conversationMetaData='" + getConversationMetaData() + "'" +
             "}";
     }
 }

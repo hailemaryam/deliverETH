@@ -7,6 +7,7 @@ export interface ITelegramUser {
   userName?: string;
   chatId?: string;
   phone?: string;
+  conversationMetaData?: string;
   orders?: IOrder[];
 }
 
@@ -18,6 +19,7 @@ export class TelegramUser implements ITelegramUser {
     public userName?: string,
     public chatId?: string,
     public phone?: string,
+    public conversationMetaData?: string,
     public orders?: IOrder[]
   ) {}
 }

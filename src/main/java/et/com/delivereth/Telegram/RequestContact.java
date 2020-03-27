@@ -45,5 +45,4 @@ public class RequestContact {
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         return  replyKeyboardMarkup;
     }
-
 }

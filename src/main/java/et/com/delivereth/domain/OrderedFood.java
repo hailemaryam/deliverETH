@@ -26,6 +26,10 @@ public class OrderedFood implements Serializable {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @Lob
+    @Column(name = "additional_note")
+    private String additionalNote;
+
     @ManyToOne
     @JsonIgnoreProperties("orderedFoods")
     private Food food;
@@ -54,6 +58,19 @@ public class OrderedFood implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getAdditionalNote() {
+        return additionalNote;
+    }
+
+    public OrderedFood additionalNote(String additionalNote) {
+        this.additionalNote = additionalNote;
+        return this;
+    }
+
+    public void setAdditionalNote(String additionalNote) {
+        this.additionalNote = additionalNote;
     }
 
     public Food getFood() {
@@ -104,6 +121,7 @@ public class OrderedFood implements Serializable {
         return "OrderedFood{" +
             "id=" + getId() +
             ", quantity=" + getQuantity() +
+            ", additionalNote='" + getAdditionalNote() + "'" +
             "}";
     }
 }

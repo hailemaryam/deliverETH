@@ -41,6 +41,9 @@ public class TelegramUser implements Serializable {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "conversation_meta_data")
+    private String conversationMetaData;
+
     @OneToMany(mappedBy = "telegramUser")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Order> orders = new HashSet<>();
@@ -119,6 +122,19 @@ public class TelegramUser implements Serializable {
         this.phone = phone;
     }
 
+    public String getConversationMetaData() {
+        return conversationMetaData;
+    }
+
+    public TelegramUser conversationMetaData(String conversationMetaData) {
+        this.conversationMetaData = conversationMetaData;
+        return this;
+    }
+
+    public void setConversationMetaData(String conversationMetaData) {
+        this.conversationMetaData = conversationMetaData;
+    }
+
     public Set<Order> getOrders() {
         return orders;
     }
@@ -170,6 +186,7 @@ public class TelegramUser implements Serializable {
             ", userName='" + getUserName() + "'" +
             ", chatId='" + getChatId() + "'" +
             ", phone='" + getPhone() + "'" +
+            ", conversationMetaData='" + getConversationMetaData() + "'" +
             "}";
     }
 }

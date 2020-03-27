@@ -51,6 +51,9 @@ public class TelegramUserResourceIT {
     private static final String DEFAULT_PHONE = "AAAAAAAAAA";
     private static final String UPDATED_PHONE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_CONVERSATION_META_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_CONVERSATION_META_DATA = "BBBBBBBBBB";
+
     @Autowired
     private TelegramUserRepository telegramUserRepository;
 
@@ -83,7 +86,8 @@ public class TelegramUserResourceIT {
             .lastName(DEFAULT_LAST_NAME)
             .userName(DEFAULT_USER_NAME)
             .chatId(DEFAULT_CHAT_ID)
-            .phone(DEFAULT_PHONE);
+            .phone(DEFAULT_PHONE)
+            .conversationMetaData(DEFAULT_CONVERSATION_META_DATA);
         return telegramUser;
     }
     /**
@@ -98,7 +102,8 @@ public class TelegramUserResourceIT {
             .lastName(UPDATED_LAST_NAME)
             .userName(UPDATED_USER_NAME)
             .chatId(UPDATED_CHAT_ID)
-            .phone(UPDATED_PHONE);
+            .phone(UPDATED_PHONE)
+            .conversationMetaData(UPDATED_CONVERSATION_META_DATA);
         return telegramUser;
     }
 
@@ -128,6 +133,7 @@ public class TelegramUserResourceIT {
         assertThat(testTelegramUser.getUserName()).isEqualTo(DEFAULT_USER_NAME);
         assertThat(testTelegramUser.getChatId()).isEqualTo(DEFAULT_CHAT_ID);
         assertThat(testTelegramUser.getPhone()).isEqualTo(DEFAULT_PHONE);
+        assertThat(testTelegramUser.getConversationMetaData()).isEqualTo(DEFAULT_CONVERSATION_META_DATA);
     }
 
     @Test
@@ -166,7 +172,8 @@ public class TelegramUserResourceIT {
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
-            .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)));
+            .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
+            .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)));
     }
     
     @Test
@@ -184,7 +191,8 @@ public class TelegramUserResourceIT {
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
             .andExpect(jsonPath("$.userName").value(DEFAULT_USER_NAME))
             .andExpect(jsonPath("$.chatId").value(DEFAULT_CHAT_ID))
-            .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE));
+            .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
+            .andExpect(jsonPath("$.conversationMetaData").value(DEFAULT_CONVERSATION_META_DATA));
     }
 
 
@@ -599,6 +607,84 @@ public class TelegramUserResourceIT {
 
     @Test
     @Transactional
+    public void getAllTelegramUsersByConversationMetaDataIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where conversationMetaData equals to DEFAULT_CONVERSATION_META_DATA
+        defaultTelegramUserShouldBeFound("conversationMetaData.equals=" + DEFAULT_CONVERSATION_META_DATA);
+
+        // Get all the telegramUserList where conversationMetaData equals to UPDATED_CONVERSATION_META_DATA
+        defaultTelegramUserShouldNotBeFound("conversationMetaData.equals=" + UPDATED_CONVERSATION_META_DATA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByConversationMetaDataIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where conversationMetaData not equals to DEFAULT_CONVERSATION_META_DATA
+        defaultTelegramUserShouldNotBeFound("conversationMetaData.notEquals=" + DEFAULT_CONVERSATION_META_DATA);
+
+        // Get all the telegramUserList where conversationMetaData not equals to UPDATED_CONVERSATION_META_DATA
+        defaultTelegramUserShouldBeFound("conversationMetaData.notEquals=" + UPDATED_CONVERSATION_META_DATA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByConversationMetaDataIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where conversationMetaData in DEFAULT_CONVERSATION_META_DATA or UPDATED_CONVERSATION_META_DATA
+        defaultTelegramUserShouldBeFound("conversationMetaData.in=" + DEFAULT_CONVERSATION_META_DATA + "," + UPDATED_CONVERSATION_META_DATA);
+
+        // Get all the telegramUserList where conversationMetaData equals to UPDATED_CONVERSATION_META_DATA
+        defaultTelegramUserShouldNotBeFound("conversationMetaData.in=" + UPDATED_CONVERSATION_META_DATA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByConversationMetaDataIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where conversationMetaData is not null
+        defaultTelegramUserShouldBeFound("conversationMetaData.specified=true");
+
+        // Get all the telegramUserList where conversationMetaData is null
+        defaultTelegramUserShouldNotBeFound("conversationMetaData.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllTelegramUsersByConversationMetaDataContainsSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where conversationMetaData contains DEFAULT_CONVERSATION_META_DATA
+        defaultTelegramUserShouldBeFound("conversationMetaData.contains=" + DEFAULT_CONVERSATION_META_DATA);
+
+        // Get all the telegramUserList where conversationMetaData contains UPDATED_CONVERSATION_META_DATA
+        defaultTelegramUserShouldNotBeFound("conversationMetaData.contains=" + UPDATED_CONVERSATION_META_DATA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByConversationMetaDataNotContainsSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where conversationMetaData does not contain DEFAULT_CONVERSATION_META_DATA
+        defaultTelegramUserShouldNotBeFound("conversationMetaData.doesNotContain=" + DEFAULT_CONVERSATION_META_DATA);
+
+        // Get all the telegramUserList where conversationMetaData does not contain UPDATED_CONVERSATION_META_DATA
+        defaultTelegramUserShouldBeFound("conversationMetaData.doesNotContain=" + UPDATED_CONVERSATION_META_DATA);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllTelegramUsersByOrderIsEqualToSomething() throws Exception {
         // Initialize the database
         telegramUserRepository.saveAndFlush(telegramUser);
@@ -628,7 +714,8 @@ public class TelegramUserResourceIT {
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
-            .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)));
+            .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
+            .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)));
 
         // Check, that the count call also returns 1
         restTelegramUserMockMvc.perform(get("/api/telegram-users/count?sort=id,desc&" + filter))
@@ -680,7 +767,8 @@ public class TelegramUserResourceIT {
             .lastName(UPDATED_LAST_NAME)
             .userName(UPDATED_USER_NAME)
             .chatId(UPDATED_CHAT_ID)
-            .phone(UPDATED_PHONE);
+            .phone(UPDATED_PHONE)
+            .conversationMetaData(UPDATED_CONVERSATION_META_DATA);
         TelegramUserDTO telegramUserDTO = telegramUserMapper.toDto(updatedTelegramUser);
 
         restTelegramUserMockMvc.perform(put("/api/telegram-users")
@@ -697,6 +785,7 @@ public class TelegramUserResourceIT {
         assertThat(testTelegramUser.getUserName()).isEqualTo(UPDATED_USER_NAME);
         assertThat(testTelegramUser.getChatId()).isEqualTo(UPDATED_CHAT_ID);
         assertThat(testTelegramUser.getPhone()).isEqualTo(UPDATED_PHONE);
+        assertThat(testTelegramUser.getConversationMetaData()).isEqualTo(UPDATED_CONVERSATION_META_DATA);
     }
 
     @Test

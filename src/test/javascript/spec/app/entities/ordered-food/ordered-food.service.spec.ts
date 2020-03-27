@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(OrderedFoodService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new OrderedFood(0, 0);
+      elemDefault = new OrderedFood(0, 0, 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -54,7 +54,8 @@ describe('Service Tests', () => {
       it('should update a OrderedFood', () => {
         const returnedFromService = Object.assign(
           {
-            quantity: 1
+            quantity: 1,
+            additionalNote: 'BBBBBB'
           },
           elemDefault
         );
@@ -71,7 +72,8 @@ describe('Service Tests', () => {
       it('should return a list of OrderedFood', () => {
         const returnedFromService = Object.assign(
           {
-            quantity: 1
+            quantity: 1,
+            additionalNote: 'BBBBBB'
           },
           elemDefault
         );

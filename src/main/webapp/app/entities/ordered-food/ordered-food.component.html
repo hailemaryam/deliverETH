@@ -24,6 +24,7 @@
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
                     <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="quantity"><span>Quantity</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="additionalNote"><span>Additional Note</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="foodName"><span>Food</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="orderDate"><span>Order</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
@@ -33,6 +34,7 @@
                 <tr *ngFor="let orderedFood of orderedFoods ;trackBy: trackId">
                     <td><a [routerLink]="['/ordered-food', orderedFood.id, 'view']">{{ orderedFood.id }}</a></td>
                     <td>{{ orderedFood.quantity }}</td>
+                    <td>{{ orderedFood.additionalNote }}</td>
                     <td>
                         <div *ngIf="orderedFood.foodId">
                             <a [routerLink]="['/food', orderedFood.foodId , 'view']" >{{ orderedFood.foodName }}</a>

@@ -36,6 +36,8 @@ public class TelegramUserCriteria implements Serializable, Criteria {
 
     private StringFilter phone;
 
+    private StringFilter conversationMetaData;
+
     private LongFilter orderId;
 
     public TelegramUserCriteria() {
@@ -48,6 +50,7 @@ public class TelegramUserCriteria implements Serializable, Criteria {
         this.userName = other.userName == null ? null : other.userName.copy();
         this.chatId = other.chatId == null ? null : other.chatId.copy();
         this.phone = other.phone == null ? null : other.phone.copy();
+        this.conversationMetaData = other.conversationMetaData == null ? null : other.conversationMetaData.copy();
         this.orderId = other.orderId == null ? null : other.orderId.copy();
     }
 
@@ -104,6 +107,14 @@ public class TelegramUserCriteria implements Serializable, Criteria {
         this.phone = phone;
     }
 
+    public StringFilter getConversationMetaData() {
+        return conversationMetaData;
+    }
+
+    public void setConversationMetaData(StringFilter conversationMetaData) {
+        this.conversationMetaData = conversationMetaData;
+    }
+
     public LongFilter getOrderId() {
         return orderId;
     }
@@ -129,6 +140,7 @@ public class TelegramUserCriteria implements Serializable, Criteria {
             Objects.equals(userName, that.userName) &&
             Objects.equals(chatId, that.chatId) &&
             Objects.equals(phone, that.phone) &&
+            Objects.equals(conversationMetaData, that.conversationMetaData) &&
             Objects.equals(orderId, that.orderId);
     }
 
@@ -141,6 +153,7 @@ public class TelegramUserCriteria implements Serializable, Criteria {
         userName,
         chatId,
         phone,
+        conversationMetaData,
         orderId
         );
     }
@@ -154,6 +167,7 @@ public class TelegramUserCriteria implements Serializable, Criteria {
                 (userName != null ? "userName=" + userName + ", " : "") +
                 (chatId != null ? "chatId=" + chatId + ", " : "") +
                 (phone != null ? "phone=" + phone + ", " : "") +
+                (conversationMetaData != null ? "conversationMetaData=" + conversationMetaData + ", " : "") +
                 (orderId != null ? "orderId=" + orderId + ", " : "") +
             "}";
     }

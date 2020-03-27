@@ -21,7 +21,8 @@ export class TelegramUserUpdateComponent implements OnInit {
     lastName: [],
     userName: [null, []],
     chatId: [],
-    phone: []
+    phone: [],
+    conversationMetaData: []
   });
 
   constructor(protected telegramUserService: TelegramUserService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -39,7 +40,8 @@ export class TelegramUserUpdateComponent implements OnInit {
       lastName: telegramUser.lastName,
       userName: telegramUser.userName,
       chatId: telegramUser.chatId,
-      phone: telegramUser.phone
+      phone: telegramUser.phone,
+      conversationMetaData: telegramUser.conversationMetaData
     });
   }
 
@@ -65,7 +67,8 @@ export class TelegramUserUpdateComponent implements OnInit {
       lastName: this.editForm.get(['lastName'])!.value,
       userName: this.editForm.get(['userName'])!.value,
       chatId: this.editForm.get(['chatId'])!.value,
-      phone: this.editForm.get(['phone'])!.value
+      phone: this.editForm.get(['phone'])!.value,
+      conversationMetaData: this.editForm.get(['conversationMetaData'])!.value
     };
   }
 

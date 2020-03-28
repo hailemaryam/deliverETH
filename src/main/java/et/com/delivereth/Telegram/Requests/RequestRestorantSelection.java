@@ -3,13 +3,11 @@ package et.com.delivereth.Telegram.Requests;
 import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
-import et.com.delivereth.service.dto.KeyValuPairHolderDTO;
 import et.com.delivereth.service.dto.RestorantDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -32,12 +30,11 @@ public class RequestRestorantSelection {
     }
 
     public void requestRestorantSelection(Update update) {
-        List<RestorantDTO> restorantList = dbUtility.getRestorantList(null, null);
+        List<RestorantDTO> restorantList = dbUtility.getRestorantList(null, null, 1, 2);
         restorantList.forEach(restorantDTO -> {
             sendRestorant(restorantDTO, update);
         });
     }
-
     public void sendRestorant(RestorantDTO restorantDTO, Update update){
         SendPhoto response = new SendPhoto();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();

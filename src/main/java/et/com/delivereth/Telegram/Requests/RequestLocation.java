@@ -28,7 +28,27 @@ public class RequestLocation {
     }
 
     public void requestLocation(Update update) {
+        requestLocation(update, "we need your location for order delivery. click share location to share your location.");
+    }
+    public void requestLocationAgain(Update update) {
+        requestLocation(update, "we can't process your order with out knowing your location. please click share location to share your location.");
+    }
+    public void requestLocation(Update update, String text){
         SendMessage response = new SendMessage();
+        response.setReplyMarkup(prepareShareLocationReplyButton());
+        if (update.hasMessage()){
+            response.setChatId(update.getMessage().getChatId());
+        } else if (update.hasCallbackQuery()) {
+            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
+        }
+        response.setText(text);
+        try {
+            telegramSender.execute(response);
+        } catch (TelegramApiException e) {
+            logger.error("Error Sending Message {}", response);
+        }
+    }
+    private ReplyKeyboardMarkup prepareShareLocationReplyButton() {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setOneTimeKeyboard(true);
         replyKeyboardMarkup.setSelective(true);
@@ -43,17 +63,7 @@ public class RequestLocation {
             .setText("Cancel"));
         keyboardRowList.add(cancelButton);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
-        response.setReplyMarkup(replyKeyboardMarkup);
-        if (update.hasMessage()){
-            response.setChatId(update.getMessage().getChatId());
-        } else if (update.hasCallbackQuery()) {
-            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
-        }
-        response.setText("we need your location for order delivery. click share location to share your location.");
-        try {
-            telegramSender.execute(response);
-        } catch (TelegramApiException e) {
-            logger.error("Error Sending Message {}", response);
-        }
+        return  replyKeyboardMarkup;
     }
+
 }

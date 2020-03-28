@@ -38,16 +38,17 @@ public class ResponseBuilder {
     public void getResponse(Update update) {
         TelegramUser telegramUser = dbUtility.getTelegramUser(update);
         if (telegramUser == null) {
-            logger.info("Register Telegram User then request contact");
             dbUtility.registerTelegramUser(update);
             requestContact.requestContact(update);
         } else {
             if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_CONTACT_RESPONSE)) {
-                logger.info("Register Contact and proeced to order");
                 processContactAndProceedToOrder(update, telegramUser);
             } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_RESPONSE)){
-                logger.info("proceed to Location Request");
                 processOrderRequestAndProceedToLocationRequest(update, telegramUser);
+            } else if(telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE)){
+                processLocationRequestAndProceedToRestorantRequest(update, telegramUser);
+            } else if(telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION)) {
+
             } else {
                 requestErrorResponder.userErrorResponseResponder(update);
             }
@@ -68,5 +69,16 @@ public class ResponseBuilder {
         } else {
             requestErrorResponder.userErrorResponseResponder(update);
         }
+    }
+    public void processLocationRequestAndProceedToRestorantRequest(Update update, TelegramUser telegramUser) {
+        if (update.hasMessage() && update.getMessage().getLocation() != null){
+            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION);
+            requestRestorantSelection.requestRestorantSelection(update);
+        } else if((update.hasMessage() && update.getMessage().getLocation() == null)|| update.hasCallbackQuery()) {
+            requestLocation.requestLocationAgain(update);
+        }
+    }
+    public void processRestorantSelectionAndProceedToItemSelection(Update update, TelegramUser telegramUser){
+
     }
 }

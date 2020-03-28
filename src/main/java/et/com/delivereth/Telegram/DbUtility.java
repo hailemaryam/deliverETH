@@ -3,14 +3,9 @@ package et.com.delivereth.Telegram;
 import et.com.delivereth.domain.*;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.repository.*;
-import et.com.delivereth.service.KeyValuPairHolderService;
-import et.com.delivereth.service.RestorantQueryService;
-import et.com.delivereth.service.RestorantService;
-import et.com.delivereth.service.TelegramUserService;
-import et.com.delivereth.service.dto.KeyValuPairHolderDTO;
-import et.com.delivereth.service.dto.RestorantCriteria;
-import et.com.delivereth.service.dto.RestorantDTO;
-import et.com.delivereth.service.dto.TelegramUserDTO;
+import et.com.delivereth.service.*;
+import et.com.delivereth.service.dto.*;
+import io.github.jhipster.service.filter.LongFilter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -27,14 +22,16 @@ public class DbUtility {
     private final OrderedFoodRepository orderedFoodRepository;
     private final KeyValuPairHolderService keyValuPairHolderService;
     private final RestorantQueryService restorantQueryService;
+    private final FoodQueryService foodQueryService;
 
-    public DbUtility(TelegramUserService telegramUserService, CustomTelegramUserRepository customTelegramUserRepository, CustomOrderRepository customOrderRepository, OrderedFoodRepository orderedFoodRepository, KeyValuPairHolderService keyValuPairHolderService, RestorantQueryService restorantQueryService) {
+    public DbUtility(TelegramUserService telegramUserService, CustomTelegramUserRepository customTelegramUserRepository, CustomOrderRepository customOrderRepository, OrderedFoodRepository orderedFoodRepository, KeyValuPairHolderService keyValuPairHolderService, RestorantQueryService restorantQueryService, FoodQueryService foodQueryService) {
         this.telegramUserService = telegramUserService;
         this.customTelegramUserRepository = customTelegramUserRepository;
         this.customOrderRepository = customOrderRepository;
         this.orderedFoodRepository = orderedFoodRepository;
         this.keyValuPairHolderService = keyValuPairHolderService;
         this.restorantQueryService = restorantQueryService;
+        this.foodQueryService = foodQueryService;
     }
 
     public void registerTelegramUser(Update update){
@@ -94,5 +91,11 @@ public class DbUtility {
     public List<RestorantDTO> getRestorantList(String latitude, String longtude) {
         RestorantCriteria restorantCriteria = new RestorantCriteria();
         return restorantQueryService.findByCriteria(restorantCriteria);
+    }
+    public List<FoodDTO> getFoodList(Long restorantId){
+        FoodCriteria foodCriteria = new FoodCriteria();
+        LongFilter longFilter = new LongFilter();
+        longFilter.setEquals(restorantId);
+        return foodQueryService.findByCriteria(foodCriteria);
     }
 }

@@ -16,8 +16,10 @@ public class ResponseBuilder {
     private final RequestErrorResponder requestErrorResponder;
     private final RequestForOrder requestForOrder;
     private final RequestRestorantSelection requestRestorantSelection;
+    private final RequestFoodList requestFoodList;
+    private final RequestQuantity requestQuantity;
 
-    public ResponseBuilder(RequestContact requestContact, RequestLocation requestLocation, InlineButtonTest inlineButtonTest, DbUtility dbUtility, RequestErrorResponder requestErrorResponder, RequestForOrder requestForOrder, RequestRestorantSelection requestRestorantSelection) {
+    public ResponseBuilder(RequestContact requestContact, RequestLocation requestLocation, InlineButtonTest inlineButtonTest, DbUtility dbUtility, RequestErrorResponder requestErrorResponder, RequestForOrder requestForOrder, RequestRestorantSelection requestRestorantSelection, RequestFoodList requestFoodList, RequestQuantity requestQuantity) {
         this.requestContact = requestContact;
         this.requestLocation = requestLocation;
         this.inlineButtonTest = inlineButtonTest;
@@ -25,6 +27,8 @@ public class ResponseBuilder {
         this.requestErrorResponder = requestErrorResponder;
         this.requestForOrder = requestForOrder;
         this.requestRestorantSelection = requestRestorantSelection;
+        this.requestFoodList = requestFoodList;
+        this.requestQuantity = requestQuantity;
     }
 
     public BotApiMethod<Message> getResponse(Update update) {
@@ -41,8 +45,10 @@ public class ResponseBuilder {
 //            dbUtility.registerTelegramUser(update);
 //            return requestContact.requestContact(update.getMessage());
 //        }
-        requestForOrder.requestForOrder(update);
-        requestRestorantSelection.requestRestorantSelection(update);
+//        requestForOrder.requestForOrder(update);
+//        requestRestorantSelection.requestRestorantSelection(update);
+//        requestFoodList.requestFoodList(update);
+//        requestQuantity.requestQuantity(update);
         return requestLocation.requestLocation(update.getMessage());
     }
 }

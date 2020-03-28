@@ -4,6 +4,7 @@ import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.domain.KeyValuPairHolder;
+import et.com.delivereth.domain.TelegramUser;
 import et.com.delivereth.service.dto.KeyValuPairHolderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +24,14 @@ import java.util.List;
 @Service
 public class RequestForOrder {
     private final TelegramSender telegramSender;
-    private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestForOrder.class);
     private final DbUtility dbUtility;
     public RequestForOrder(TelegramSender telegramSender, DbUtility dbUtility) {
         this.telegramSender = telegramSender;
         this.dbUtility = dbUtility;
     }
 
-    public SendPhoto requestForOrder(Update update) {
-        Message message = update.getMessage();
+    public void requestForOrder(Update update, TelegramUser telegramUser) {
         SendPhoto response = new SendPhoto();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -40,7 +40,11 @@ public class RequestForOrder {
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
-        response.setChatId(message.getChatId());
+        if (update.hasMessage()){
+            response.setChatId(update.getMessage().getChatId());
+        } else if (update.hasCallbackQuery()) {
+            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
+        }
         KeyValuPairHolderDTO orderImage = dbUtility.getKeyValuPairHolderRepository("OrderImage");
         InputStream inputStream = new ByteArrayInputStream(orderImage.getValueImage());
         response.setPhoto(orderImage.getKey(), inputStream);
@@ -50,6 +54,5 @@ public class RequestForOrder {
         } catch (TelegramApiException e) {
             logger.error("Error Sending Message {}", response);
         }
-        return response;
     }
 }

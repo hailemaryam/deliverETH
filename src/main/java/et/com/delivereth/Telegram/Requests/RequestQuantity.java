@@ -39,7 +39,11 @@ public class RequestQuantity {
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
-        response.setChatId(update.getMessage().getChatId());
+        if (update.hasMessage()){
+            response.setChatId(update.getMessage().getChatId());
+        } else if (update.hasCallbackQuery()) {
+            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
+        }
         response.setText("How Many " + selectedFoodName + ". do you want?");
         try {
             telegramSender.execute(response);

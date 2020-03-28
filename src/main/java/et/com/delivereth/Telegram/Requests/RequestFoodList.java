@@ -24,20 +24,17 @@ public class RequestFoodList {
     private final TelegramSender telegramSender;
     private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
     private final DbUtility dbUtility;
-
     public RequestFoodList(TelegramSender telegramSender, DbUtility dbUtility) {
         this.telegramSender = telegramSender;
         this.dbUtility = dbUtility;
     }
-
     public void requestFoodList(Update update) {
         List<FoodDTO> foodList = dbUtility.getFoodList(1L);
         foodList.forEach(foodDTO -> {
-            sendFood(foodDTO, update.getMessage());
+            sendFood(foodDTO, update);
         });
     }
-
-    public void sendFood(FoodDTO foodDTO, Message message){
+    public void sendFood(FoodDTO foodDTO, Update update){
         SendPhoto response = new SendPhoto();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -46,7 +43,11 @@ public class RequestFoodList {
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
-        response.setChatId(message.getChatId());
+        if (update.hasMessage()){
+            response.setChatId(update.getMessage().getChatId());
+        } else if (update.hasCallbackQuery()) {
+            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
+        }
         InputStream inputStream = new ByteArrayInputStream(foodDTO.getIconImage());
         response.setPhoto(foodDTO.getName(), inputStream);
         response.setCaption(foodDTO.getName() + " : " + foodDTO.getPrice() + " birr");
@@ -56,6 +57,4 @@ public class RequestFoodList {
             logger.error("Error Sending Message {}", response);
         }
     }
-
-
 }

@@ -34,11 +34,11 @@ public class RequestRestorantSelection {
     public void requestRestorantSelection(Update update) {
         List<RestorantDTO> restorantList = dbUtility.getRestorantList(null, null);
         restorantList.forEach(restorantDTO -> {
-            sendRestorant(restorantDTO, update.getMessage());
+            sendRestorant(restorantDTO, update);
         });
     }
 
-    public void sendRestorant(RestorantDTO restorantDTO, Message message){
+    public void sendRestorant(RestorantDTO restorantDTO, Update update){
         SendPhoto response = new SendPhoto();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -47,7 +47,11 @@ public class RequestRestorantSelection {
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
-        response.setChatId(message.getChatId());
+        if (update.hasMessage()){
+            response.setChatId(update.getMessage().getChatId());
+        } else if (update.hasCallbackQuery()) {
+            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
+        }
         InputStream inputStream = new ByteArrayInputStream(restorantDTO.getIconImage());
         response.setPhoto(restorantDTO.getName(), inputStream);
         response.setCaption(restorantDTO.getDescription());
@@ -57,5 +61,4 @@ public class RequestRestorantSelection {
             logger.error("Error Sending Message {}", response);
         }
     }
-
 }

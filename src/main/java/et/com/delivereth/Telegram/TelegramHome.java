@@ -1,16 +1,12 @@
 package et.com.delivereth.Telegram;
 
+import et.com.delivereth.Telegram.Requests.RequestErrorResponder;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendInvoice;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
 import javax.annotation.PostConstruct;
@@ -19,16 +15,17 @@ import javax.annotation.PostConstruct;
 public class TelegramHome extends TelegramLongPollingBot {
 
     private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
-
     @Value("${bot.token}")
     private String token;
 
     @Value("${bot.username}")
     private String username;
     private final ResponseBuilder responseBuilder;
+    private final RequestErrorResponder requestErrorResponder;
 
-    public TelegramHome(ResponseBuilder responseBuilder) {
+    public TelegramHome(ResponseBuilder responseBuilder, RequestErrorResponder requestErrorResponder) {
         this.responseBuilder = responseBuilder;
+        this.requestErrorResponder = requestErrorResponder;
     }
 
     @Override
@@ -46,12 +43,8 @@ public class TelegramHome extends TelegramLongPollingBot {
         logger.info("Received message {}", update);
         if (update.hasMessage() || update.hasCallbackQuery()) {
             responseBuilder.getResponse(update);
-//            try {
-//                logger.info("Sent message {}", response);
-//                execute(response);
-//            } catch (TelegramApiException e) {
-//                logger.error("Error Sending Message {}", response);
-//            }
+        } else {
+            requestErrorResponder.userErrorResponseResponder(update);
         }
     }
     @PostConstruct

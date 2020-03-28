@@ -1,11 +1,14 @@
 package et.com.delivereth.Telegram;
 
+import et.com.delivereth.Telegram.Requests.RequestForOrder;
 import et.com.delivereth.domain.*;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.repository.*;
 import et.com.delivereth.service.*;
 import et.com.delivereth.service.dto.*;
 import io.github.jhipster.service.filter.LongFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import java.util.Optional;
 
 @Service
 public class DbUtility {
+    private static final Logger logger = LoggerFactory.getLogger(DbUtility.class);
     private final TelegramUserService telegramUserService;
     private final CustomTelegramUserRepository customTelegramUserRepository;
     private final CustomOrderRepository customOrderRepository;
@@ -48,20 +52,27 @@ public class DbUtility {
         }
         telegramUserService.save(telegramUserDTO);
     }
-    public void registerUserPhone(Update update) {
-        Optional<TelegramUser> telegramUserByUserNameEquals =
-            customTelegramUserRepository
-                .findTelegramUserByUserNameEquals(update.getMessage().getFrom().getUserName());
-        TelegramUser telegramUser = telegramUserByUserNameEquals.get();
+    public void registerUserPhone(Update update, TelegramUser telegramUser) {
         telegramUser.setPhone(update.getMessage().getContact().getPhoneNumber());
         telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_ORDER_RESPONSE);
         customTelegramUserRepository.save(telegramUser);
     }
     public TelegramUser getTelegramUser(Update update) {
-        Optional<TelegramUser> telegramUserByUserNameEquals =
-            customTelegramUserRepository
-                .findTelegramUserByUserNameEquals(update.getMessage().getFrom().getUserName());
+        Optional<TelegramUser> telegramUserByUserNameEquals = null;
+        if (update.hasMessage()) {
+            telegramUserByUserNameEquals =
+                customTelegramUserRepository
+                    .findTelegramUserByUserNameEquals(update.getMessage().getFrom().getUserName());
+        } else if (update.hasCallbackQuery()){
+            telegramUserByUserNameEquals =
+                customTelegramUserRepository
+                    .findTelegramUserByUserNameEquals(update.getCallbackQuery().getFrom().getUserName());
+        }
         return telegramUserByUserNameEquals.isPresent()? telegramUserByUserNameEquals.get(): null;
+    }
+    public void updateStep(TelegramUser telegramUser, String step){
+        telegramUser.setConversationMetaData(step);
+        customTelegramUserRepository.save(telegramUser);
     }
     public Order registerOrder(TelegramUser telegramUser) {
         Order order = new Order();

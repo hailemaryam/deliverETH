@@ -26,6 +26,3 @@ public class InlineButtonTest {
         return response;
     }
 }
-
-
-

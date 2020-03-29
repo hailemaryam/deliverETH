@@ -104,10 +104,10 @@ public class DbUtility {
         RestorantCriteria restorantCriteria = new RestorantCriteria();
         return restorantQueryService.findByCriteria(restorantCriteria, PageRequest.of(page, pageSize)).toList();
     }
-    public List<FoodDTO> getFoodList(Long restorantId){
+    public List<FoodDTO> getFoodList(Long restorantId, Integer page, Integer size){
         FoodCriteria foodCriteria = new FoodCriteria();
         LongFilter longFilter = new LongFilter();
         longFilter.setEquals(restorantId);
-        return foodQueryService.findByCriteria(foodCriteria);
+        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(page, size)).toList();
     }
 }

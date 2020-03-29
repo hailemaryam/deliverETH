@@ -1,9 +1,9 @@
 package et.com.delivereth.Telegram.Requests;
 
 import et.com.delivereth.Telegram.DbUtility;
-import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
-import et.com.delivereth.service.dto.RestorantDTO;
+import et.com.delivereth.domain.TelegramUser;
+import et.com.delivereth.service.dto.KeyValuPairHolderDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,28 +19,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RequestRestorantSelection {
+public class RequestForFinishOrder {
     private final TelegramSender telegramSender;
-    private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestForFinishOrder.class);
     private final DbUtility dbUtility;
 
-    public RequestRestorantSelection(TelegramSender telegramSender, DbUtility dbUtility) {
+    public RequestForFinishOrder(TelegramSender telegramSender, DbUtility dbUtility) {
         this.telegramSender = telegramSender;
         this.dbUtility = dbUtility;
     }
 
-    public void requestRestorantSelection(Update update) {
-        List<RestorantDTO> restorantList = dbUtility.getRestorantList(null, null, 0, 2);
-        restorantList.forEach(restorantDTO -> {
-            sendRestorant(restorantDTO, update);
-        });
-    }
-    public void sendRestorant(RestorantDTO restorantDTO, Update update){
+    public void requestForFinishOrder(Update update, TelegramUser telegramUser) {
         SendPhoto response = new SendPhoto();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("Show Menu").setCallbackData("menu_" + restorantDTO.getId()));
+        rowInline.add(new InlineKeyboardButton().setText("Add More Item").setCallbackData("order"));
+        rowInline.add(new InlineKeyboardButton().setText("Cancel").setCallbackData("order"));
+        rowInline.add(new InlineKeyboardButton().setText("Place Order").setCallbackData("order"));
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
@@ -49,9 +45,10 @@ public class RequestRestorantSelection {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        InputStream inputStream = new ByteArrayInputStream(restorantDTO.getIconImage());
-        response.setPhoto(restorantDTO.getName(), inputStream);
-        response.setCaption(restorantDTO.getDescription());
+        KeyValuPairHolderDTO orderImage = dbUtility.getKeyValuPairHolderRepository("OrderImage");
+        InputStream inputStream = new ByteArrayInputStream(orderImage.getValueImage());
+        response.setPhoto(orderImage.getKey(), inputStream);
+        response.setCaption("order invoice under development");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

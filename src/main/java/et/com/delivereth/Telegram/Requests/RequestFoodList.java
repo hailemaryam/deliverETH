@@ -29,7 +29,7 @@ public class RequestFoodList {
         this.dbUtility = dbUtility;
     }
     public void requestFoodList(Update update) {
-        List<FoodDTO> foodList = dbUtility.getFoodList(1L);
+        List<FoodDTO> foodList = dbUtility.getFoodList(Long.valueOf(update.getCallbackQuery().getData().substring(5)), 0, 2);
         foodList.forEach(foodDTO -> {
             sendFood(foodDTO, update);
         });
@@ -50,7 +50,7 @@ public class RequestFoodList {
         }
         InputStream inputStream = new ByteArrayInputStream(foodDTO.getIconImage());
         response.setPhoto(foodDTO.getName(), inputStream);
-        response.setCaption(foodDTO.getName() + " : " + foodDTO.getPrice() + " birr");
+        response.setCaption(foodDTO.getName() + " : " + foodDTO.getPrice() + " birr.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

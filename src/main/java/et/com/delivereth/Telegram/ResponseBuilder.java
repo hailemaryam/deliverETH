@@ -18,10 +18,10 @@ public class ResponseBuilder {
     private final RequestQuantity requestQuantity;
     private final RequestForFinishOrder requestForFinishOrder;
     private final RequestErrorResponder requestErrorResponder;
-    private final InlineButtonTest inlineButtonTest;
+    private final RequestForHelp requestForHelp;
     private final DbUtility dbUtility;
 
-    public ResponseBuilder(RequestContact requestContact, RequestForOrder requestForOrder, RequestLocation requestLocation, RequestRestorantSelection requestRestorantSelection, RequestFoodList requestFoodList, RequestQuantity requestQuantity, RequestForFinishOrder requestForFinishOrder, RequestErrorResponder requestErrorResponder, InlineButtonTest inlineButtonTest, DbUtility dbUtility) {
+    public ResponseBuilder(RequestContact requestContact, RequestForOrder requestForOrder, RequestLocation requestLocation, RequestRestorantSelection requestRestorantSelection, RequestFoodList requestFoodList, RequestQuantity requestQuantity, RequestForFinishOrder requestForFinishOrder, RequestErrorResponder requestErrorResponder, RequestForHelp requestForHelp, DbUtility dbUtility) {
         this.requestContact = requestContact;
         this.requestForOrder = requestForOrder;
         this.requestLocation = requestLocation;
@@ -30,7 +30,7 @@ public class ResponseBuilder {
         this.requestQuantity = requestQuantity;
         this.requestForFinishOrder = requestForFinishOrder;
         this.requestErrorResponder = requestErrorResponder;
-        this.inlineButtonTest = inlineButtonTest;
+        this.requestForHelp = requestForHelp;
         this.dbUtility = dbUtility;
     }
 
@@ -42,42 +42,45 @@ public class ResponseBuilder {
         } else {
             if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_CONTACT_RESPONSE)) {
                 processContactAndProceedToOrder(update, telegramUser);
-            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_RESPONSE)){
+            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_RESPONSE)) {
                 processOrderRequestAndProceedToLocationRequest(update, telegramUser);
-            } else if(telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE)){
+            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE)) {
                 processLocationRequestAndProceedToRestorantRequest(update, telegramUser);
-            } else if(telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION)) {
+            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION)) {
                 processRestorantSelectionAndProceedToFoodSelection(update, telegramUser);
-            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM)){
+            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM)) {
                 processAddItemAndRequestQuanity(update, telegramUser);
-            } else if(telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY)){
+            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY)) {
                 processSetQuantityAndPreceedToPlaceOrder(update, telegramUser);
             } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_LOOP_FINISH_ORDER)) {
-
-            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_LOOP_FOLLOW_ORDER_STATUS)) {
-
-            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_HELP_OR_PROCEED_RESPONSE)){
-
+                processOrderFinishOrAddMoreItem(update, telegramUser);
+            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ERROR_PAGE_RESPONSE)) {
+                processErrorResponse(update, telegramUser);
+            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_HELP_PAGE_RESPONSE)) {
+                processHelpResponse(update, telegramUser);
             } else {
                 requestForErrorResponder(update, telegramUser);
             }
         }
     }
+    /* remaining*/
     public void requestForErrorResponder(Update update, TelegramUser telegramUser) {
         if (Integer.valueOf(telegramUser.getConversationMetaData()) <= 7) {
             // cancel order first
         }
-        dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION);
+        dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ERROR_PAGE_RESPONSE);
         requestErrorResponder.userErrorResponseResponder(update);
     }
-    public void processContactAndProceedToOrder (Update update, TelegramUser telegramUser) {
+
+    public void processContactAndProceedToOrder(Update update, TelegramUser telegramUser) {
         if (update.getMessage().getContact() != null) {
-            dbUtility.registerUserPhone(update ,telegramUser);
+            dbUtility.registerUserPhone(update, telegramUser);
             requestForOrder.requestForOrder(update, telegramUser);
         } else {
             requestContact.requestContactAgain(update);
         }
     }
+
     public void processOrderRequestAndProceedToLocationRequest(Update update, TelegramUser telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order")) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);
@@ -86,33 +89,39 @@ public class ResponseBuilder {
             requestErrorResponder.userErrorResponseResponder(update);
         }
     }
+
     public void processLocationRequestAndProceedToRestorantRequest(Update update, TelegramUser telegramUser) {
-        if (update.hasMessage() && update.getMessage().getLocation() != null){
+        if (update.hasMessage() && update.getMessage().getLocation() != null) {
+//            dbUtility.registerOrder(telegramUser, update.getMessage().getLocation().getLatitude(), update.getMessage().getLocation().getLongitude());
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION);
             requestRestorantSelection.requestRestorantSelection(update);
-        } else if((update.hasMessage() && update.getMessage().getLocation() == null)|| update.hasCallbackQuery()) {
+        } else if ((update.hasMessage() && update.getMessage().getLocation() == null) || update.hasCallbackQuery()) {
             requestLocation.requestLocationAgain(update);
         }
     }
+
     /* remaining */
-    public void processRestorantSelectionAndProceedToFoodSelection(Update update, TelegramUser telegramUser){
-        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("menu_")){
+    public void processRestorantSelectionAndProceedToFoodSelection(Update update, TelegramUser telegramUser) {
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("menu_")) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM);
             requestFoodList.requestFoodList(update);
         } else {
-
+            requestForErrorResponder(update, telegramUser);
         }
     }
+
     /* remaining */
     public void processAddItemAndRequestQuanity(Update update, TelegramUser telegramUser) {
-        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("food_")){
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("food_")) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY);
             requestQuantity.requestQuantity(update);
         } else {
 
         }
     }
-    public void processSetQuantityAndPreceedToPlaceOrder(Update update, TelegramUser telegramUser){
+
+    /* remaining */
+    public void processSetQuantityAndPreceedToPlaceOrder(Update update, TelegramUser telegramUser) {
         if (update.hasCallbackQuery()) {
             if (update.getCallbackQuery().getData().startsWith("quantity_page_")) {
                 // update list to paget by substring
@@ -129,6 +138,36 @@ public class ResponseBuilder {
         } else if (update.hasMessage()) {
             Integer quantity = Integer.valueOf(update.getMessage().getText());
 
+        }
+    }
+
+    /* remaining */
+    public void processOrderFinishOrAddMoreItem(Update update, TelegramUser telegramUser) {
+
+    }
+    public void processErrorResponse(Update update, TelegramUser telegramUser) {
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("help")) {
+            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_HELP_PAGE_RESPONSE);
+            requestForHelp.requestForHelp(update, telegramUser);
+        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order")) {
+            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_RESPONSE);
+            requestForOrder.requestForOrder(update, telegramUser);
+        } else {
+            requestForErrorResponder(update, telegramUser);
+        }
+    }
+    public void processHelpResponse(Update update, TelegramUser telegramUser) {
+        if (update.hasCallbackQuery()) {
+            if (update.getCallbackQuery().getData().equals("ok")) {
+                dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_RESPONSE);
+                requestForOrder.requestForOrder(update, telegramUser);
+            } else {
+                dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ERROR_PAGE_RESPONSE);
+                requestForErrorResponder(update, telegramUser);
+            }
+        } else {
+            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ERROR_PAGE_RESPONSE);
+            requestForErrorResponder(update, telegramUser);
         }
     }
 }

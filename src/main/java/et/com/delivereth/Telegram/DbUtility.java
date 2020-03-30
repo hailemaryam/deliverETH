@@ -75,8 +75,11 @@ public class DbUtility {
         telegramUser.setConversationMetaData(step);
         customTelegramUserRepository.save(telegramUser);
     }
-    public Order registerOrder(TelegramUser telegramUser) {
+
+    public Order registerOrder(TelegramUser telegramUser, String latitude, String longtude) {
         Order order = new Order();
+        order.setLatitude(latitude);
+        order.setLongtude(longtude);
         order.setTelegramUser(telegramUser);
         order.setOrderStatus(OrderStatus.STARTED);
         return customOrderRepository.save(order);

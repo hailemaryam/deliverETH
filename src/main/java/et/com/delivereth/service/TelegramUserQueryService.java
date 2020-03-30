@@ -109,6 +109,12 @@ public class TelegramUserQueryService extends QueryService<TelegramUser> {
             if (criteria.getConversationMetaData() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getConversationMetaData(), TelegramUser_.conversationMetaData));
             }
+            if (criteria.getOrderIdPaused() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getOrderIdPaused(), TelegramUser_.orderIdPaused));
+            }
+            if (criteria.getOrderedFoodIdPaused() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getOrderedFoodIdPaused(), TelegramUser_.orderedFoodIdPaused));
+            }
             if (criteria.getOrderId() != null) {
                 specification = specification.and(buildSpecification(criteria.getOrderId(),
                     root -> root.join(TelegramUser_.orders, JoinType.LEFT).get(Order_.id)));

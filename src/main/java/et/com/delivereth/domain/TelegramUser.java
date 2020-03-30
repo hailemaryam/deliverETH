@@ -44,6 +44,12 @@ public class TelegramUser implements Serializable {
     @Column(name = "conversation_meta_data")
     private String conversationMetaData;
 
+    @Column(name = "order_id_paused")
+    private Long orderIdPaused;
+
+    @Column(name = "ordered_food_id_paused")
+    private Long orderedFoodIdPaused;
+
     @OneToMany(mappedBy = "telegramUser")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Order> orders = new HashSet<>();
@@ -135,6 +141,32 @@ public class TelegramUser implements Serializable {
         this.conversationMetaData = conversationMetaData;
     }
 
+    public Long getOrderIdPaused() {
+        return orderIdPaused;
+    }
+
+    public TelegramUser orderIdPaused(Long orderIdPaused) {
+        this.orderIdPaused = orderIdPaused;
+        return this;
+    }
+
+    public void setOrderIdPaused(Long orderIdPaused) {
+        this.orderIdPaused = orderIdPaused;
+    }
+
+    public Long getOrderedFoodIdPaused() {
+        return orderedFoodIdPaused;
+    }
+
+    public TelegramUser orderedFoodIdPaused(Long orderedFoodIdPaused) {
+        this.orderedFoodIdPaused = orderedFoodIdPaused;
+        return this;
+    }
+
+    public void setOrderedFoodIdPaused(Long orderedFoodIdPaused) {
+        this.orderedFoodIdPaused = orderedFoodIdPaused;
+    }
+
     public Set<Order> getOrders() {
         return orders;
     }
@@ -187,6 +219,8 @@ public class TelegramUser implements Serializable {
             ", chatId='" + getChatId() + "'" +
             ", phone='" + getPhone() + "'" +
             ", conversationMetaData='" + getConversationMetaData() + "'" +
+            ", orderIdPaused=" + getOrderIdPaused() +
+            ", orderedFoodIdPaused=" + getOrderedFoodIdPaused() +
             "}";
     }
 }

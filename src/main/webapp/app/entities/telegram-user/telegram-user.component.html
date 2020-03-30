@@ -29,6 +29,8 @@
                     <th scope="col"  jhiSortBy="chatId"><span>Chat Id</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="phone"><span>Phone</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="conversationMetaData"><span>Conversation Meta Data</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="orderIdPaused"><span>Order Id Paused</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="orderedFoodIdPaused"><span>Ordered Food Id Paused</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -41,6 +43,8 @@
                     <td>{{ telegramUser.chatId }}</td>
                     <td>{{ telegramUser.phone }}</td>
                     <td>{{ telegramUser.conversationMetaData }}</td>
+                    <td>{{ telegramUser.orderIdPaused }}</td>
+                    <td>{{ telegramUser.orderedFoodIdPaused }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"

@@ -54,6 +54,14 @@ public class TelegramUserResourceIT {
     private static final String DEFAULT_CONVERSATION_META_DATA = "AAAAAAAAAA";
     private static final String UPDATED_CONVERSATION_META_DATA = "BBBBBBBBBB";
 
+    private static final Long DEFAULT_ORDER_ID_PAUSED = 1L;
+    private static final Long UPDATED_ORDER_ID_PAUSED = 2L;
+    private static final Long SMALLER_ORDER_ID_PAUSED = 1L - 1L;
+
+    private static final Long DEFAULT_ORDERED_FOOD_ID_PAUSED = 1L;
+    private static final Long UPDATED_ORDERED_FOOD_ID_PAUSED = 2L;
+    private static final Long SMALLER_ORDERED_FOOD_ID_PAUSED = 1L - 1L;
+
     @Autowired
     private TelegramUserRepository telegramUserRepository;
 
@@ -87,7 +95,9 @@ public class TelegramUserResourceIT {
             .userName(DEFAULT_USER_NAME)
             .chatId(DEFAULT_CHAT_ID)
             .phone(DEFAULT_PHONE)
-            .conversationMetaData(DEFAULT_CONVERSATION_META_DATA);
+            .conversationMetaData(DEFAULT_CONVERSATION_META_DATA)
+            .orderIdPaused(DEFAULT_ORDER_ID_PAUSED)
+            .orderedFoodIdPaused(DEFAULT_ORDERED_FOOD_ID_PAUSED);
         return telegramUser;
     }
     /**
@@ -103,7 +113,9 @@ public class TelegramUserResourceIT {
             .userName(UPDATED_USER_NAME)
             .chatId(UPDATED_CHAT_ID)
             .phone(UPDATED_PHONE)
-            .conversationMetaData(UPDATED_CONVERSATION_META_DATA);
+            .conversationMetaData(UPDATED_CONVERSATION_META_DATA)
+            .orderIdPaused(UPDATED_ORDER_ID_PAUSED)
+            .orderedFoodIdPaused(UPDATED_ORDERED_FOOD_ID_PAUSED);
         return telegramUser;
     }
 
@@ -134,6 +146,8 @@ public class TelegramUserResourceIT {
         assertThat(testTelegramUser.getChatId()).isEqualTo(DEFAULT_CHAT_ID);
         assertThat(testTelegramUser.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testTelegramUser.getConversationMetaData()).isEqualTo(DEFAULT_CONVERSATION_META_DATA);
+        assertThat(testTelegramUser.getOrderIdPaused()).isEqualTo(DEFAULT_ORDER_ID_PAUSED);
+        assertThat(testTelegramUser.getOrderedFoodIdPaused()).isEqualTo(DEFAULT_ORDERED_FOOD_ID_PAUSED);
     }
 
     @Test
@@ -173,7 +187,9 @@ public class TelegramUserResourceIT {
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
-            .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)));
+            .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)))
+            .andExpect(jsonPath("$.[*].orderIdPaused").value(hasItem(DEFAULT_ORDER_ID_PAUSED.intValue())))
+            .andExpect(jsonPath("$.[*].orderedFoodIdPaused").value(hasItem(DEFAULT_ORDERED_FOOD_ID_PAUSED.intValue())));
     }
     
     @Test
@@ -192,7 +208,9 @@ public class TelegramUserResourceIT {
             .andExpect(jsonPath("$.userName").value(DEFAULT_USER_NAME))
             .andExpect(jsonPath("$.chatId").value(DEFAULT_CHAT_ID))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
-            .andExpect(jsonPath("$.conversationMetaData").value(DEFAULT_CONVERSATION_META_DATA));
+            .andExpect(jsonPath("$.conversationMetaData").value(DEFAULT_CONVERSATION_META_DATA))
+            .andExpect(jsonPath("$.orderIdPaused").value(DEFAULT_ORDER_ID_PAUSED.intValue()))
+            .andExpect(jsonPath("$.orderedFoodIdPaused").value(DEFAULT_ORDERED_FOOD_ID_PAUSED.intValue()));
     }
 
 
@@ -685,6 +703,216 @@ public class TelegramUserResourceIT {
 
     @Test
     @Transactional
+    public void getAllTelegramUsersByOrderIdPausedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderIdPaused equals to DEFAULT_ORDER_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderIdPaused.equals=" + DEFAULT_ORDER_ID_PAUSED);
+
+        // Get all the telegramUserList where orderIdPaused equals to UPDATED_ORDER_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderIdPaused.equals=" + UPDATED_ORDER_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderIdPausedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderIdPaused not equals to DEFAULT_ORDER_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderIdPaused.notEquals=" + DEFAULT_ORDER_ID_PAUSED);
+
+        // Get all the telegramUserList where orderIdPaused not equals to UPDATED_ORDER_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderIdPaused.notEquals=" + UPDATED_ORDER_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderIdPausedIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderIdPaused in DEFAULT_ORDER_ID_PAUSED or UPDATED_ORDER_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderIdPaused.in=" + DEFAULT_ORDER_ID_PAUSED + "," + UPDATED_ORDER_ID_PAUSED);
+
+        // Get all the telegramUserList where orderIdPaused equals to UPDATED_ORDER_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderIdPaused.in=" + UPDATED_ORDER_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderIdPausedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderIdPaused is not null
+        defaultTelegramUserShouldBeFound("orderIdPaused.specified=true");
+
+        // Get all the telegramUserList where orderIdPaused is null
+        defaultTelegramUserShouldNotBeFound("orderIdPaused.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderIdPausedIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderIdPaused is greater than or equal to DEFAULT_ORDER_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderIdPaused.greaterThanOrEqual=" + DEFAULT_ORDER_ID_PAUSED);
+
+        // Get all the telegramUserList where orderIdPaused is greater than or equal to UPDATED_ORDER_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderIdPaused.greaterThanOrEqual=" + UPDATED_ORDER_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderIdPausedIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderIdPaused is less than or equal to DEFAULT_ORDER_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderIdPaused.lessThanOrEqual=" + DEFAULT_ORDER_ID_PAUSED);
+
+        // Get all the telegramUserList where orderIdPaused is less than or equal to SMALLER_ORDER_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderIdPaused.lessThanOrEqual=" + SMALLER_ORDER_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderIdPausedIsLessThanSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderIdPaused is less than DEFAULT_ORDER_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderIdPaused.lessThan=" + DEFAULT_ORDER_ID_PAUSED);
+
+        // Get all the telegramUserList where orderIdPaused is less than UPDATED_ORDER_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderIdPaused.lessThan=" + UPDATED_ORDER_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderIdPausedIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderIdPaused is greater than DEFAULT_ORDER_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderIdPaused.greaterThan=" + DEFAULT_ORDER_ID_PAUSED);
+
+        // Get all the telegramUserList where orderIdPaused is greater than SMALLER_ORDER_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderIdPaused.greaterThan=" + SMALLER_ORDER_ID_PAUSED);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderedFoodIdPausedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderedFoodIdPaused equals to DEFAULT_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderedFoodIdPaused.equals=" + DEFAULT_ORDERED_FOOD_ID_PAUSED);
+
+        // Get all the telegramUserList where orderedFoodIdPaused equals to UPDATED_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderedFoodIdPaused.equals=" + UPDATED_ORDERED_FOOD_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderedFoodIdPausedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderedFoodIdPaused not equals to DEFAULT_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderedFoodIdPaused.notEquals=" + DEFAULT_ORDERED_FOOD_ID_PAUSED);
+
+        // Get all the telegramUserList where orderedFoodIdPaused not equals to UPDATED_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderedFoodIdPaused.notEquals=" + UPDATED_ORDERED_FOOD_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderedFoodIdPausedIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderedFoodIdPaused in DEFAULT_ORDERED_FOOD_ID_PAUSED or UPDATED_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderedFoodIdPaused.in=" + DEFAULT_ORDERED_FOOD_ID_PAUSED + "," + UPDATED_ORDERED_FOOD_ID_PAUSED);
+
+        // Get all the telegramUserList where orderedFoodIdPaused equals to UPDATED_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderedFoodIdPaused.in=" + UPDATED_ORDERED_FOOD_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderedFoodIdPausedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderedFoodIdPaused is not null
+        defaultTelegramUserShouldBeFound("orderedFoodIdPaused.specified=true");
+
+        // Get all the telegramUserList where orderedFoodIdPaused is null
+        defaultTelegramUserShouldNotBeFound("orderedFoodIdPaused.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderedFoodIdPausedIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderedFoodIdPaused is greater than or equal to DEFAULT_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderedFoodIdPaused.greaterThanOrEqual=" + DEFAULT_ORDERED_FOOD_ID_PAUSED);
+
+        // Get all the telegramUserList where orderedFoodIdPaused is greater than or equal to UPDATED_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderedFoodIdPaused.greaterThanOrEqual=" + UPDATED_ORDERED_FOOD_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderedFoodIdPausedIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderedFoodIdPaused is less than or equal to DEFAULT_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderedFoodIdPaused.lessThanOrEqual=" + DEFAULT_ORDERED_FOOD_ID_PAUSED);
+
+        // Get all the telegramUserList where orderedFoodIdPaused is less than or equal to SMALLER_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderedFoodIdPaused.lessThanOrEqual=" + SMALLER_ORDERED_FOOD_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderedFoodIdPausedIsLessThanSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderedFoodIdPaused is less than DEFAULT_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderedFoodIdPaused.lessThan=" + DEFAULT_ORDERED_FOOD_ID_PAUSED);
+
+        // Get all the telegramUserList where orderedFoodIdPaused is less than UPDATED_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderedFoodIdPaused.lessThan=" + UPDATED_ORDERED_FOOD_ID_PAUSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersByOrderedFoodIdPausedIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where orderedFoodIdPaused is greater than DEFAULT_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldNotBeFound("orderedFoodIdPaused.greaterThan=" + DEFAULT_ORDERED_FOOD_ID_PAUSED);
+
+        // Get all the telegramUserList where orderedFoodIdPaused is greater than SMALLER_ORDERED_FOOD_ID_PAUSED
+        defaultTelegramUserShouldBeFound("orderedFoodIdPaused.greaterThan=" + SMALLER_ORDERED_FOOD_ID_PAUSED);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllTelegramUsersByOrderIsEqualToSomething() throws Exception {
         // Initialize the database
         telegramUserRepository.saveAndFlush(telegramUser);
@@ -715,7 +943,9 @@ public class TelegramUserResourceIT {
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
-            .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)));
+            .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)))
+            .andExpect(jsonPath("$.[*].orderIdPaused").value(hasItem(DEFAULT_ORDER_ID_PAUSED.intValue())))
+            .andExpect(jsonPath("$.[*].orderedFoodIdPaused").value(hasItem(DEFAULT_ORDERED_FOOD_ID_PAUSED.intValue())));
 
         // Check, that the count call also returns 1
         restTelegramUserMockMvc.perform(get("/api/telegram-users/count?sort=id,desc&" + filter))
@@ -768,7 +998,9 @@ public class TelegramUserResourceIT {
             .userName(UPDATED_USER_NAME)
             .chatId(UPDATED_CHAT_ID)
             .phone(UPDATED_PHONE)
-            .conversationMetaData(UPDATED_CONVERSATION_META_DATA);
+            .conversationMetaData(UPDATED_CONVERSATION_META_DATA)
+            .orderIdPaused(UPDATED_ORDER_ID_PAUSED)
+            .orderedFoodIdPaused(UPDATED_ORDERED_FOOD_ID_PAUSED);
         TelegramUserDTO telegramUserDTO = telegramUserMapper.toDto(updatedTelegramUser);
 
         restTelegramUserMockMvc.perform(put("/api/telegram-users")
@@ -786,6 +1018,8 @@ public class TelegramUserResourceIT {
         assertThat(testTelegramUser.getChatId()).isEqualTo(UPDATED_CHAT_ID);
         assertThat(testTelegramUser.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testTelegramUser.getConversationMetaData()).isEqualTo(UPDATED_CONVERSATION_META_DATA);
+        assertThat(testTelegramUser.getOrderIdPaused()).isEqualTo(UPDATED_ORDER_ID_PAUSED);
+        assertThat(testTelegramUser.getOrderedFoodIdPaused()).isEqualTo(UPDATED_ORDERED_FOOD_ID_PAUSED);
     }
 
     @Test

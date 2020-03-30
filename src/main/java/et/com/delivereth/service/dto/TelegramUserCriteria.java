@@ -38,6 +38,10 @@ public class TelegramUserCriteria implements Serializable, Criteria {
 
     private StringFilter conversationMetaData;
 
+    private LongFilter orderIdPaused;
+
+    private LongFilter orderedFoodIdPaused;
+
     private LongFilter orderId;
 
     public TelegramUserCriteria() {
@@ -51,6 +55,8 @@ public class TelegramUserCriteria implements Serializable, Criteria {
         this.chatId = other.chatId == null ? null : other.chatId.copy();
         this.phone = other.phone == null ? null : other.phone.copy();
         this.conversationMetaData = other.conversationMetaData == null ? null : other.conversationMetaData.copy();
+        this.orderIdPaused = other.orderIdPaused == null ? null : other.orderIdPaused.copy();
+        this.orderedFoodIdPaused = other.orderedFoodIdPaused == null ? null : other.orderedFoodIdPaused.copy();
         this.orderId = other.orderId == null ? null : other.orderId.copy();
     }
 
@@ -115,6 +121,22 @@ public class TelegramUserCriteria implements Serializable, Criteria {
         this.conversationMetaData = conversationMetaData;
     }
 
+    public LongFilter getOrderIdPaused() {
+        return orderIdPaused;
+    }
+
+    public void setOrderIdPaused(LongFilter orderIdPaused) {
+        this.orderIdPaused = orderIdPaused;
+    }
+
+    public LongFilter getOrderedFoodIdPaused() {
+        return orderedFoodIdPaused;
+    }
+
+    public void setOrderedFoodIdPaused(LongFilter orderedFoodIdPaused) {
+        this.orderedFoodIdPaused = orderedFoodIdPaused;
+    }
+
     public LongFilter getOrderId() {
         return orderId;
     }
@@ -141,6 +163,8 @@ public class TelegramUserCriteria implements Serializable, Criteria {
             Objects.equals(chatId, that.chatId) &&
             Objects.equals(phone, that.phone) &&
             Objects.equals(conversationMetaData, that.conversationMetaData) &&
+            Objects.equals(orderIdPaused, that.orderIdPaused) &&
+            Objects.equals(orderedFoodIdPaused, that.orderedFoodIdPaused) &&
             Objects.equals(orderId, that.orderId);
     }
 
@@ -154,6 +178,8 @@ public class TelegramUserCriteria implements Serializable, Criteria {
         chatId,
         phone,
         conversationMetaData,
+        orderIdPaused,
+        orderedFoodIdPaused,
         orderId
         );
     }
@@ -168,6 +194,8 @@ public class TelegramUserCriteria implements Serializable, Criteria {
                 (chatId != null ? "chatId=" + chatId + ", " : "") +
                 (phone != null ? "phone=" + phone + ", " : "") +
                 (conversationMetaData != null ? "conversationMetaData=" + conversationMetaData + ", " : "") +
+                (orderIdPaused != null ? "orderIdPaused=" + orderIdPaused + ", " : "") +
+                (orderedFoodIdPaused != null ? "orderedFoodIdPaused=" + orderedFoodIdPaused + ", " : "") +
                 (orderId != null ? "orderId=" + orderId + ", " : "") +
             "}";
     }

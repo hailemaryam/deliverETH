@@ -27,6 +27,14 @@
         {
             "fieldName": "conversationMetaData",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "orderIdPaused",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "orderedFoodIdPaused",
+            "fieldType": "Long"
         }
     ],
     "relationships": [

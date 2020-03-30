@@ -25,7 +25,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Order(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, 'AAAAAAA', OrderStatus.STARTED);
+      elemDefault = new Order(0, 0, 0, 'AAAAAAA', 'AAAAAAA', currentDate, 'AAAAAAA', OrderStatus.STARTED);
     });
 
     describe('Service methods', () => {
@@ -70,8 +70,8 @@ describe('Service Tests', () => {
       it('should update a Order', () => {
         const returnedFromService = Object.assign(
           {
-            latitude: 'BBBBBB',
-            longtude: 'BBBBBB',
+            latitude: 1,
+            longtude: 1,
             locationDescription: 'BBBBBB',
             totalPrice: 'BBBBBB',
             date: currentDate.format(DATE_TIME_FORMAT),
@@ -98,8 +98,8 @@ describe('Service Tests', () => {
       it('should return a list of Order', () => {
         const returnedFromService = Object.assign(
           {
-            latitude: 'BBBBBB',
-            longtude: 'BBBBBB',
+            latitude: 1,
+            longtude: 1,
             locationDescription: 'BBBBBB',
             totalPrice: 'BBBBBB',
             date: currentDate.format(DATE_TIME_FORMAT),

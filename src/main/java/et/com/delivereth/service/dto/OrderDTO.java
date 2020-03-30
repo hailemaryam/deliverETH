@@ -13,9 +13,9 @@ public class OrderDTO implements Serializable {
     
     private Long id;
 
-    private String latitude;
+    private Float latitude;
 
-    private String longtude;
+    private Float longtude;
 
     @Lob
     private String locationDescription;
@@ -42,19 +42,19 @@ public class OrderDTO implements Serializable {
         this.id = id;
     }
 
-    public String getLatitude() {
+    public Float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongtude() {
+    public Float getLongtude() {
         return longtude;
     }
 
-    public void setLongtude(String longtude) {
+    public void setLongtude(Float longtude) {
         this.longtude = longtude;
     }
 
@@ -139,8 +139,8 @@ public class OrderDTO implements Serializable {
     public String toString() {
         return "OrderDTO{" +
             "id=" + getId() +
-            ", latitude='" + getLatitude() + "'" +
-            ", longtude='" + getLongtude() + "'" +
+            ", latitude=" + getLatitude() +
+            ", longtude=" + getLongtude() +
             ", locationDescription='" + getLocationDescription() + "'" +
             ", totalPrice='" + getTotalPrice() + "'" +
             ", date='" + getDate() + "'" +

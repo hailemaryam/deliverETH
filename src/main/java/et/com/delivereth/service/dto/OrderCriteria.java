@@ -46,9 +46,9 @@ public class OrderCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter latitude;
+    private FloatFilter latitude;
 
-    private StringFilter longtude;
+    private FloatFilter longtude;
 
     private StringFilter totalPrice;
 
@@ -87,19 +87,19 @@ public class OrderCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getLatitude() {
+    public FloatFilter getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(StringFilter latitude) {
+    public void setLatitude(FloatFilter latitude) {
         this.latitude = latitude;
     }
 
-    public StringFilter getLongtude() {
+    public FloatFilter getLongtude() {
         return longtude;
     }
 
-    public void setLongtude(StringFilter longtude) {
+    public void setLongtude(FloatFilter longtude) {
         this.longtude = longtude;
     }
 

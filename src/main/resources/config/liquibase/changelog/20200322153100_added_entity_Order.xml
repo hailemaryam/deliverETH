@@ -16,10 +16,10 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="latitude" type="varchar(255)">
+            <column name="latitude" type="${floatType}">
                 <constraints nullable="true" />
             </column>
-            <column name="longtude" type="varchar(255)">
+            <column name="longtude" type="${floatType}">
                 <constraints nullable="true" />
             </column>
             <column name="location_description" type="${clobType}">
@@ -64,8 +64,8 @@
                   separator=";"
                   tableName="jhi_order">
             <column name="id" type="numeric"/>
-            <column name="latitude" type="string"/>
-            <column name="longtude" type="string"/>
+            <column name="latitude" type="numeric"/>
+            <column name="longtude" type="numeric"/>
             <column name="location_description" type="clob"/>
             <column name="total_price" type="string"/>
             <column name="date" type="datetime"/>

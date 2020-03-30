@@ -41,11 +41,13 @@ import et.com.delivereth.domain.enumeration.OrderStatus;
 @WithMockUser
 public class OrderResourceIT {
 
-    private static final String DEFAULT_LATITUDE = "AAAAAAAAAA";
-    private static final String UPDATED_LATITUDE = "BBBBBBBBBB";
+    private static final Float DEFAULT_LATITUDE = 1F;
+    private static final Float UPDATED_LATITUDE = 2F;
+    private static final Float SMALLER_LATITUDE = 1F - 1F;
 
-    private static final String DEFAULT_LONGTUDE = "AAAAAAAAAA";
-    private static final String UPDATED_LONGTUDE = "BBBBBBBBBB";
+    private static final Float DEFAULT_LONGTUDE = 1F;
+    private static final Float UPDATED_LONGTUDE = 2F;
+    private static final Float SMALLER_LONGTUDE = 1F - 1F;
 
     private static final String DEFAULT_LOCATION_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_LOCATION_DESCRIPTION = "BBBBBBBBBB";
@@ -179,8 +181,8 @@ public class OrderResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(order.getId().intValue())))
-            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE)))
-            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE)))
+            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
+            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].locationDescription").value(hasItem(DEFAULT_LOCATION_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE)))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
@@ -199,8 +201,8 @@ public class OrderResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(order.getId().intValue()))
-            .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE))
-            .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE))
+            .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE.doubleValue()))
+            .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE.doubleValue()))
             .andExpect(jsonPath("$.locationDescription").value(DEFAULT_LOCATION_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
@@ -279,30 +281,57 @@ public class OrderResourceIT {
         // Get all the orderList where latitude is null
         defaultOrderShouldNotBeFound("latitude.specified=false");
     }
-                @Test
+
+    @Test
     @Transactional
-    public void getAllOrdersByLatitudeContainsSomething() throws Exception {
+    public void getAllOrdersByLatitudeIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         orderRepository.saveAndFlush(order);
 
-        // Get all the orderList where latitude contains DEFAULT_LATITUDE
-        defaultOrderShouldBeFound("latitude.contains=" + DEFAULT_LATITUDE);
+        // Get all the orderList where latitude is greater than or equal to DEFAULT_LATITUDE
+        defaultOrderShouldBeFound("latitude.greaterThanOrEqual=" + DEFAULT_LATITUDE);
 
-        // Get all the orderList where latitude contains UPDATED_LATITUDE
-        defaultOrderShouldNotBeFound("latitude.contains=" + UPDATED_LATITUDE);
+        // Get all the orderList where latitude is greater than or equal to UPDATED_LATITUDE
+        defaultOrderShouldNotBeFound("latitude.greaterThanOrEqual=" + UPDATED_LATITUDE);
     }
 
     @Test
     @Transactional
-    public void getAllOrdersByLatitudeNotContainsSomething() throws Exception {
+    public void getAllOrdersByLatitudeIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         orderRepository.saveAndFlush(order);
 
-        // Get all the orderList where latitude does not contain DEFAULT_LATITUDE
-        defaultOrderShouldNotBeFound("latitude.doesNotContain=" + DEFAULT_LATITUDE);
+        // Get all the orderList where latitude is less than or equal to DEFAULT_LATITUDE
+        defaultOrderShouldBeFound("latitude.lessThanOrEqual=" + DEFAULT_LATITUDE);
 
-        // Get all the orderList where latitude does not contain UPDATED_LATITUDE
-        defaultOrderShouldBeFound("latitude.doesNotContain=" + UPDATED_LATITUDE);
+        // Get all the orderList where latitude is less than or equal to SMALLER_LATITUDE
+        defaultOrderShouldNotBeFound("latitude.lessThanOrEqual=" + SMALLER_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByLatitudeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where latitude is less than DEFAULT_LATITUDE
+        defaultOrderShouldNotBeFound("latitude.lessThan=" + DEFAULT_LATITUDE);
+
+        // Get all the orderList where latitude is less than UPDATED_LATITUDE
+        defaultOrderShouldBeFound("latitude.lessThan=" + UPDATED_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByLatitudeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where latitude is greater than DEFAULT_LATITUDE
+        defaultOrderShouldNotBeFound("latitude.greaterThan=" + DEFAULT_LATITUDE);
+
+        // Get all the orderList where latitude is greater than SMALLER_LATITUDE
+        defaultOrderShouldBeFound("latitude.greaterThan=" + SMALLER_LATITUDE);
     }
 
 
@@ -357,30 +386,57 @@ public class OrderResourceIT {
         // Get all the orderList where longtude is null
         defaultOrderShouldNotBeFound("longtude.specified=false");
     }
-                @Test
+
+    @Test
     @Transactional
-    public void getAllOrdersByLongtudeContainsSomething() throws Exception {
+    public void getAllOrdersByLongtudeIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         orderRepository.saveAndFlush(order);
 
-        // Get all the orderList where longtude contains DEFAULT_LONGTUDE
-        defaultOrderShouldBeFound("longtude.contains=" + DEFAULT_LONGTUDE);
+        // Get all the orderList where longtude is greater than or equal to DEFAULT_LONGTUDE
+        defaultOrderShouldBeFound("longtude.greaterThanOrEqual=" + DEFAULT_LONGTUDE);
 
-        // Get all the orderList where longtude contains UPDATED_LONGTUDE
-        defaultOrderShouldNotBeFound("longtude.contains=" + UPDATED_LONGTUDE);
+        // Get all the orderList where longtude is greater than or equal to UPDATED_LONGTUDE
+        defaultOrderShouldNotBeFound("longtude.greaterThanOrEqual=" + UPDATED_LONGTUDE);
     }
 
     @Test
     @Transactional
-    public void getAllOrdersByLongtudeNotContainsSomething() throws Exception {
+    public void getAllOrdersByLongtudeIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         orderRepository.saveAndFlush(order);
 
-        // Get all the orderList where longtude does not contain DEFAULT_LONGTUDE
-        defaultOrderShouldNotBeFound("longtude.doesNotContain=" + DEFAULT_LONGTUDE);
+        // Get all the orderList where longtude is less than or equal to DEFAULT_LONGTUDE
+        defaultOrderShouldBeFound("longtude.lessThanOrEqual=" + DEFAULT_LONGTUDE);
 
-        // Get all the orderList where longtude does not contain UPDATED_LONGTUDE
-        defaultOrderShouldBeFound("longtude.doesNotContain=" + UPDATED_LONGTUDE);
+        // Get all the orderList where longtude is less than or equal to SMALLER_LONGTUDE
+        defaultOrderShouldNotBeFound("longtude.lessThanOrEqual=" + SMALLER_LONGTUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByLongtudeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where longtude is less than DEFAULT_LONGTUDE
+        defaultOrderShouldNotBeFound("longtude.lessThan=" + DEFAULT_LONGTUDE);
+
+        // Get all the orderList where longtude is less than UPDATED_LONGTUDE
+        defaultOrderShouldBeFound("longtude.lessThan=" + UPDATED_LONGTUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByLongtudeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where longtude is greater than DEFAULT_LONGTUDE
+        defaultOrderShouldNotBeFound("longtude.greaterThan=" + DEFAULT_LONGTUDE);
+
+        // Get all the orderList where longtude is greater than SMALLER_LONGTUDE
+        defaultOrderShouldBeFound("longtude.greaterThan=" + SMALLER_LONGTUDE);
     }
 
 
@@ -613,8 +669,8 @@ public class OrderResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(order.getId().intValue())))
-            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE)))
-            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE)))
+            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
+            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].locationDescription").value(hasItem(DEFAULT_LOCATION_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE)))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))

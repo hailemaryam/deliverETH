@@ -92,10 +92,10 @@ public class OrderQueryService extends QueryService<Order> {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Order_.id));
             }
             if (criteria.getLatitude() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLatitude(), Order_.latitude));
+                specification = specification.and(buildRangeSpecification(criteria.getLatitude(), Order_.latitude));
             }
             if (criteria.getLongtude() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLongtude(), Order_.longtude));
+                specification = specification.and(buildRangeSpecification(criteria.getLongtude(), Order_.longtude));
             }
             if (criteria.getTotalPrice() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTotalPrice(), Order_.totalPrice));

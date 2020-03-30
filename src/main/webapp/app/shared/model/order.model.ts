@@ -4,8 +4,8 @@ import { OrderStatus } from 'app/shared/model/enumerations/order-status.model';
 
 export interface IOrder {
   id?: number;
-  latitude?: string;
-  longtude?: string;
+  latitude?: number;
+  longtude?: number;
   locationDescription?: any;
   totalPrice?: string;
   date?: Moment;
@@ -19,8 +19,8 @@ export interface IOrder {
 export class Order implements IOrder {
   constructor(
     public id?: number,
-    public latitude?: string,
-    public longtude?: string,
+    public latitude?: number,
+    public longtude?: number,
     public locationDescription?: any,
     public totalPrice?: string,
     public date?: Moment,

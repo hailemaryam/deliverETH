@@ -29,10 +29,10 @@ public class Order implements Serializable {
     private Long id;
 
     @Column(name = "latitude")
-    private String latitude;
+    private Float latitude;
 
     @Column(name = "longtude")
-    private String longtude;
+    private Float longtude;
 
     @Lob
     @Column(name = "location_description")
@@ -69,29 +69,29 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public String getLatitude() {
+    public Float getLatitude() {
         return latitude;
     }
 
-    public Order latitude(String latitude) {
+    public Order latitude(Float latitude) {
         this.latitude = latitude;
         return this;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongtude() {
+    public Float getLongtude() {
         return longtude;
     }
 
-    public Order longtude(String longtude) {
+    public Order longtude(Float longtude) {
         this.longtude = longtude;
         return this;
     }
 
-    public void setLongtude(String longtude) {
+    public void setLongtude(Float longtude) {
         this.longtude = longtude;
     }
 
@@ -219,8 +219,8 @@ public class Order implements Serializable {
     public String toString() {
         return "Order{" +
             "id=" + getId() +
-            ", latitude='" + getLatitude() + "'" +
-            ", longtude='" + getLongtude() + "'" +
+            ", latitude=" + getLatitude() +
+            ", longtude=" + getLongtude() +
             ", locationDescription='" + getLocationDescription() + "'" +
             ", totalPrice='" + getTotalPrice() + "'" +
             ", date='" + getDate() + "'" +

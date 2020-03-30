@@ -28,8 +28,9 @@ public class DbUtility {
     private final KeyValuPairHolderService keyValuPairHolderService;
     private final RestorantQueryService restorantQueryService;
     private final FoodQueryService foodQueryService;
+    private final FoodRepository foodRepository;
 
-    public DbUtility(TelegramUserService telegramUserService, CustomTelegramUserRepository customTelegramUserRepository, CustomOrderRepository customOrderRepository, OrderedFoodRepository orderedFoodRepository, KeyValuPairHolderService keyValuPairHolderService, RestorantQueryService restorantQueryService, FoodQueryService foodQueryService) {
+    public DbUtility(TelegramUserService telegramUserService, CustomTelegramUserRepository customTelegramUserRepository, CustomOrderRepository customOrderRepository, OrderedFoodRepository orderedFoodRepository, KeyValuPairHolderService keyValuPairHolderService, RestorantQueryService restorantQueryService, FoodQueryService foodQueryService, FoodRepository foodRepository) {
         this.telegramUserService = telegramUserService;
         this.customTelegramUserRepository = customTelegramUserRepository;
         this.customOrderRepository = customOrderRepository;
@@ -37,6 +38,7 @@ public class DbUtility {
         this.keyValuPairHolderService = keyValuPairHolderService;
         this.restorantQueryService = restorantQueryService;
         this.foodQueryService = foodQueryService;
+        this.foodRepository = foodRepository;
     }
 
     public void registerTelegramUser(Update update){
@@ -76,21 +78,6 @@ public class DbUtility {
         customTelegramUserRepository.save(telegramUser);
     }
 
-    public Order registerOrder(TelegramUser telegramUser, String latitude, String longtude) {
-        Order order = new Order();
-        order.setLatitude(latitude);
-        order.setLongtude(longtude);
-        order.setTelegramUser(telegramUser);
-        order.setOrderStatus(OrderStatus.STARTED);
-        return customOrderRepository.save(order);
-    }
-    public OrderedFood addItemToOrder(Order order, Food food, Integer quantity){
-        OrderedFood orderedFood = new OrderedFood();
-        orderedFood.setOrder(order);
-        orderedFood.setFood(food);
-        orderedFood.setQuantity(quantity);
-        return orderedFoodRepository.save(orderedFood);
-    }
     public Order updateOrder(Order order) {
         return customOrderRepository.save(order);
     }
@@ -112,5 +99,28 @@ public class DbUtility {
         LongFilter longFilter = new LongFilter();
         longFilter.setEquals(restorantId);
         return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(page, size)).toList();
+    }
+    public Food getFoodById(Long id){
+        return foodRepository.getOne(id);
+    }
+    public OrderedFood addFoodToOrder(Order order, Food food){
+        OrderedFood orderedFood = new OrderedFood();
+        orderedFood.setFood(food);
+        orderedFood.setOrder(order);
+        orderedFood.setQuantity(1);
+        return orderedFoodRepository.save(orderedFood);
+    }
+    public Order registerOrder(TelegramUser telegramUser, Float latitude, Float longtude) {
+        Order order = new Order();
+        order.setLatitude(latitude);
+        order.setLongtude(longtude);
+        order.setTelegramUser(telegramUser);
+        order.setOrderStatus(OrderStatus.STARTED);
+        return customOrderRepository.save(order);
+    }
+    public OrderedFood addToCart(Update update, TelegramUser telegramUser){
+        Order order= findOrder(telegramUser, OrderStatus.STARTED);
+        Food food = getFoodById(Long.valueOf(update.getCallbackQuery().getData().substring(5)));
+        return addFoodToOrder(order, food);
     }
 }

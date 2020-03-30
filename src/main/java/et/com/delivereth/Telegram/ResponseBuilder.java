@@ -1,7 +1,11 @@
 package et.com.delivereth.Telegram;
 
 import et.com.delivereth.Telegram.Requests.*;
+import et.com.delivereth.domain.Food;
+import et.com.delivereth.domain.Order;
+import et.com.delivereth.domain.OrderedFood;
 import et.com.delivereth.domain.TelegramUser;
+import et.com.delivereth.domain.enumeration.OrderStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -92,15 +96,13 @@ public class ResponseBuilder {
 
     public void processLocationRequestAndProceedToRestorantRequest(Update update, TelegramUser telegramUser) {
         if (update.hasMessage() && update.getMessage().getLocation() != null) {
-//            dbUtility.registerOrder(telegramUser, update.getMessage().getLocation().getLatitude(), update.getMessage().getLocation().getLongitude());
+            dbUtility.registerOrder(telegramUser, update.getMessage().getLocation().getLatitude(), update.getMessage().getLocation().getLongitude());
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION);
             requestRestorantSelection.requestRestorantSelection(update);
         } else if ((update.hasMessage() && update.getMessage().getLocation() == null) || update.hasCallbackQuery()) {
             requestLocation.requestLocationAgain(update);
         }
     }
-
-    /* remaining */
     public void processRestorantSelectionAndProceedToFoodSelection(Update update, TelegramUser telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("menu_")) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM);
@@ -109,21 +111,20 @@ public class ResponseBuilder {
             requestForErrorResponder(update, telegramUser);
         }
     }
-
-    /* remaining */
     public void processAddItemAndRequestQuanity(Update update, TelegramUser telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("food_")) {
+            OrderedFood orderedFood = dbUtility.addToCart(update, telegramUser);
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY);
-            requestQuantity.requestQuantity(update);
+            requestQuantity.requestQuantity(update, orderedFood);
         } else {
-
+            requestForErrorResponder(update, telegramUser);
         }
     }
 
     /* remaining */
     public void processSetQuantityAndPreceedToPlaceOrder(Update update, TelegramUser telegramUser) {
         if (update.hasCallbackQuery()) {
-            if (update.getCallbackQuery().getData().startsWith("quantity_page_")) {
+            if (update.getCallbackQuery().getData().startsWith("quantity_")) {
                 // update list to paget by substring
             } else {
                 try {

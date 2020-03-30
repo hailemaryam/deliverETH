@@ -3,6 +3,7 @@ package et.com.delivereth.Telegram.Requests;
 import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
+import et.com.delivereth.domain.OrderedFood;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,14 +27,14 @@ public class RequestQuantity {
         this.dbUtility = dbUtility;
     }
 
-    public void requestQuantity(Update update) {
+    public void requestQuantity(Update update, OrderedFood orderedFood) {
         String selectedFoodName = "chees burger";
         SendMessage response = new SendMessage();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         for (int i = 1; i < 6; i++) {
-            rowInline.add(new InlineKeyboardButton().setText("" + i).setCallbackData("quantity_" + i));
+            rowInline.add(new InlineKeyboardButton().setText("" + i).setCallbackData("quantity_" + i + "_orderedItem_" + orderedFood.getId()));
         }
         rowInline.add(new InlineKeyboardButton().setText(">>").setCallbackData("next_6"));
         rowsInline.add(rowInline);

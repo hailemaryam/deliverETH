@@ -42,6 +42,8 @@ public class TelegramUserCriteria implements Serializable, Criteria {
 
     private LongFilter orderedFoodIdPaused;
 
+    private IntegerFilter loadedPage;
+
     private LongFilter orderId;
 
     public TelegramUserCriteria() {
@@ -57,6 +59,7 @@ public class TelegramUserCriteria implements Serializable, Criteria {
         this.conversationMetaData = other.conversationMetaData == null ? null : other.conversationMetaData.copy();
         this.orderIdPaused = other.orderIdPaused == null ? null : other.orderIdPaused.copy();
         this.orderedFoodIdPaused = other.orderedFoodIdPaused == null ? null : other.orderedFoodIdPaused.copy();
+        this.loadedPage = other.loadedPage == null ? null : other.loadedPage.copy();
         this.orderId = other.orderId == null ? null : other.orderId.copy();
     }
 
@@ -137,6 +140,14 @@ public class TelegramUserCriteria implements Serializable, Criteria {
         this.orderedFoodIdPaused = orderedFoodIdPaused;
     }
 
+    public IntegerFilter getLoadedPage() {
+        return loadedPage;
+    }
+
+    public void setLoadedPage(IntegerFilter loadedPage) {
+        this.loadedPage = loadedPage;
+    }
+
     public LongFilter getOrderId() {
         return orderId;
     }
@@ -165,6 +176,7 @@ public class TelegramUserCriteria implements Serializable, Criteria {
             Objects.equals(conversationMetaData, that.conversationMetaData) &&
             Objects.equals(orderIdPaused, that.orderIdPaused) &&
             Objects.equals(orderedFoodIdPaused, that.orderedFoodIdPaused) &&
+            Objects.equals(loadedPage, that.loadedPage) &&
             Objects.equals(orderId, that.orderId);
     }
 
@@ -180,6 +192,7 @@ public class TelegramUserCriteria implements Serializable, Criteria {
         conversationMetaData,
         orderIdPaused,
         orderedFoodIdPaused,
+        loadedPage,
         orderId
         );
     }
@@ -196,6 +209,7 @@ public class TelegramUserCriteria implements Serializable, Criteria {
                 (conversationMetaData != null ? "conversationMetaData=" + conversationMetaData + ", " : "") +
                 (orderIdPaused != null ? "orderIdPaused=" + orderIdPaused + ", " : "") +
                 (orderedFoodIdPaused != null ? "orderedFoodIdPaused=" + orderedFoodIdPaused + ", " : "") +
+                (loadedPage != null ? "loadedPage=" + loadedPage + ", " : "") +
                 (orderId != null ? "orderId=" + orderId + ", " : "") +
             "}";
     }

@@ -50,6 +50,9 @@ public class TelegramUser implements Serializable {
     @Column(name = "ordered_food_id_paused")
     private Long orderedFoodIdPaused;
 
+    @Column(name = "loaded_page")
+    private Integer loadedPage;
+
     @OneToMany(mappedBy = "telegramUser")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Order> orders = new HashSet<>();
@@ -167,6 +170,19 @@ public class TelegramUser implements Serializable {
         this.orderedFoodIdPaused = orderedFoodIdPaused;
     }
 
+    public Integer getLoadedPage() {
+        return loadedPage;
+    }
+
+    public TelegramUser loadedPage(Integer loadedPage) {
+        this.loadedPage = loadedPage;
+        return this;
+    }
+
+    public void setLoadedPage(Integer loadedPage) {
+        this.loadedPage = loadedPage;
+    }
+
     public Set<Order> getOrders() {
         return orders;
     }
@@ -221,6 +237,7 @@ public class TelegramUser implements Serializable {
             ", conversationMetaData='" + getConversationMetaData() + "'" +
             ", orderIdPaused=" + getOrderIdPaused() +
             ", orderedFoodIdPaused=" + getOrderedFoodIdPaused() +
+            ", loadedPage=" + getLoadedPage() +
             "}";
     }
 }

@@ -35,6 +35,10 @@
         {
             "fieldName": "orderedFoodIdPaused",
             "fieldType": "Long"
+        },
+        {
+            "fieldName": "loadedPage",
+            "fieldType": "Integer"
         }
     ],
     "relationships": [

@@ -24,7 +24,8 @@ export class TelegramUserUpdateComponent implements OnInit {
     phone: [],
     conversationMetaData: [],
     orderIdPaused: [],
-    orderedFoodIdPaused: []
+    orderedFoodIdPaused: [],
+    loadedPage: []
   });
 
   constructor(protected telegramUserService: TelegramUserService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -45,7 +46,8 @@ export class TelegramUserUpdateComponent implements OnInit {
       phone: telegramUser.phone,
       conversationMetaData: telegramUser.conversationMetaData,
       orderIdPaused: telegramUser.orderIdPaused,
-      orderedFoodIdPaused: telegramUser.orderedFoodIdPaused
+      orderedFoodIdPaused: telegramUser.orderedFoodIdPaused,
+      loadedPage: telegramUser.loadedPage
     });
   }
 
@@ -74,7 +76,8 @@ export class TelegramUserUpdateComponent implements OnInit {
       phone: this.editForm.get(['phone'])!.value,
       conversationMetaData: this.editForm.get(['conversationMetaData'])!.value,
       orderIdPaused: this.editForm.get(['orderIdPaused'])!.value,
-      orderedFoodIdPaused: this.editForm.get(['orderedFoodIdPaused'])!.value
+      orderedFoodIdPaused: this.editForm.get(['orderedFoodIdPaused'])!.value,
+      loadedPage: this.editForm.get(['loadedPage'])!.value
     };
   }
 

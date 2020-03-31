@@ -10,6 +10,7 @@ export interface ITelegramUser {
   conversationMetaData?: string;
   orderIdPaused?: number;
   orderedFoodIdPaused?: number;
+  loadedPage?: number;
   orders?: IOrder[];
 }
 
@@ -24,6 +25,7 @@ export class TelegramUser implements ITelegramUser {
     public conversationMetaData?: string,
     public orderIdPaused?: number,
     public orderedFoodIdPaused?: number,
+    public loadedPage?: number,
     public orders?: IOrder[]
   ) {}
 }

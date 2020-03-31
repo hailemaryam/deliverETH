@@ -96,6 +96,11 @@ public class DbUtility {
         Order order = customOrderRepository.getOne(telegramUser.getOrderIdPaused());
         Float latitude = order.getLatitude();
         Float longtitude = order.getLongtude();
+        if (telegramUser.getLoadedPage() == null) {
+            telegramUser.setLoadedPage(1);
+        } else {
+            telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
+        }
         return restorantQueryService.findByCriteria(restorantCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2)).toList();
     }
     public List<FoodDTO> getFoodList(TelegramUser telegramUser){
@@ -103,6 +108,11 @@ public class DbUtility {
         LongFilter longFilter = new LongFilter();
         longFilter.setEquals(telegramUser.getSelectedRestorant());
         foodCriteria.setRestorantId(longFilter);
+        if (telegramUser.getLoadedPage() == null) {
+            telegramUser.setLoadedPage(1);
+        } else {
+            telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
+        }
         return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2)).toList();
     }
     public void addFoodToOrder(Update update, TelegramUser telegramUser){
@@ -139,6 +149,7 @@ public class DbUtility {
     }
     public void updateStep(TelegramUser telegramUser, String step){
         telegramUser.setConversationMetaData(step);
+        telegramUser.setLoadedPage(null);
         customTelegramUserRepository.save(telegramUser);
     }
     public KeyValuPairHolderDTO getKeyValuPairHolderRepository(String Key) {

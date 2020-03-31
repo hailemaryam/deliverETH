@@ -104,6 +104,8 @@ public class ResponseBuilder {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("menu_")) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM);
             requestFoodList.requestFoodList(update, telegramUser);
+        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("loadMore")) {
+            requestFoodList.requestFoodList(update, telegramUser);
         } else {
             requestForErrorResponder(update, telegramUser);
         }
@@ -113,6 +115,8 @@ public class ResponseBuilder {
             dbUtility.addFoodToOrder(update, telegramUser);
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY);
             requestQuantity.requestQuantity(update);
+        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("loadMore")){
+            requestFoodList.requestFoodList(update, telegramUser);
         } else {
             requestForErrorResponder(update, telegramUser);
         }

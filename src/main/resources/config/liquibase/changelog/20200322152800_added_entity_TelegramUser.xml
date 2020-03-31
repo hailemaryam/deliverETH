@@ -40,6 +40,9 @@
             <column name="ordered_food_id_paused" type="bigint">
                 <constraints nullable="true" />
             </column>
+            <column name="selected_restorant" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="loaded_page" type="integer">
                 <constraints nullable="true" />
             </column>
@@ -74,6 +77,7 @@
             <column name="conversation_meta_data" type="string"/>
             <column name="order_id_paused" type="numeric"/>
             <column name="ordered_food_id_paused" type="numeric"/>
+            <column name="selected_restorant" type="numeric"/>
             <column name="loaded_page" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>

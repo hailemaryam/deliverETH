@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(TelegramUserService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new TelegramUser(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 0, 0, 0);
+      elemDefault = new TelegramUser(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 0, 0, 0, 0);
     });
 
     describe('Service methods', () => {
@@ -62,6 +62,7 @@ describe('Service Tests', () => {
             conversationMetaData: 'BBBBBB',
             orderIdPaused: 1,
             orderedFoodIdPaused: 1,
+            selectedRestorant: 1,
             loadedPage: 1
           },
           elemDefault
@@ -87,6 +88,7 @@ describe('Service Tests', () => {
             conversationMetaData: 'BBBBBB',
             orderIdPaused: 1,
             orderedFoodIdPaused: 1,
+            selectedRestorant: 1,
             loadedPage: 1
           },
           elemDefault

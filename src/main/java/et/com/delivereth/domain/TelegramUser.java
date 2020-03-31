@@ -50,6 +50,9 @@ public class TelegramUser implements Serializable {
     @Column(name = "ordered_food_id_paused")
     private Long orderedFoodIdPaused;
 
+    @Column(name = "selected_restorant")
+    private Long selectedRestorant;
+
     @Column(name = "loaded_page")
     private Integer loadedPage;
 
@@ -170,6 +173,19 @@ public class TelegramUser implements Serializable {
         this.orderedFoodIdPaused = orderedFoodIdPaused;
     }
 
+    public Long getSelectedRestorant() {
+        return selectedRestorant;
+    }
+
+    public TelegramUser selectedRestorant(Long selectedRestorant) {
+        this.selectedRestorant = selectedRestorant;
+        return this;
+    }
+
+    public void setSelectedRestorant(Long selectedRestorant) {
+        this.selectedRestorant = selectedRestorant;
+    }
+
     public Integer getLoadedPage() {
         return loadedPage;
     }
@@ -237,6 +253,7 @@ public class TelegramUser implements Serializable {
             ", conversationMetaData='" + getConversationMetaData() + "'" +
             ", orderIdPaused=" + getOrderIdPaused() +
             ", orderedFoodIdPaused=" + getOrderedFoodIdPaused() +
+            ", selectedRestorant=" + getSelectedRestorant() +
             ", loadedPage=" + getLoadedPage() +
             "}";
     }

@@ -62,6 +62,10 @@ public class TelegramUserResourceIT {
     private static final Long UPDATED_ORDERED_FOOD_ID_PAUSED = 2L;
     private static final Long SMALLER_ORDERED_FOOD_ID_PAUSED = 1L - 1L;
 
+    private static final Long DEFAULT_SELECTED_RESTORANT = 1L;
+    private static final Long UPDATED_SELECTED_RESTORANT = 2L;
+    private static final Long SMALLER_SELECTED_RESTORANT = 1L - 1L;
+
     private static final Integer DEFAULT_LOADED_PAGE = 1;
     private static final Integer UPDATED_LOADED_PAGE = 2;
     private static final Integer SMALLER_LOADED_PAGE = 1 - 1;
@@ -102,6 +106,7 @@ public class TelegramUserResourceIT {
             .conversationMetaData(DEFAULT_CONVERSATION_META_DATA)
             .orderIdPaused(DEFAULT_ORDER_ID_PAUSED)
             .orderedFoodIdPaused(DEFAULT_ORDERED_FOOD_ID_PAUSED)
+            .selectedRestorant(DEFAULT_SELECTED_RESTORANT)
             .loadedPage(DEFAULT_LOADED_PAGE);
         return telegramUser;
     }
@@ -121,6 +126,7 @@ public class TelegramUserResourceIT {
             .conversationMetaData(UPDATED_CONVERSATION_META_DATA)
             .orderIdPaused(UPDATED_ORDER_ID_PAUSED)
             .orderedFoodIdPaused(UPDATED_ORDERED_FOOD_ID_PAUSED)
+            .selectedRestorant(UPDATED_SELECTED_RESTORANT)
             .loadedPage(UPDATED_LOADED_PAGE);
         return telegramUser;
     }
@@ -154,6 +160,7 @@ public class TelegramUserResourceIT {
         assertThat(testTelegramUser.getConversationMetaData()).isEqualTo(DEFAULT_CONVERSATION_META_DATA);
         assertThat(testTelegramUser.getOrderIdPaused()).isEqualTo(DEFAULT_ORDER_ID_PAUSED);
         assertThat(testTelegramUser.getOrderedFoodIdPaused()).isEqualTo(DEFAULT_ORDERED_FOOD_ID_PAUSED);
+        assertThat(testTelegramUser.getSelectedRestorant()).isEqualTo(DEFAULT_SELECTED_RESTORANT);
         assertThat(testTelegramUser.getLoadedPage()).isEqualTo(DEFAULT_LOADED_PAGE);
     }
 
@@ -197,6 +204,7 @@ public class TelegramUserResourceIT {
             .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)))
             .andExpect(jsonPath("$.[*].orderIdPaused").value(hasItem(DEFAULT_ORDER_ID_PAUSED.intValue())))
             .andExpect(jsonPath("$.[*].orderedFoodIdPaused").value(hasItem(DEFAULT_ORDERED_FOOD_ID_PAUSED.intValue())))
+            .andExpect(jsonPath("$.[*].selectedRestorant").value(hasItem(DEFAULT_SELECTED_RESTORANT.intValue())))
             .andExpect(jsonPath("$.[*].loadedPage").value(hasItem(DEFAULT_LOADED_PAGE)));
     }
     
@@ -219,6 +227,7 @@ public class TelegramUserResourceIT {
             .andExpect(jsonPath("$.conversationMetaData").value(DEFAULT_CONVERSATION_META_DATA))
             .andExpect(jsonPath("$.orderIdPaused").value(DEFAULT_ORDER_ID_PAUSED.intValue()))
             .andExpect(jsonPath("$.orderedFoodIdPaused").value(DEFAULT_ORDERED_FOOD_ID_PAUSED.intValue()))
+            .andExpect(jsonPath("$.selectedRestorant").value(DEFAULT_SELECTED_RESTORANT.intValue()))
             .andExpect(jsonPath("$.loadedPage").value(DEFAULT_LOADED_PAGE));
     }
 
@@ -922,6 +931,111 @@ public class TelegramUserResourceIT {
 
     @Test
     @Transactional
+    public void getAllTelegramUsersBySelectedRestorantIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where selectedRestorant equals to DEFAULT_SELECTED_RESTORANT
+        defaultTelegramUserShouldBeFound("selectedRestorant.equals=" + DEFAULT_SELECTED_RESTORANT);
+
+        // Get all the telegramUserList where selectedRestorant equals to UPDATED_SELECTED_RESTORANT
+        defaultTelegramUserShouldNotBeFound("selectedRestorant.equals=" + UPDATED_SELECTED_RESTORANT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersBySelectedRestorantIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where selectedRestorant not equals to DEFAULT_SELECTED_RESTORANT
+        defaultTelegramUserShouldNotBeFound("selectedRestorant.notEquals=" + DEFAULT_SELECTED_RESTORANT);
+
+        // Get all the telegramUserList where selectedRestorant not equals to UPDATED_SELECTED_RESTORANT
+        defaultTelegramUserShouldBeFound("selectedRestorant.notEquals=" + UPDATED_SELECTED_RESTORANT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersBySelectedRestorantIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where selectedRestorant in DEFAULT_SELECTED_RESTORANT or UPDATED_SELECTED_RESTORANT
+        defaultTelegramUserShouldBeFound("selectedRestorant.in=" + DEFAULT_SELECTED_RESTORANT + "," + UPDATED_SELECTED_RESTORANT);
+
+        // Get all the telegramUserList where selectedRestorant equals to UPDATED_SELECTED_RESTORANT
+        defaultTelegramUserShouldNotBeFound("selectedRestorant.in=" + UPDATED_SELECTED_RESTORANT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersBySelectedRestorantIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where selectedRestorant is not null
+        defaultTelegramUserShouldBeFound("selectedRestorant.specified=true");
+
+        // Get all the telegramUserList where selectedRestorant is null
+        defaultTelegramUserShouldNotBeFound("selectedRestorant.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersBySelectedRestorantIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where selectedRestorant is greater than or equal to DEFAULT_SELECTED_RESTORANT
+        defaultTelegramUserShouldBeFound("selectedRestorant.greaterThanOrEqual=" + DEFAULT_SELECTED_RESTORANT);
+
+        // Get all the telegramUserList where selectedRestorant is greater than or equal to UPDATED_SELECTED_RESTORANT
+        defaultTelegramUserShouldNotBeFound("selectedRestorant.greaterThanOrEqual=" + UPDATED_SELECTED_RESTORANT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersBySelectedRestorantIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where selectedRestorant is less than or equal to DEFAULT_SELECTED_RESTORANT
+        defaultTelegramUserShouldBeFound("selectedRestorant.lessThanOrEqual=" + DEFAULT_SELECTED_RESTORANT);
+
+        // Get all the telegramUserList where selectedRestorant is less than or equal to SMALLER_SELECTED_RESTORANT
+        defaultTelegramUserShouldNotBeFound("selectedRestorant.lessThanOrEqual=" + SMALLER_SELECTED_RESTORANT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersBySelectedRestorantIsLessThanSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where selectedRestorant is less than DEFAULT_SELECTED_RESTORANT
+        defaultTelegramUserShouldNotBeFound("selectedRestorant.lessThan=" + DEFAULT_SELECTED_RESTORANT);
+
+        // Get all the telegramUserList where selectedRestorant is less than UPDATED_SELECTED_RESTORANT
+        defaultTelegramUserShouldBeFound("selectedRestorant.lessThan=" + UPDATED_SELECTED_RESTORANT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramUsersBySelectedRestorantIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        telegramUserRepository.saveAndFlush(telegramUser);
+
+        // Get all the telegramUserList where selectedRestorant is greater than DEFAULT_SELECTED_RESTORANT
+        defaultTelegramUserShouldNotBeFound("selectedRestorant.greaterThan=" + DEFAULT_SELECTED_RESTORANT);
+
+        // Get all the telegramUserList where selectedRestorant is greater than SMALLER_SELECTED_RESTORANT
+        defaultTelegramUserShouldBeFound("selectedRestorant.greaterThan=" + SMALLER_SELECTED_RESTORANT);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllTelegramUsersByLoadedPageIsEqualToSomething() throws Exception {
         // Initialize the database
         telegramUserRepository.saveAndFlush(telegramUser);
@@ -1060,6 +1174,7 @@ public class TelegramUserResourceIT {
             .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)))
             .andExpect(jsonPath("$.[*].orderIdPaused").value(hasItem(DEFAULT_ORDER_ID_PAUSED.intValue())))
             .andExpect(jsonPath("$.[*].orderedFoodIdPaused").value(hasItem(DEFAULT_ORDERED_FOOD_ID_PAUSED.intValue())))
+            .andExpect(jsonPath("$.[*].selectedRestorant").value(hasItem(DEFAULT_SELECTED_RESTORANT.intValue())))
             .andExpect(jsonPath("$.[*].loadedPage").value(hasItem(DEFAULT_LOADED_PAGE)));
 
         // Check, that the count call also returns 1
@@ -1116,6 +1231,7 @@ public class TelegramUserResourceIT {
             .conversationMetaData(UPDATED_CONVERSATION_META_DATA)
             .orderIdPaused(UPDATED_ORDER_ID_PAUSED)
             .orderedFoodIdPaused(UPDATED_ORDERED_FOOD_ID_PAUSED)
+            .selectedRestorant(UPDATED_SELECTED_RESTORANT)
             .loadedPage(UPDATED_LOADED_PAGE);
         TelegramUserDTO telegramUserDTO = telegramUserMapper.toDto(updatedTelegramUser);
 
@@ -1136,6 +1252,7 @@ public class TelegramUserResourceIT {
         assertThat(testTelegramUser.getConversationMetaData()).isEqualTo(UPDATED_CONVERSATION_META_DATA);
         assertThat(testTelegramUser.getOrderIdPaused()).isEqualTo(UPDATED_ORDER_ID_PAUSED);
         assertThat(testTelegramUser.getOrderedFoodIdPaused()).isEqualTo(UPDATED_ORDERED_FOOD_ID_PAUSED);
+        assertThat(testTelegramUser.getSelectedRestorant()).isEqualTo(UPDATED_SELECTED_RESTORANT);
         assertThat(testTelegramUser.getLoadedPage()).isEqualTo(UPDATED_LOADED_PAGE);
     }
 

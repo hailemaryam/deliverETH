@@ -28,6 +28,8 @@ public class TelegramUserDTO implements Serializable {
 
     private Long orderedFoodIdPaused;
 
+    private Long selectedRestorant;
+
     private Integer loadedPage;
 
     
@@ -103,6 +105,14 @@ public class TelegramUserDTO implements Serializable {
         this.orderedFoodIdPaused = orderedFoodIdPaused;
     }
 
+    public Long getSelectedRestorant() {
+        return selectedRestorant;
+    }
+
+    public void setSelectedRestorant(Long selectedRestorant) {
+        this.selectedRestorant = selectedRestorant;
+    }
+
     public Integer getLoadedPage() {
         return loadedPage;
     }
@@ -144,6 +154,7 @@ public class TelegramUserDTO implements Serializable {
             ", conversationMetaData='" + getConversationMetaData() + "'" +
             ", orderIdPaused=" + getOrderIdPaused() +
             ", orderedFoodIdPaused=" + getOrderedFoodIdPaused() +
+            ", selectedRestorant=" + getSelectedRestorant() +
             ", loadedPage=" + getLoadedPage() +
             "}";
     }

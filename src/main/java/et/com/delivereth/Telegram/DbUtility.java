@@ -37,7 +37,6 @@ public class DbUtility {
         this.foodQueryService = foodQueryService;
         this.foodRepository = foodRepository;
     }
-
     public void registerTelegramUser(Update update){
         TelegramUserDTO telegramUserDTO = new TelegramUserDTO();
         if (update.hasMessage()){
@@ -91,22 +90,52 @@ public class DbUtility {
         customTelegramUserRepository.save(telegramUser);
         return order;
     }
-    /*Not Finished*/
-    public List<RestorantDTO> getRestorantList(TelegramUser telegramUser, Order order) {
+    /*Not Finished Request Restorant Based On Location*/
+    public List<RestorantDTO> getRestorantList(TelegramUser telegramUser) {
         RestorantCriteria restorantCriteria = new RestorantCriteria();
+        Order order = customOrderRepository.getOne(telegramUser.getOrderIdPaused());
+        Float latitude = order.getLatitude();
+        Float longtitude = order.getLongtude();
         return restorantQueryService.findByCriteria(restorantCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2)).toList();
     }
-    /*Not Finished*/
     public List<FoodDTO> getFoodList(TelegramUser telegramUser){
         FoodCriteria foodCriteria = new FoodCriteria();
         LongFilter longFilter = new LongFilter();
-//        longFilter.setEquals();
+        longFilter.setEquals(telegramUser.getSelectedRestorant());
         foodCriteria.setRestorantId(longFilter);
         return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2)).toList();
     }
-    /*Not Finished*/
     public void addFoodToOrder(Update update, TelegramUser telegramUser){
-
+        Order order = customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
+        Food food = foodRepository.getOne(Long.valueOf(update.getCallbackQuery().getData().substring(5)));
+        OrderedFood orderedFood = new OrderedFood();
+        orderedFood.setFood(food);
+        orderedFood.setQuantity(1);
+        orderedFood.setOrder(order);
+        orderedFood =orderedFoodRepository.save(orderedFood);
+        telegramUser.setOrderedFoodIdPaused(orderedFood.getId());
+        customTelegramUserRepository.save(telegramUser);
+    }
+    public void setQuantity(Update update, TelegramUser telegramUser){
+        OrderedFood orderedFood = orderedFoodRepository.getOne(telegramUser.getOrderIdPaused());
+        if (update.hasCallbackQuery()) {
+            orderedFood.setQuantity(Integer.valueOf(update.getCallbackQuery().getData().substring(9)));
+        } else if (update.hasMessage()){
+            orderedFood.setQuantity(Integer.valueOf(update.getMessage().getText()));
+        }
+        orderedFoodRepository.save(orderedFood);
+        telegramUser.setOrderedFoodIdPaused(null);
+        customTelegramUserRepository.save(telegramUser);
+    }
+    public void finishOrder(TelegramUser telegramUser){
+        Order order = customOrderRepository.getOne(telegramUser.getOrderIdPaused());
+        order.setOrderStatus(OrderStatus.ORDERED);
+        customOrderRepository.save(order);
+        telegramUser.setOrderedFoodIdPaused(null);
+        telegramUser.setOrderIdPaused(null);
+        telegramUser.setSelectedRestorant(null);
+        telegramUser.setLoadedPage(null);
+        customTelegramUserRepository.save(telegramUser);
     }
     public void updateStep(TelegramUser telegramUser, String step){
         telegramUser.setConversationMetaData(step);
@@ -116,5 +145,4 @@ public class DbUtility {
         Optional<KeyValuPairHolderDTO> one = keyValuPairHolderService.findOne(1L);
         return one.isPresent()? one.get(): null;
     }
-
 }

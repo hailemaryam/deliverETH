@@ -34,10 +34,11 @@ public class RequestContact {
         response.setReplyMarkup(prepareShareContactReplyButton());
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
+            response.setText("Welcome " + update.getMessage().getFrom().getUserName() + ".we need your contact for registration. click share button to share your contact.");
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
+            response.setText("Welcome " + update.getCallbackQuery().getFrom().getUserName() + ".we need your contact for registration. click share button to share your contact.");
         }
-        response.setText("we need your contact for registration. click share button to share your contact.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

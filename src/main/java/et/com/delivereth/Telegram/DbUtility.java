@@ -93,7 +93,7 @@ public class DbUtility {
     /*Not Finished Request Restorant Based On Location*/
     public List<RestorantDTO> getRestorantList(TelegramUser telegramUser) {
         RestorantCriteria restorantCriteria = new RestorantCriteria();
-        Order order = customOrderRepository.getOne(telegramUser.getOrderIdPaused());
+        Order order = customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
         Float latitude = order.getLatitude();
         Float longtitude = order.getLongtude();
         if (telegramUser.getLoadedPage() == null) {
@@ -117,17 +117,17 @@ public class DbUtility {
     }
     public void addFoodToOrder(Update update, TelegramUser telegramUser){
         Order order = customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
-        Food food = foodRepository.getOne(Long.valueOf(update.getCallbackQuery().getData().substring(5)));
+        Food food = foodRepository.findById(Long.valueOf(update.getCallbackQuery().getData().substring(5))).get();
         OrderedFood orderedFood = new OrderedFood();
         orderedFood.setFood(food);
         orderedFood.setQuantity(1);
         orderedFood.setOrder(order);
-        orderedFood =orderedFoodRepository.save(orderedFood);
+        orderedFood = orderedFoodRepository.save(orderedFood);
         telegramUser.setOrderedFoodIdPaused(orderedFood.getId());
         customTelegramUserRepository.save(telegramUser);
     }
     public void setQuantity(Update update, TelegramUser telegramUser){
-        OrderedFood orderedFood = orderedFoodRepository.getOne(telegramUser.getOrderIdPaused());
+        OrderedFood orderedFood = orderedFoodRepository.findById(telegramUser.getOrderIdPaused()).get();
         if (update.hasCallbackQuery()) {
             orderedFood.setQuantity(Integer.valueOf(update.getCallbackQuery().getData().substring(9)));
         } else if (update.hasMessage()){
@@ -138,7 +138,7 @@ public class DbUtility {
         customTelegramUserRepository.save(telegramUser);
     }
     public void finishOrder(TelegramUser telegramUser){
-        Order order = customOrderRepository.getOne(telegramUser.getOrderIdPaused());
+        Order order = customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
         order.setOrderStatus(OrderStatus.ORDERED);
         customOrderRepository.save(order);
         telegramUser.setOrderedFoodIdPaused(null);

@@ -53,7 +53,7 @@ public class DbUtility {
     }
     public void registerUserPhone(Update update, TelegramUser telegramUser) {
         telegramUser.setPhone(update.getMessage().getContact().getPhoneNumber());
-        telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_ORDER_RESPONSE);
+        telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
         customTelegramUserRepository.save(telegramUser);
     }
     public TelegramUser getTelegramUser(Update update) {
@@ -150,6 +150,9 @@ public class DbUtility {
     public void updateStep(TelegramUser telegramUser, String step){
         telegramUser.setConversationMetaData(step);
         telegramUser.setLoadedPage(null);
+        customTelegramUserRepository.save(telegramUser);
+    }
+    public void updateTelegramUser(TelegramUser telegramUser){
         customTelegramUserRepository.save(telegramUser);
     }
     public KeyValuPairHolderDTO getKeyValuPairHolderRepository(String Key) {

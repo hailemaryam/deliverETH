@@ -4,6 +4,7 @@ import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.domain.OrderedFood;
+import et.com.delivereth.domain.TelegramUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,16 +28,55 @@ public class RequestQuantity {
         this.dbUtility = dbUtility;
     }
 
-    public void requestQuantity(Update update) {
+    public void requestQuantity(Update update, TelegramUser telegramUser) {
         String selectedFoodName = "chees burger";
         SendMessage response = new SendMessage();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        for (int i = 1; i < 6; i++) {
+        if (telegramUser.getLoadedPage() == null) {
+            telegramUser.setLoadedPage(1);
+            dbUtility.updateTelegramUser(telegramUser);
+        } else {
+            telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
+            dbUtility.updateTelegramUser(telegramUser);
+        }
+        for (int i = telegramUser.getLoadedPage(); i < telegramUser.getLoadedPage()*5; i++) {
             rowInline.add(new InlineKeyboardButton().setText("" + i).setCallbackData("quantity_" + i));
         }
-        rowInline.add(new InlineKeyboardButton().setText(">>").setCallbackData("next_6"));
+        rowInline.add(new InlineKeyboardButton().setText(">>").setCallbackData("next"));
+        rowsInline.add(rowInline);
+        markupInline.setKeyboard(rowsInline);
+        response.setReplyMarkup(markupInline);
+        if (update.hasMessage()){
+            response.setChatId(update.getMessage().getChatId());
+        } else if (update.hasCallbackQuery()) {
+            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
+        }
+        response.setText("How Many " + selectedFoodName + ". do you want?");
+        try {
+            telegramSender.execute(response);
+        } catch (TelegramApiException e) {
+            logger.error("Error Sending Message {}", response);
+        }
+    }
+    public void requestQuantityEdited(Update update, TelegramUser telegramUser) {
+        String selectedFoodName = "chees burger";
+        SendMessage response = new SendMessage();
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        if (telegramUser.getLoadedPage() == null) {
+            telegramUser.setLoadedPage(1);
+            dbUtility.updateTelegramUser(telegramUser);
+        } else {
+            telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
+            dbUtility.updateTelegramUser(telegramUser);
+        }
+        for (int i = telegramUser.getLoadedPage(); i < telegramUser.getLoadedPage()*5; i++) {
+            rowInline.add(new InlineKeyboardButton().setText("" + i).setCallbackData("quantity_" + i));
+        }
+        rowInline.add(new InlineKeyboardButton().setText(">>").setCallbackData("next"));
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);

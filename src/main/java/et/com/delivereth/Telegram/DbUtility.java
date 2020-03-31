@@ -1,6 +1,5 @@
 package et.com.delivereth.Telegram;
 
-import et.com.delivereth.Telegram.Requests.RequestForOrder;
 import et.com.delivereth.domain.*;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.repository.*;
@@ -10,8 +9,6 @@ import io.github.jhipster.service.filter.LongFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -73,54 +70,51 @@ public class DbUtility {
         }
         return telegramUserByUserNameEquals.isPresent()? telegramUserByUserNameEquals.get(): null;
     }
+    public void cancelOrder(TelegramUser telegramUser) {
+        Optional<Order> order = customOrderRepository.findById(telegramUser.getOrderIdPaused());
+        if (order.isPresent()) {
+            Order orderTobeUpdated = order.get();
+            orderTobeUpdated.setOrderStatus(OrderStatus.CANCELED_BY_USER);
+            customOrderRepository.save(orderTobeUpdated);
+            telegramUser.setOrderIdPaused(null);
+            customTelegramUserRepository.save(telegramUser);
+        }
+    }
+    public Order registerOrder(Update update, TelegramUser telegramUser) {
+        Order order = new Order();
+        order.setLatitude(update.getMessage().getLocation().getLatitude());
+        order.setLongtude(update.getMessage().getLocation().getLongitude());
+        order.setTelegramUser(telegramUser);
+        order.setOrderStatus(OrderStatus.STARTED);
+        order = customOrderRepository.save(order);
+        telegramUser.setOrderIdPaused(order.getId());
+        customTelegramUserRepository.save(telegramUser);
+        return order;
+    }
+    /*Not Finished*/
+    public List<RestorantDTO> getRestorantList(TelegramUser telegramUser, Order order) {
+        RestorantCriteria restorantCriteria = new RestorantCriteria();
+        return restorantQueryService.findByCriteria(restorantCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2)).toList();
+    }
+    /*Not Finished*/
+    public List<FoodDTO> getFoodList(TelegramUser telegramUser){
+        FoodCriteria foodCriteria = new FoodCriteria();
+        LongFilter longFilter = new LongFilter();
+//        longFilter.setEquals();
+        foodCriteria.setRestorantId(longFilter);
+        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2)).toList();
+    }
+    /*Not Finished*/
+    public void addFoodToOrder(Update update, TelegramUser telegramUser){
+
+    }
     public void updateStep(TelegramUser telegramUser, String step){
         telegramUser.setConversationMetaData(step);
         customTelegramUserRepository.save(telegramUser);
-    }
-
-    public Order updateOrder(Order order) {
-        return customOrderRepository.save(order);
-    }
-    public Order findOrder(TelegramUser telegramUser, OrderStatus orderStatus){
-        Optional<Order> byOrderStatusAndTelegramUser = customOrderRepository.findByOrderStatusAndTelegramUser(orderStatus, telegramUser);
-        return  byOrderStatusAndTelegramUser.isPresent()? byOrderStatusAndTelegramUser.get(): null;
     }
     public KeyValuPairHolderDTO getKeyValuPairHolderRepository(String Key) {
         Optional<KeyValuPairHolderDTO> one = keyValuPairHolderService.findOne(1L);
         return one.isPresent()? one.get(): null;
     }
 
-    public List<RestorantDTO> getRestorantList(String latitude, String longtude, Integer page, Integer pageSize) {
-        RestorantCriteria restorantCriteria = new RestorantCriteria();
-        return restorantQueryService.findByCriteria(restorantCriteria, PageRequest.of(page, pageSize)).toList();
-    }
-    public List<FoodDTO> getFoodList(Long restorantId, Integer page, Integer size){
-        FoodCriteria foodCriteria = new FoodCriteria();
-        LongFilter longFilter = new LongFilter();
-        longFilter.setEquals(restorantId);
-        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(page, size)).toList();
-    }
-    public Food getFoodById(Long id){
-        return foodRepository.getOne(id);
-    }
-    public OrderedFood addFoodToOrder(Order order, Food food){
-        OrderedFood orderedFood = new OrderedFood();
-        orderedFood.setFood(food);
-        orderedFood.setOrder(order);
-        orderedFood.setQuantity(1);
-        return orderedFoodRepository.save(orderedFood);
-    }
-    public Order registerOrder(TelegramUser telegramUser, Float latitude, Float longtude) {
-        Order order = new Order();
-        order.setLatitude(latitude);
-        order.setLongtude(longtude);
-        order.setTelegramUser(telegramUser);
-        order.setOrderStatus(OrderStatus.STARTED);
-        return customOrderRepository.save(order);
-    }
-    public OrderedFood addToCart(Update update, TelegramUser telegramUser){
-        Order order= findOrder(telegramUser, OrderStatus.STARTED);
-        Food food = getFoodById(Long.valueOf(update.getCallbackQuery().getData().substring(5)));
-        return addFoodToOrder(order, food);
-    }
 }

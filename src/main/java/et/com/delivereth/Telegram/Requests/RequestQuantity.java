@@ -27,14 +27,14 @@ public class RequestQuantity {
         this.dbUtility = dbUtility;
     }
 
-    public void requestQuantity(Update update, OrderedFood orderedFood) {
+    public void requestQuantity(Update update) {
         String selectedFoodName = "chees burger";
         SendMessage response = new SendMessage();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         for (int i = 1; i < 6; i++) {
-            rowInline.add(new InlineKeyboardButton().setText("" + i).setCallbackData("quantity_" + i + "_orderedItem_" + orderedFood.getId()));
+            rowInline.add(new InlineKeyboardButton().setText("" + i).setCallbackData("quantity_" + i));
         }
         rowInline.add(new InlineKeyboardButton().setText(">>").setCallbackData("next_6"));
         rowsInline.add(rowInline);

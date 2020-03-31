@@ -3,6 +3,7 @@ package et.com.delivereth.Telegram.Requests;
 import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
+import et.com.delivereth.domain.TelegramUser;
 import et.com.delivereth.service.dto.FoodDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +29,8 @@ public class RequestFoodList {
         this.telegramSender = telegramSender;
         this.dbUtility = dbUtility;
     }
-    public void requestFoodList(Update update) {
-        List<FoodDTO> foodList = dbUtility.getFoodList(Long.valueOf(update.getCallbackQuery().getData().substring(5)), 0, 2);
+    public void requestFoodList(Update update, TelegramUser telegramUser) {
+        List<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
         foodList.forEach(foodDTO -> {
             sendFood(foodDTO, update);
         });

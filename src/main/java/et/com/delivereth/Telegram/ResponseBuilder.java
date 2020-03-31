@@ -67,10 +67,9 @@ public class ResponseBuilder {
             }
         }
     }
-    /* remaining*/
     public void requestForErrorResponder(Update update, TelegramUser telegramUser) {
         if (Integer.valueOf(telegramUser.getConversationMetaData()) <= 7) {
-            // cancel order first
+            dbUtility.cancelOrder(telegramUser);
         }
         dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ERROR_PAGE_RESPONSE);
         requestErrorResponder.userErrorResponseResponder(update);
@@ -89,6 +88,9 @@ public class ResponseBuilder {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order")) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);
             requestLocation.requestLocation(update);
+        } else if (update.hasMessage() && update.getMessage().getText().equals("order")) {
+            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);
+            requestLocation.requestLocation(update);
         } else {
             requestErrorResponder.userErrorResponseResponder(update);
         }
@@ -96,26 +98,27 @@ public class ResponseBuilder {
 
     public void processLocationRequestAndProceedToRestorantRequest(Update update, TelegramUser telegramUser) {
         if (update.hasMessage() && update.getMessage().getLocation() != null) {
-            dbUtility.registerOrder(telegramUser, update.getMessage().getLocation().getLatitude(), update.getMessage().getLocation().getLongitude());
+            Order order = dbUtility.registerOrder(update, telegramUser);
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION);
-            requestRestorantSelection.requestRestorantSelection(update);
+            requestRestorantSelection.requestRestorantSelection(update, telegramUser, order);
         } else if ((update.hasMessage() && update.getMessage().getLocation() == null) || update.hasCallbackQuery()) {
             requestLocation.requestLocationAgain(update);
         }
     }
+
     public void processRestorantSelectionAndProceedToFoodSelection(Update update, TelegramUser telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("menu_")) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM);
-            requestFoodList.requestFoodList(update);
+            requestFoodList.requestFoodList(update, telegramUser);
         } else {
             requestForErrorResponder(update, telegramUser);
         }
     }
     public void processAddItemAndRequestQuanity(Update update, TelegramUser telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("food_")) {
-            OrderedFood orderedFood = dbUtility.addToCart(update, telegramUser);
+            dbUtility.addFoodToOrder(update, telegramUser);
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY);
-            requestQuantity.requestQuantity(update, orderedFood);
+            requestQuantity.requestQuantity(update);
         } else {
             requestForErrorResponder(update, telegramUser);
         }

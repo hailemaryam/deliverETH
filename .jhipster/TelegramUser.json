@@ -37,6 +37,10 @@
             "fieldType": "Long"
         },
         {
+            "fieldName": "selectedRestorant",
+            "fieldType": "Long"
+        },
+        {
             "fieldName": "loadedPage",
             "fieldType": "Integer"
         }

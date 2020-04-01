@@ -167,4 +167,8 @@ public class DbUtility {
         Order order= customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
         return customOrderedFoodRepository.findAllByOrder(order);
     }
+    public OrderedFood getSelectedFood(TelegramUser telegramUser){
+        Optional<OrderedFood> orderFood = customOrderedFoodRepository.findById(telegramUser.getOrderedFoodIdPaused());
+        return orderFood.isPresent()? orderFood.get(): null;
+    }
 }

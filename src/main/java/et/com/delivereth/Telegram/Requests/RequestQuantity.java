@@ -29,7 +29,7 @@ public class RequestQuantity {
     }
 
     public void requestQuantity(Update update, TelegramUser telegramUser) {
-        String selectedFoodName = "chees burger";
+        String selectedFoodName = dbUtility.getSelectedFood(telegramUser).getFood().getName();
         SendMessage response = new SendMessage();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -61,7 +61,7 @@ public class RequestQuantity {
         }
     }
     public void requestQuantityEdited(Update update, TelegramUser telegramUser) {
-        String selectedFoodName = "chees burger";
+        String selectedFoodName = dbUtility.getSelectedFood(telegramUser).getFood().getName();
         SendMessage response = new SendMessage();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();

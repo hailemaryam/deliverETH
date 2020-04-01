@@ -9,6 +9,4 @@ public class ChatStepConstants {
     public static String WAITING_FOR_ORDER_LOOP_SET_QUANTITY = "6";
     public static String WAITING_FOR_ORDER_LOOP_FINISH_ORDER = "7";
     public static String WAITING_FOR_ORDER_LOOP_FOLLOW_ORDER_STATUS = "8";
-    public static String WAITING_FOR_ERROR_PAGE_RESPONSE = "9";
-    public static String WAITING_FOR_HELP_PAGE_RESPONSE = "10";
 }

@@ -32,17 +32,10 @@ public class RequestErrorResponder {
             chatId = update.getCallbackQuery().getMessage().getChatId();
         }
         SendMessage response = new SendMessage();
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("Help").setCallbackData("help"));
-        rowInline.add(new InlineKeyboardButton().setText("Cancel").setCallbackData("order"));
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
-        response.setReplyMarkup(markupInline);
         response.setChatId(chatId.toString());
         response.setText("<b>Improper Command</b>\n" +
             "Your request could not be processed. you need to choose or write proper commands.");
+        response.setParseMode("HTML");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

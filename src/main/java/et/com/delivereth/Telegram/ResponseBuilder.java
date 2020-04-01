@@ -19,10 +19,9 @@ public class ResponseBuilder {
     private final RequestQuantity requestQuantity;
     private final RequestForFinishOrder requestForFinishOrder;
     private final RequestErrorResponder requestErrorResponder;
-    private final RequestForHelp requestForHelp;
     private final DbUtility dbUtility;
 
-    public ResponseBuilder(RequestContact requestContact, RequestForMenu requestForMenu, RequestLocation requestLocation, RequestRestorantSelection requestRestorantSelection, RequestFoodList requestFoodList, RequestQuantity requestQuantity, RequestForFinishOrder requestForFinishOrder, RequestErrorResponder requestErrorResponder, RequestForHelp requestForHelp, DbUtility dbUtility) {
+    public ResponseBuilder(RequestContact requestContact, RequestForMenu requestForMenu, RequestLocation requestLocation, RequestRestorantSelection requestRestorantSelection, RequestFoodList requestFoodList, RequestQuantity requestQuantity, RequestForFinishOrder requestForFinishOrder, RequestErrorResponder requestErrorResponder, DbUtility dbUtility) {
         this.requestContact = requestContact;
         this.requestForMenu = requestForMenu;
         this.requestLocation = requestLocation;
@@ -31,7 +30,6 @@ public class ResponseBuilder {
         this.requestQuantity = requestQuantity;
         this.requestForFinishOrder = requestForFinishOrder;
         this.requestErrorResponder = requestErrorResponder;
-        this.requestForHelp = requestForHelp;
         this.dbUtility = dbUtility;
     }
 
@@ -55,10 +53,6 @@ public class ResponseBuilder {
                 processSetQuantityAndPreceedToPlaceOrder(update, telegramUser);
             } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_LOOP_FINISH_ORDER)) {
                 processOrderFinishOrAddMoreItem(update, telegramUser);
-            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ERROR_PAGE_RESPONSE)) {
-                processErrorResponse(update, telegramUser);
-            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_HELP_PAGE_RESPONSE)) {
-                processHelpResponse(update, telegramUser);
             } else {
                 requestForErrorResponder(update, telegramUser);
             }
@@ -69,8 +63,9 @@ public class ResponseBuilder {
         if (Integer.valueOf(telegramUser.getConversationMetaData()) <= 7) {
             dbUtility.cancelOrder(telegramUser);
         }
-        dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ERROR_PAGE_RESPONSE);
         requestErrorResponder.userErrorResponseResponder(update);
+        requestForMenu.requestForMenu(update, telegramUser);
+        dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
     }
 
     public void processContactAndProceedToOrder(Update update, TelegramUser telegramUser) {
@@ -163,33 +158,6 @@ public class ResponseBuilder {
             dbUtility.cancelOrder(telegramUser);
             requestForMenu.requestForMenu(update, telegramUser);
         } else {
-            requestForErrorResponder(update, telegramUser);
-        }
-    }
-
-    public void processErrorResponse(Update update, TelegramUser telegramUser) {
-        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("help")) {
-            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_HELP_PAGE_RESPONSE);
-            requestForHelp.requestForHelp(update, telegramUser);
-        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order")) {
-            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
-            requestForMenu.requestForMenu(update, telegramUser);
-        } else {
-            requestForErrorResponder(update, telegramUser);
-        }
-    }
-
-    public void processHelpResponse(Update update, TelegramUser telegramUser) {
-        if (update.hasCallbackQuery()) {
-            if (update.getCallbackQuery().getData().equals("ok")) {
-                dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
-                requestForMenu.requestForMenu(update, telegramUser);
-            } else {
-                dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ERROR_PAGE_RESPONSE);
-                requestForErrorResponder(update, telegramUser);
-            }
-        } else {
-            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ERROR_PAGE_RESPONSE);
             requestForErrorResponder(update, telegramUser);
         }
     }

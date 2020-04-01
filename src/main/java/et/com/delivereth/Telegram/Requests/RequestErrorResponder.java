@@ -41,7 +41,8 @@ public class RequestErrorResponder {
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
         response.setChatId(chatId.toString());
-        response.setText("Your request could not be processed. you need to choose or write proper commands.");
+        response.setText("<b>Improper Command</b>\n" +
+            "Your request could not be processed. you need to choose or write proper commands.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

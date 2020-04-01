@@ -46,7 +46,11 @@ public class RequestForMenu {
         KeyValuPairHolderDTO orderImage = dbUtility.getKeyValuPairHolderRepository("OrderImage");
         InputStream inputStream = new ByteArrayInputStream(orderImage.getValueImage());
         response.setPhoto(orderImage.getKey(), inputStream);
-        response.setCaption("currently we are delivering @ hayat, semit and bole");
+        response.setCaption("<b>currently we are delivering @</b>\n" +
+            "<i>* hayat</i>\n" +
+            "<i>* semit</i>\n" +
+            "<i>* bole</i>\n");
+        response.setParseMode("HTML");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

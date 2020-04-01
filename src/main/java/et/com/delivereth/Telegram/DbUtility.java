@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,22 +22,23 @@ public class DbUtility {
     private final TelegramUserService telegramUserService;
     private final CustomTelegramUserRepository customTelegramUserRepository;
     private final CustomOrderRepository customOrderRepository;
-    private final OrderedFoodRepository orderedFoodRepository;
+    private final CustomOrderedFoodRepository customOrderedFoodRepository;
     private final KeyValuPairHolderService keyValuPairHolderService;
     private final RestorantQueryService restorantQueryService;
     private final FoodQueryService foodQueryService;
     private final FoodRepository foodRepository;
 
-    public DbUtility(TelegramUserService telegramUserService, CustomTelegramUserRepository customTelegramUserRepository, CustomOrderRepository customOrderRepository, OrderedFoodRepository orderedFoodRepository, KeyValuPairHolderService keyValuPairHolderService, RestorantQueryService restorantQueryService, FoodQueryService foodQueryService, FoodRepository foodRepository) {
+    public DbUtility(TelegramUserService telegramUserService, CustomTelegramUserRepository customTelegramUserRepository, CustomOrderRepository customOrderRepository, CustomOrderedFoodRepository customOrderedFoodRepository, KeyValuPairHolderService keyValuPairHolderService, RestorantQueryService restorantQueryService, FoodQueryService foodQueryService, FoodRepository foodRepository) {
         this.telegramUserService = telegramUserService;
         this.customTelegramUserRepository = customTelegramUserRepository;
         this.customOrderRepository = customOrderRepository;
-        this.orderedFoodRepository = orderedFoodRepository;
+        this.customOrderedFoodRepository = customOrderedFoodRepository;
         this.keyValuPairHolderService = keyValuPairHolderService;
         this.restorantQueryService = restorantQueryService;
         this.foodQueryService = foodQueryService;
         this.foodRepository = foodRepository;
     }
+
     public void registerTelegramUser(Update update){
         TelegramUserDTO telegramUserDTO = new TelegramUserDTO();
         if (update.hasMessage()){
@@ -122,24 +124,25 @@ public class DbUtility {
         orderedFood.setFood(food);
         orderedFood.setQuantity(1);
         orderedFood.setOrder(order);
-        orderedFood = orderedFoodRepository.save(orderedFood);
+        orderedFood = customOrderedFoodRepository.save(orderedFood);
         telegramUser.setOrderedFoodIdPaused(orderedFood.getId());
         customTelegramUserRepository.save(telegramUser);
     }
     public void setQuantity(Update update, TelegramUser telegramUser){
-        OrderedFood orderedFood = orderedFoodRepository.findById(telegramUser.getOrderIdPaused()).get();
+        OrderedFood orderedFood = customOrderedFoodRepository.findById(telegramUser.getOrderIdPaused()).get();
         if (update.hasCallbackQuery()) {
             orderedFood.setQuantity(Integer.valueOf(update.getCallbackQuery().getData().substring(9)));
         } else if (update.hasMessage()){
             orderedFood.setQuantity(Integer.valueOf(update.getMessage().getText()));
         }
-        orderedFoodRepository.save(orderedFood);
+        customOrderedFoodRepository.save(orderedFood);
         telegramUser.setOrderedFoodIdPaused(null);
         customTelegramUserRepository.save(telegramUser);
     }
     public void finishOrder(TelegramUser telegramUser){
         Order order = customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
         order.setOrderStatus(OrderStatus.ORDERED);
+        order.setDate(Instant.now());
         customOrderRepository.save(order);
         telegramUser.setOrderedFoodIdPaused(null);
         telegramUser.setOrderIdPaused(null);
@@ -158,5 +161,10 @@ public class DbUtility {
     public KeyValuPairHolderDTO getKeyValuPairHolderRepository(String Key) {
         Optional<KeyValuPairHolderDTO> one = keyValuPairHolderService.findOne(1L);
         return one.isPresent()? one.get(): null;
+    }
+
+    public List<OrderedFood> getOrderedFoods(TelegramUser telegramUser){
+        Order order= customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
+        return customOrderedFoodRepository.findAllByOrder(order);
     }
 }

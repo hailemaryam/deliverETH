@@ -2,6 +2,7 @@ package et.com.delivereth.Telegram.Requests;
 
 import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramSender;
+import et.com.delivereth.domain.OrderedFood;
 import et.com.delivereth.domain.TelegramUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class RequestForFinishOrder {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         rowInline.add(new InlineKeyboardButton().setText("Add More Item").setCallbackData("addMoreItem"));
-        rowInline.add(new InlineKeyboardButton().setText("Finish Order").setCallbackData("finishOrder"));
+        rowInline.add(new InlineKeyboardButton().setText("Order").setCallbackData("finishOrder"));
         rowInline.add(new InlineKeyboardButton().setText("Cancel").setCallbackData("cancelOrder"));
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
@@ -41,7 +42,16 @@ public class RequestForFinishOrder {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("Invoice under develpment");
+        List<OrderedFood> orderedFoodList = dbUtility.getOrderedFoods(telegramUser);
+        String invoice = "<strong>Order Confirmation</strong>\n";
+        Double total = 0D;
+        for (OrderedFood orderedFood : orderedFoodList) {
+            invoice = invoice + (orderedFood.getFood().getName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * orderedFood.getFood().getPrice() + "\n" );
+            total += orderedFood.getQuantity() * orderedFood.getFood().getPrice();
+        }
+        invoice = invoice + "<b>Total = " + total +"</b>";
+        response.setText(invoice);
+        response.setParseMode("HTML");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

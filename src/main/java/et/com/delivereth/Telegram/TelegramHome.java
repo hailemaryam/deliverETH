@@ -1,6 +1,7 @@
 package et.com.delivereth.Telegram;
 
 import et.com.delivereth.Telegram.Requests.RequestErrorResponder;
+import liquibase.pro.packaged.T;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.slf4j.Logger;
@@ -15,11 +16,8 @@ import javax.annotation.PostConstruct;
 public class TelegramHome extends TelegramLongPollingBot {
 
     private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
-    @Value("${bot.token}")
-    private String token;
-
-    @Value("${bot.username}")
-    private String username;
+    private String token = TelegramBotConstant.BOT_TOKEN;
+    private String username = TelegramBotConstant.BOT_USER_NAME;
     private final ResponseBuilder responseBuilder;
     private final RequestErrorResponder requestErrorResponder;
 

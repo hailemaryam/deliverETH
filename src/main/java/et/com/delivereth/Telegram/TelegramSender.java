@@ -8,8 +8,7 @@ import org.telegram.telegrambots.meta.ApiContext;
 
 @Component
 public class TelegramSender extends DefaultAbsSender {
-    @Value("${bot.token}")
-    private String token;
+    private String token = TelegramBotConstant.BOT_TOKEN;
     public TelegramSender() {
         this((DefaultBotOptions) ApiContext.getInstance(DefaultBotOptions.class));
     }

@@ -3,6 +3,7 @@ package et.com.delivereth.Telegram.Requests;
 import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.domain.TelegramUser;
+import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class RequestAddMoreOrFinish {
         this.telegramSender = telegramSender;
         this.dbUtility = dbUtility;
     }
-    public void RequestAddMoreOrFinish(Update update, TelegramUser telegramUser) {
+    public void RequestAddMoreOrFinish(Update update, TelegramUserDTO telegramUser) {
         SendMessage response = new SendMessage();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();

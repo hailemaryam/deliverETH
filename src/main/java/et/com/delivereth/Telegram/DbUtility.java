@@ -6,6 +6,7 @@ import et.com.delivereth.repository.*;
 import et.com.delivereth.service.*;
 import et.com.delivereth.service.dto.*;
 import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,23 +22,25 @@ import java.util.Optional;
 public class DbUtility {
     private static final Logger logger = LoggerFactory.getLogger(DbUtility.class);
     private final TelegramUserService telegramUserService;
-    private final CustomTelegramUserRepository customTelegramUserRepository;
-    private final CustomOrderRepository customOrderRepository;
-    private final CustomOrderedFoodRepository customOrderedFoodRepository;
+    private final TelegramUserQueryService telegramUserQueryService;
+    private final OrderService orderService;
+    private final OrderedFoodService orderedFoodService;
+    private final OrderedFoodQueryService orderedFoodQueryService;
     private final KeyValuPairHolderService keyValuPairHolderService;
     private final RestorantQueryService restorantQueryService;
     private final FoodQueryService foodQueryService;
-    private final FoodRepository foodRepository;
+    private final FoodService foodService;
 
-    public DbUtility(TelegramUserService telegramUserService, CustomTelegramUserRepository customTelegramUserRepository, CustomOrderRepository customOrderRepository, CustomOrderedFoodRepository customOrderedFoodRepository, KeyValuPairHolderService keyValuPairHolderService, RestorantQueryService restorantQueryService, FoodQueryService foodQueryService, FoodRepository foodRepository) {
+    public DbUtility(TelegramUserService telegramUserService, TelegramUserQueryService telegramUserQueryService, OrderService orderService, OrderedFoodService orderedFoodService, OrderedFoodQueryService orderedFoodQueryService, KeyValuPairHolderService keyValuPairHolderService, RestorantQueryService restorantQueryService, FoodQueryService foodQueryService, FoodService foodService) {
         this.telegramUserService = telegramUserService;
-        this.customTelegramUserRepository = customTelegramUserRepository;
-        this.customOrderRepository = customOrderRepository;
-        this.customOrderedFoodRepository = customOrderedFoodRepository;
+        this.telegramUserQueryService = telegramUserQueryService;
+        this.orderService = orderService;
+        this.orderedFoodService = orderedFoodService;
+        this.orderedFoodQueryService = orderedFoodQueryService;
         this.keyValuPairHolderService = keyValuPairHolderService;
         this.restorantQueryService = restorantQueryService;
         this.foodQueryService = foodQueryService;
-        this.foodRepository = foodRepository;
+        this.foodService = foodService;
     }
 
     public void registerTelegramUser(Update update){
@@ -53,49 +57,53 @@ public class DbUtility {
         }
         telegramUserService.save(telegramUserDTO);
     }
-    public void registerUserPhone(Update update, TelegramUser telegramUser) {
+    public void registerUserPhone(Update update, TelegramUserDTO telegramUser) {
         telegramUser.setPhone(update.getMessage().getContact().getPhoneNumber());
         telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
-        customTelegramUserRepository.save(telegramUser);
+        telegramUserService.save(telegramUser);
     }
-    public TelegramUser getTelegramUser(Update update) {
-        Optional<TelegramUser> telegramUserByUserNameEquals = null;
+    public TelegramUserDTO getTelegramUser(Update update) {
+        List<TelegramUserDTO> telegramUserDTOList = new ArrayList<>();
+        TelegramUserCriteria telegramUserCriteria = new TelegramUserCriteria();
+        StringFilter stringFilter = new StringFilter();
         if (update.hasMessage()) {
-            telegramUserByUserNameEquals =
-                customTelegramUserRepository
-                    .findTelegramUserByUserNameEquals(update.getMessage().getFrom().getUserName());
+            stringFilter.setEquals(update.getMessage().getFrom().getUserName());
+            telegramUserCriteria.setUserName(stringFilter);
+            telegramUserDTOList = telegramUserQueryService.findByCriteria(telegramUserCriteria);
         } else if (update.hasCallbackQuery()){
-            telegramUserByUserNameEquals =
-                customTelegramUserRepository
-                    .findTelegramUserByUserNameEquals(update.getCallbackQuery().getFrom().getUserName());
+            stringFilter.setEquals(update.getCallbackQuery().getFrom().getUserName());
+            telegramUserCriteria.setUserName(stringFilter);
+            telegramUserDTOList = telegramUserQueryService.findByCriteria(telegramUserCriteria);
         }
-        return telegramUserByUserNameEquals.isPresent()? telegramUserByUserNameEquals.get(): null;
+        return telegramUserDTOList.size() > 0 ? telegramUserDTOList.get(0): null;
     }
-    public void cancelOrder(TelegramUser telegramUser) {
-        Optional<Order> order = customOrderRepository.findById(telegramUser.getOrderIdPaused());
+    public void cancelOrder(TelegramUserDTO telegramUser) {
+        Optional<OrderDTO> order = orderService.findOne(telegramUser.getOrderIdPaused());
         if (order.isPresent()) {
-            Order orderTobeUpdated = order.get();
+            OrderDTO orderTobeUpdated = order.get();
             orderTobeUpdated.setOrderStatus(OrderStatus.CANCELED_BY_USER);
-            customOrderRepository.save(orderTobeUpdated);
+            orderTobeUpdated.setDate(Instant.now());
+            orderService.save(orderTobeUpdated);
             telegramUser.setOrderIdPaused(null);
-            customTelegramUserRepository.save(telegramUser);
+            telegramUserService.save(telegramUser);
         }
     }
-    public Order registerOrder(Update update, TelegramUser telegramUser) {
-        Order order = new Order();
+    public OrderDTO registerOrder(Update update, TelegramUserDTO telegramUser) {
+        OrderDTO order = new OrderDTO();
         order.setLatitude(update.getMessage().getLocation().getLatitude());
         order.setLongtude(update.getMessage().getLocation().getLongitude());
-        order.setTelegramUser(telegramUser);
+        order.setTelegramUserId(telegramUser.getId());
+        order.setTelegramUserUserName(telegramUser.getUserName());
         order.setOrderStatus(OrderStatus.STARTED);
-        order = customOrderRepository.save(order);
+        order = orderService.save(order);
         telegramUser.setOrderIdPaused(order.getId());
-        customTelegramUserRepository.save(telegramUser);
+        telegramUserService.save(telegramUser);
         return order;
     }
     /*Not Finished Request Restorant Based On Location*/
-    public List<RestorantDTO> getRestorantList(TelegramUser telegramUser) {
+    public List<RestorantDTO> getRestorantList(TelegramUserDTO telegramUser) {
         RestorantCriteria restorantCriteria = new RestorantCriteria();
-        Order order = customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
+        OrderDTO order = orderService.findOne(telegramUser.getOrderIdPaused()).get();
         Float latitude = order.getLatitude();
         Float longtitude = order.getLongtude();
         if (telegramUser.getLoadedPage() == null) {
@@ -105,7 +113,7 @@ public class DbUtility {
         }
         return restorantQueryService.findByCriteria(restorantCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2)).toList();
     }
-    public List<FoodDTO> getFoodList(TelegramUser telegramUser){
+    public List<FoodDTO> getFoodList(TelegramUserDTO telegramUser){
         FoodCriteria foodCriteria = new FoodCriteria();
         LongFilter longFilter = new LongFilter();
         longFilter.setEquals(telegramUser.getSelectedRestorant());
@@ -117,58 +125,67 @@ public class DbUtility {
         }
         return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2)).toList();
     }
-    public void addFoodToOrder(Update update, TelegramUser telegramUser){
-        Order order = customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
-        Food food = foodRepository.findById(Long.valueOf(update.getCallbackQuery().getData().substring(5))).get();
-        OrderedFood orderedFood = new OrderedFood();
-        orderedFood.setFood(food);
+    public void addFoodToOrder(Update update, TelegramUserDTO telegramUser){
+        OrderDTO order = orderService.findOne(telegramUser.getOrderIdPaused()).get();
+        FoodDTO food = foodService.findOne(Long.valueOf(update.getCallbackQuery().getData().substring(5))).get();
+        OrderedFoodDTO orderedFood = new OrderedFoodDTO();
+        orderedFood.setFoodId(food.getId());
         orderedFood.setQuantity(1);
-        orderedFood.setOrder(order);
-        orderedFood = customOrderedFoodRepository.save(orderedFood);
+        orderedFood.setOrderId(order.getId());
+        orderedFood = orderedFoodService.save(orderedFood);
         telegramUser.setOrderedFoodIdPaused(orderedFood.getId());
-        customTelegramUserRepository.save(telegramUser);
+        telegramUserService.save(telegramUser);
     }
-    public void setQuantity(Update update, TelegramUser telegramUser){
-        OrderedFood orderedFood = customOrderedFoodRepository.findById(telegramUser.getOrderIdPaused()).get();
+    public void setQuantity(Update update, TelegramUserDTO telegramUser){
+        OrderedFoodDTO orderedFood = orderedFoodService.findOne(telegramUser.getOrderIdPaused()).get();
         if (update.hasCallbackQuery()) {
             orderedFood.setQuantity(Integer.valueOf(update.getCallbackQuery().getData().substring(9)));
         } else if (update.hasMessage()){
             orderedFood.setQuantity(Integer.valueOf(update.getMessage().getText()));
         }
-        customOrderedFoodRepository.save(orderedFood);
+        orderedFoodService.save(orderedFood);
         telegramUser.setOrderedFoodIdPaused(null);
-        customTelegramUserRepository.save(telegramUser);
+        telegramUserService.save(telegramUser);
     }
-    public void finishOrder(TelegramUser telegramUser){
-        Order order = customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
+    public void finishOrder(TelegramUserDTO telegramUser){
+        OrderDTO order = orderService.findOne(telegramUser.getOrderIdPaused()).get();
         order.setOrderStatus(OrderStatus.ORDERED);
         order.setDate(Instant.now());
-        customOrderRepository.save(order);
+        orderService.save(order);
         telegramUser.setOrderedFoodIdPaused(null);
         telegramUser.setOrderIdPaused(null);
         telegramUser.setSelectedRestorant(null);
         telegramUser.setLoadedPage(null);
-        customTelegramUserRepository.save(telegramUser);
+        telegramUserService.save(telegramUser);
     }
-    public void updateStep(TelegramUser telegramUser, String step){
+    public void updateStep(TelegramUserDTO telegramUser, String step){
         telegramUser.setConversationMetaData(step);
         telegramUser.setLoadedPage(null);
-        customTelegramUserRepository.save(telegramUser);
+        telegramUserService.save(telegramUser);
     }
-    public void updateTelegramUser(TelegramUser telegramUser){
-        customTelegramUserRepository.save(telegramUser);
+    public void updateTelegramUser(TelegramUserDTO telegramUser){
+        telegramUserService.save(telegramUser);
     }
     public KeyValuPairHolderDTO getKeyValuPairHolderRepository(String Key) {
         Optional<KeyValuPairHolderDTO> one = keyValuPairHolderService.findOne(1L);
         return one.isPresent()? one.get(): null;
     }
-
-    public List<OrderedFood> getOrderedFoods(TelegramUser telegramUser){
-        Order order= customOrderRepository.findById(telegramUser.getOrderIdPaused()).get();
-        return customOrderedFoodRepository.findAllByOrder(order);
+    public List<OrderedFoodDTO> getOrderedFoods(TelegramUserDTO telegramUser){
+        LongFilter longFilter = new LongFilter();
+        longFilter.setEquals(telegramUser.getOrderIdPaused());
+        OrderedFoodCriteria orderedFoodCriteria = new OrderedFoodCriteria();
+        orderedFoodCriteria.setOrderId(longFilter);
+        return orderedFoodQueryService.findByCriteria(orderedFoodCriteria);
     }
-    public OrderedFood getSelectedFood(TelegramUser telegramUser){
-        Optional<OrderedFood> orderFood = customOrderedFoodRepository.findById(telegramUser.getOrderedFoodIdPaused());
-        return orderFood.isPresent()? orderFood.get(): null;
+    public OrderedFoodDTO getSelectedFood(TelegramUserDTO telegramUser){
+        LongFilter longFilter = new LongFilter();
+        longFilter.setEquals(telegramUser.getOrderedFoodIdPaused());
+        OrderedFoodCriteria orderedFoodCriteria = new OrderedFoodCriteria();
+        orderedFoodCriteria.setId(longFilter);
+        List<OrderedFoodDTO> orderFoodList = orderedFoodQueryService.findByCriteria(orderedFoodCriteria);
+        return orderFoodList.size() > 0? orderFoodList.get(0): null;
+    }
+    public FoodDTO getFood(Long id){
+        return foodService.findOne(id).get();
     }
 }

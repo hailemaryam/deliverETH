@@ -2,8 +2,10 @@ package et.com.delivereth.Telegram.Requests;
 
 import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramSender;
-import et.com.delivereth.domain.OrderedFood;
-import et.com.delivereth.domain.TelegramUser;
+import et.com.delivereth.domain.Food;
+import et.com.delivereth.service.dto.FoodDTO;
+import et.com.delivereth.service.dto.OrderedFoodDTO;
+import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class RequestForFinishOrder {
         this.telegramSender = telegramSender;
         this.dbUtility = dbUtility;
     }
-    public void requestForFinishOrder(Update update, TelegramUser telegramUser) {
+    public void requestForFinishOrder(Update update, TelegramUserDTO telegramUser) {
         SendMessage response = new SendMessage();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -42,12 +44,13 @@ public class RequestForFinishOrder {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        List<OrderedFood> orderedFoodList = dbUtility.getOrderedFoods(telegramUser);
+        List<OrderedFoodDTO> orderedFoodList = dbUtility.getOrderedFoods(telegramUser);
         String invoice = "<strong>Order Confirmation</strong>\n";
         Double total = 0D;
-        for (OrderedFood orderedFood : orderedFoodList) {
-            invoice = invoice + (orderedFood.getFood().getName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * orderedFood.getFood().getPrice() + "\n" );
-            total += orderedFood.getQuantity() * orderedFood.getFood().getPrice();
+        for (OrderedFoodDTO orderedFood : orderedFoodList) {
+            FoodDTO food = dbUtility.getFood(orderedFood.getFoodId());
+            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n" );
+            total += orderedFood.getQuantity() * food.getPrice();
         }
         invoice = invoice + "<b>Total = " + total +"</b>";
         response.setText(invoice);
@@ -79,7 +82,7 @@ public class RequestForFinishOrder {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("Your order has been successfully registered.");
+        response.setText("Your order has been successfully canceled.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

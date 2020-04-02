@@ -3,8 +3,7 @@ package et.com.delivereth.Telegram.Requests;
 import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
-import et.com.delivereth.domain.OrderedFood;
-import et.com.delivereth.domain.TelegramUser;
+import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,8 +27,8 @@ public class RequestQuantity {
         this.dbUtility = dbUtility;
     }
 
-    public void requestQuantity(Update update, TelegramUser telegramUser) {
-        String selectedFoodName = dbUtility.getSelectedFood(telegramUser).getFood().getName();
+    public void requestQuantity(Update update, TelegramUserDTO telegramUser) {
+        String selectedFoodName = dbUtility.getSelectedFood(telegramUser).getFoodName();
         SendMessage response = new SendMessage();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -60,8 +59,8 @@ public class RequestQuantity {
             logger.error("Error Sending Message {}", response);
         }
     }
-    public void requestQuantityEdited(Update update, TelegramUser telegramUser) {
-        String selectedFoodName = dbUtility.getSelectedFood(telegramUser).getFood().getName();
+    public void requestQuantityEdited(Update update, TelegramUserDTO telegramUser) {
+        String selectedFoodName = dbUtility.getSelectedFood(telegramUser).getFoodName();
         SendMessage response = new SendMessage();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();

@@ -6,6 +6,7 @@ import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.domain.Order;
 import et.com.delivereth.domain.TelegramUser;
 import et.com.delivereth.service.dto.RestorantDTO;
+import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class RequestRestorantSelection {
         this.dbUtility = dbUtility;
     }
 
-    public void requestRestorantSelection(Update update, TelegramUser telegramUser) {
+    public void requestRestorantSelection(Update update, TelegramUserDTO telegramUser) {
         List<RestorantDTO> restorantList = dbUtility.getRestorantList(telegramUser);
         restorantList.forEach(restorantDTO -> {
             sendRestorant(restorantDTO, update);

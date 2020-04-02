@@ -4,6 +4,7 @@ import et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.domain.TelegramUser;
 import et.com.delivereth.service.dto.KeyValuPairHolderDTO;
+import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class RequestForMenu {
         this.dbUtility = dbUtility;
     }
 
-    public void requestForMenu(Update update, TelegramUser telegramUser) {
+    public void requestForMenu(Update update, TelegramUserDTO telegramUser) {
         SendPhoto response = new SendPhoto();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();

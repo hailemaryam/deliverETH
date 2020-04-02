@@ -5,6 +5,7 @@ import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.domain.TelegramUser;
 import et.com.delivereth.service.dto.FoodDTO;
+import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class RequestFoodList {
         this.telegramSender = telegramSender;
         this.dbUtility = dbUtility;
     }
-    public void requestFoodList(Update update, TelegramUser telegramUser) {
+    public void requestFoodList(Update update, TelegramUserDTO telegramUser) {
         List<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
         foodList.forEach(foodDTO -> {
             sendFood(foodDTO, update);

@@ -3,6 +3,7 @@ package et.com.delivereth.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -25,7 +26,8 @@ public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
     @Column(name = "latitude")
@@ -35,6 +37,7 @@ public class Order implements Serializable {
     private Float longtude;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "location_description")
     private String locationDescription;
 
@@ -45,6 +48,7 @@ public class Order implements Serializable {
     private Instant date;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "additional_note")
     private String additionalNote;
 

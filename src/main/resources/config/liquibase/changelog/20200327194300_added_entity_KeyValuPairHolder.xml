@@ -6,17 +6,16 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-        <property name="autoIncrement" value="true"/>
-
+    
     <!--
         Added the entity KeyValuPairHolder.
     -->
     <changeSet id="20200327194300-1" author="jhipster">
         <createTable tableName="key_valu_pair_holder">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="jhi_key" type="varchar(255)">
+            <column name="key" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="value_string" type="varchar(255)">
@@ -54,7 +53,7 @@
                   separator=";"
                   tableName="key_valu_pair_holder">
             <column name="id" type="numeric"/>
-            <column name="jhi_key" type="string"/>
+            <column name="key" type="string"/>
             <column name="value_string" type="string"/>
             <column name="value_number" type="numeric"/>
             <column name="value_image" type="blob"/>

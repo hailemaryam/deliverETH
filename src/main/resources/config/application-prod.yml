@@ -33,9 +33,9 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/deliverEth
-    username: deliverEth
-    password:
+    url: jdbc:postgres://nklhftjkqdnrnn:d18afeed5ec6ff453db2ce4001bdadceefce7780a8a004d827cd84315d5aaef7@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d5d4agdbi0v53o
+    username: nklhftjkqdnrnn
+    password: d18afeed5ec6ff453db2ce4001bdadceefce7780a8a004d827cd84315d5aaef7
     hikari:
       poolName: Hikari
       auto-commit: false

@@ -15,7 +15,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.ByteArrayInputStream;
@@ -95,11 +98,32 @@ public class RequestFoodList {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("There are no more food item to list.");
+        response.setText("There are no food list.");
+        response.setReplyMarkup(orderKeyBoardMenu());
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
             logger.error("Error Sending Message {}", response);
         }
+    }
+    public ReplyKeyboardMarkup orderKeyBoardMenu() {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        List<KeyboardRow> keyboardRowList = new ArrayList<>();
+        KeyboardRow keyboardButtons1 = new KeyboardRow();
+        keyboardButtons1.add(new KeyboardButton()
+            .setText("Cancel Order"));
+//        keyboardButtons1.add(new KeyboardButton()
+//            .setText("My Orders"));
+//        KeyboardRow keyboardButtons2 = new KeyboardRow();
+//        keyboardButtons2.add(new KeyboardButton()
+//            .setText("Help"));
+//        keyboardButtons2.add(new KeyboardButton()
+//            .setText("Setting"));
+        keyboardRowList.add(keyboardButtons1);
+//        keyboardRowList.add(keyboardButtons2);
+        replyKeyboardMarkup.setKeyboard(keyboardRowList);
+        return  replyKeyboardMarkup;
     }
 }

@@ -42,7 +42,7 @@ public class RequestRestorantSelection {
         restorantList.toList().forEach(restorantDTO -> {
             sendRestorant(restorantDTO, update);
         });
-        if (restorantList.toList().size() == 0 || !restorantList.hasNext()) {
+        if (restorantList.toList().size() == 0) {
             sendNoMoreItem(update);
             dbUtility.cancelOrder(telegramUser);
         } else if (restorantList.hasNext()) {
@@ -100,7 +100,7 @@ public class RequestRestorantSelection {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("There are no more restaurant to laod.");
+        response.setText("There are no restaurant list around you delivering at this time.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -131,16 +131,16 @@ public class RequestRestorantSelection {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardButtons1 = new KeyboardRow();
         keyboardButtons1.add(new KeyboardButton()
-            .setText("New Order"));
-        keyboardButtons1.add(new KeyboardButton()
-            .setText("My Orders"));
-        KeyboardRow keyboardButtons2 = new KeyboardRow();
-        keyboardButtons2.add(new KeyboardButton()
-            .setText("Help"));
-        keyboardButtons2.add(new KeyboardButton()
-            .setText("Setting"));
+            .setText("Cancel Order"));
+//        keyboardButtons1.add(new KeyboardButton()
+//            .setText("My Orders"));
+//        KeyboardRow keyboardButtons2 = new KeyboardRow();
+//        keyboardButtons2.add(new KeyboardButton()
+//            .setText("Help"));
+//        keyboardButtons2.add(new KeyboardButton()
+//            .setText("Setting"));
         keyboardRowList.add(keyboardButtons1);
-        keyboardRowList.add(keyboardButtons2);
+//        keyboardRowList.add(keyboardButtons2);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         return  replyKeyboardMarkup;
     }

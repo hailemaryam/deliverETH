@@ -60,7 +60,7 @@ public class RequestLocation {
         keyboardRowList.add(shareLocationButton);
         KeyboardRow cancelButton = new KeyboardRow();
         cancelButton.add(new KeyboardButton()
-            .setText("Cancel"));
+            .setText("Cancel Order"));
         keyboardRowList.add(cancelButton);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         return  replyKeyboardMarkup;

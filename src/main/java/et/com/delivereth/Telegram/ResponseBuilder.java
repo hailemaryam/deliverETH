@@ -1,8 +1,6 @@
 package et.com.delivereth.Telegram;
 
 import et.com.delivereth.Telegram.Requests.*;
-import et.com.delivereth.domain.Order;
-import et.com.delivereth.domain.TelegramUser;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.OrderDTO;
 import et.com.delivereth.service.dto.TelegramUserDTO;
@@ -44,11 +42,13 @@ public class ResponseBuilder {
         if (telegramUser == null) {
             dbUtility.registerTelegramUser(update);
             requestContact.requestContact(update);
+        } else if (update.hasMessage() && update.getMessage().hasText() && update.getMessage().getText().equals("Cancel Order")) {
+            cancelOrder(update, telegramUser);
         } else {
             if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_CONTACT_RESPONSE)) {
                 processContactAndProceedToOrder(update, telegramUser);
             } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE)) {
-                processOrderRequestAndProceedToLocationRequest(update, telegramUser);
+                processOrderMenuRequestAndProceedToLocationRequest(update, telegramUser);
             } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE)) {
                 processLocationRequestAndProceedToRestorantRequest(update, telegramUser);
             } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION)) {
@@ -67,13 +67,16 @@ public class ResponseBuilder {
         }
     }
 
-    public void requestForErrorResponder(Update update, TelegramUserDTO telegramUser) {
+    public void cancelOrder(Update update, TelegramUserDTO telegramUser){
         if (Integer.valueOf(telegramUser.getConversationMetaData()) <= 7) {
             dbUtility.cancelOrder(telegramUser);
         }
-        requestErrorResponder.userErrorResponseResponder(update);
         requestForMenu.requestForMenu(update, telegramUser);
-        dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
+    }
+
+    public void requestForErrorResponder(Update update, TelegramUserDTO telegramUser) {
+        requestErrorResponder.userErrorResponseResponder(update);
+        cancelOrder(update, telegramUser);
     }
 
     public void processContactAndProceedToOrder(Update update, TelegramUserDTO telegramUser) {
@@ -85,7 +88,7 @@ public class ResponseBuilder {
         }
     }
 
-    public void processOrderRequestAndProceedToLocationRequest(Update update, TelegramUserDTO telegramUser) {
+    public void processOrderMenuRequestAndProceedToLocationRequest(Update update, TelegramUserDTO telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order") ||
             (update.hasMessage() && update.getMessage().getText().equals("New Order"))) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);
@@ -93,7 +96,6 @@ public class ResponseBuilder {
         } else if ((update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("myOrder")) ||
             (update.hasMessage() && update.getMessage().getText().equals("My Orders"))) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE);
-            requestForMyOrdersList.sendTitle(update);
             requestForMyOrdersList.requestForMyOrdersList(update, telegramUser);
         } else if (update.hasMessage() && update.getMessage().getText().equals("Help")) {
 
@@ -112,6 +114,8 @@ public class ResponseBuilder {
             requestRestorantSelection.requestRestorantSelection(update, telegramUser);
         } else if ((update.hasMessage() && update.getMessage().getLocation() == null) || update.hasCallbackQuery()) {
             requestLocation.requestLocationAgain(update);
+        } else {
+            requestForErrorResponder(update, telegramUser);
         }
     }
 
@@ -186,7 +190,7 @@ public class ResponseBuilder {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("C_")) {
             dbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(2)), OrderStatus.CANCELED_BY_USER);
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("R_")) {
-            dbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(2)), OrderStatus.CANCELED_BY_USER);
+            dbUtility.orderRemove(Long.valueOf(update.getCallbackQuery().getData().substring(2)));
         }  else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order") ||
             (update.hasMessage() && update.getMessage().getText().equals("New Order"))) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);

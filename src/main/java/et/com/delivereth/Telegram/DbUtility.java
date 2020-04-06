@@ -90,7 +90,10 @@ public class DbUtility {
             orderTobeUpdated.setOrderStatus(OrderStatus.CANCELED_BY_USER);
             orderTobeUpdated.setDate(Instant.now());
             orderService.save(orderTobeUpdated);
+            telegramUser.setOrderedFoodIdPaused(null);
             telegramUser.setOrderIdPaused(null);
+            telegramUser.setSelectedRestorant(null);
+            telegramUser.setLoadedPage(null);
             telegramUserService.save(telegramUser);
         }
     }
@@ -99,6 +102,19 @@ public class DbUtility {
         if (order.isPresent()) {
             OrderDTO orderTobeUpdated = order.get();
             orderTobeUpdated.setOrderStatus(orderStatus);
+            orderTobeUpdated.setDate(Instant.now());
+            orderService.save(orderTobeUpdated);
+        }
+    }
+    public void orderRemove(Long id) {
+        Optional<OrderDTO> order = orderService.findOne(id);
+        if (order.isPresent()) {
+            OrderDTO orderTobeUpdated = order.get();
+            if (orderTobeUpdated.getOrderStatus().equals(OrderStatus.DELIVERED)){
+                orderTobeUpdated.setOrderStatus(OrderStatus.DELIVERED_AND_REMOVED);
+            } else if (orderTobeUpdated.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT)) {
+                orderTobeUpdated.setOrderStatus(OrderStatus.CANCELED_BY_RESTAURANT_AND_REMOVED);
+            }
             orderTobeUpdated.setDate(Instant.now());
             orderService.save(orderTobeUpdated);
         }
@@ -174,6 +190,7 @@ public class DbUtility {
         telegramUser.setOrderIdPaused(null);
         telegramUser.setSelectedRestorant(null);
         telegramUser.setLoadedPage(null);
+        telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
         telegramUserService.save(telegramUser);
     }
     public void updateStep(TelegramUserDTO telegramUser, String step){
@@ -214,17 +231,20 @@ public class DbUtility {
         Optional<RestorantDTO> restaurant = restorantService.findOne(id);
         return restaurant.isPresent()? restaurant.get(): null;
     }
-
     public Page<OrderDTO> getMyOrders(TelegramUserDTO telegramUser){
         List<OrderStatus> orderStatusList = new ArrayList<>();
         orderStatusList.add(OrderStatus.ORDERED);
-        orderStatusList.add(OrderStatus.WAITING);
-        orderStatusList.add(OrderStatus.CANCELED_BY_RESTORANT);
+        orderStatusList.add(OrderStatus.ACCEPTED_BY_RESTAURANT);
+        orderStatusList.add(OrderStatus.ACCEPTED_BY_DRIVER);
         orderStatusList.add(OrderStatus.DELIVERED);
+        orderStatusList.add(OrderStatus.CANCELED_BY_RESTAURANT);
         OrderCriteria.OrderStatusFilter orderStatusFilter = new OrderCriteria.OrderStatusFilter();
         orderStatusFilter.setIn(orderStatusList);
+        LongFilter longFilter = new LongFilter();
+        longFilter.setEquals(telegramUser.getId());
         OrderCriteria orderCriteria = new OrderCriteria();
         orderCriteria.setOrderStatus(orderStatusFilter);
+        orderCriteria.setTelegramUserId(longFilter);
         if (telegramUser.getLoadedPage() == null) {
             telegramUser.setLoadedPage(0);
         } else {

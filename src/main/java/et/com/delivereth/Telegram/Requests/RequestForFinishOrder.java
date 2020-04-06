@@ -44,7 +44,7 @@ public class RequestForFinishOrder {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        List<OrderedFoodDTO> orderedFoodList = dbUtility.getOrderedFoods(telegramUser);
+        List<OrderedFoodDTO> orderedFoodList = dbUtility.getOrderedFoods(telegramUser.getOrderIdPaused());
         String invoice = "<strong>Restaurant Name: " +
              dbUtility.getRestorant(telegramUser.getSelectedRestorant()).getName() +
             "</strong>\n";

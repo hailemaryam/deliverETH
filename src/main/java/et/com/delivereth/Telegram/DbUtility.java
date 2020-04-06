@@ -94,6 +94,16 @@ public class DbUtility {
             telegramUserService.save(telegramUser);
         }
     }
+    public void changeOrderStatusById(Long id, OrderStatus orderStatus) {
+        Optional<OrderDTO> order = orderService.findOne(id);
+        if (order.isPresent()) {
+            OrderDTO orderTobeUpdated = order.get();
+            orderTobeUpdated.setOrderStatus(orderStatus);
+            orderTobeUpdated.setDate(Instant.now());
+            orderService.save(orderTobeUpdated);
+        }
+    }
+
     public OrderDTO registerOrder(Update update, TelegramUserDTO telegramUser) {
         OrderDTO order = new OrderDTO();
         order.setLatitude(update.getMessage().getLocation().getLatitude());
@@ -182,9 +192,9 @@ public class DbUtility {
         List<KeyValuPairHolderDTO> keyValuPairHolderDTOList = keyValuPairHolderQueryService.findByCriteria(keyValuPairHolderCriteria);
         return keyValuPairHolderDTOList.size() > 0? keyValuPairHolderDTOList.get(0): null;
     }
-    public List<OrderedFoodDTO> getOrderedFoods(TelegramUserDTO telegramUser){
+    public List<OrderedFoodDTO> getOrderedFoods(Long orderId){
         LongFilter longFilter = new LongFilter();
-        longFilter.setEquals(telegramUser.getOrderIdPaused());
+        longFilter.setEquals(orderId);
         OrderedFoodCriteria orderedFoodCriteria = new OrderedFoodCriteria();
         orderedFoodCriteria.setOrderId(longFilter);
         return orderedFoodQueryService.findByCriteria(orderedFoodCriteria);
@@ -205,7 +215,7 @@ public class DbUtility {
         return restaurant.isPresent()? restaurant.get(): null;
     }
 
-    public Page<OrderDTO> getMyOrders(TelegramUserDTO telegramUserDTO){
+    public Page<OrderDTO> getMyOrders(TelegramUserDTO telegramUser){
         List<OrderStatus> orderStatusList = new ArrayList<>();
         orderStatusList.add(OrderStatus.ORDERED);
         orderStatusList.add(OrderStatus.WAITING);
@@ -215,6 +225,12 @@ public class DbUtility {
         orderStatusFilter.setIn(orderStatusList);
         OrderCriteria orderCriteria = new OrderCriteria();
         orderCriteria.setOrderStatus(orderStatusFilter);
-        return orderQueryService.findByCriteria(orderCriteria, PageRequest.of(telegramUserDTO.getLoadedPage(), 5));
+        if (telegramUser.getLoadedPage() == null) {
+            telegramUser.setLoadedPage(0);
+        } else {
+            telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
+        }
+        updateTelegramUser(telegramUser);
+        return orderQueryService.findByCriteria(orderCriteria, PageRequest.of(telegramUser.getLoadedPage(), 5));
     }
 }

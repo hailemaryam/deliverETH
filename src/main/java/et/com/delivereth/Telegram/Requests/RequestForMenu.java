@@ -34,7 +34,7 @@ public class RequestForMenu {
     }
 
     public void requestForMenu(Update update, TelegramUserDTO telegramUser) {
-        SendPhoto response = new SendPhoto();
+        SendMessage response = new SendMessage();
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
@@ -48,10 +48,10 @@ public class RequestForMenu {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        KeyValuPairHolderDTO orderImage = dbUtility.getKeyValuPairHolderRepository("OrderImage");
-        InputStream inputStream = new ByteArrayInputStream(orderImage.getValueImage());
-        response.setPhoto(orderImage.getKey(), inputStream);
-        response.setCaption("<b>currently we are delivering @</b>\n" +
+//        KeyValuPairHolderDTO orderImage = dbUtility.getKeyValuPairHolderRepository("OrderImage");
+//        InputStream inputStream = new ByteArrayInputStream(orderImage.getValueImage());
+//        response.setPhoto(orderImage.getKey(), inputStream);
+        response.setText("<b>currently we are delivering @</b>\n" +
             "<i>* hayat</i>\n" +
             "<i>* semit</i>\n" +
             "<i>* bole</i>\n");

@@ -8,5 +8,5 @@ public class ChatStepConstants {
     public static String WAITING_FOR_ORDER_LOOP_ADD_ITEM = "5";
     public static String WAITING_FOR_ORDER_LOOP_SET_QUANTITY = "6";
     public static String WAITING_FOR_ORDER_LOOP_FINISH_ORDER = "7";
-    public static String WAITING_FOR_ORDER_LOOP_FOLLOW_ORDER_STATUS = "8";
+    public static String WAITING_FOR_MY_ORDER_LIST_RESPONSE = "8";
 }

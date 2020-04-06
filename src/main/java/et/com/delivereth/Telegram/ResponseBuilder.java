@@ -2,6 +2,8 @@ package et.com.delivereth.Telegram;
 
 import et.com.delivereth.Telegram.Requests.*;
 import et.com.delivereth.domain.Order;
+import et.com.delivereth.domain.TelegramUser;
+import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.OrderDTO;
 import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.slf4j.Logger;
@@ -20,9 +22,10 @@ public class ResponseBuilder {
     private final RequestQuantity requestQuantity;
     private final RequestForFinishOrder requestForFinishOrder;
     private final RequestErrorResponder requestErrorResponder;
+    private final RequestForMyOrdersList requestForMyOrdersList;
     private final DbUtility dbUtility;
 
-    public ResponseBuilder(RequestContact requestContact, RequestForMenu requestForMenu, RequestLocation requestLocation, RequestRestorantSelection requestRestorantSelection, RequestFoodList requestFoodList, RequestQuantity requestQuantity, RequestForFinishOrder requestForFinishOrder, RequestErrorResponder requestErrorResponder, DbUtility dbUtility) {
+    public ResponseBuilder(RequestContact requestContact, RequestForMenu requestForMenu, RequestLocation requestLocation, RequestRestorantSelection requestRestorantSelection, RequestFoodList requestFoodList, RequestQuantity requestQuantity, RequestForFinishOrder requestForFinishOrder, RequestErrorResponder requestErrorResponder, RequestForMyOrdersList requestForMyOrdersList, DbUtility dbUtility) {
         this.requestContact = requestContact;
         this.requestForMenu = requestForMenu;
         this.requestLocation = requestLocation;
@@ -31,6 +34,7 @@ public class ResponseBuilder {
         this.requestQuantity = requestQuantity;
         this.requestForFinishOrder = requestForFinishOrder;
         this.requestErrorResponder = requestErrorResponder;
+        this.requestForMyOrdersList = requestForMyOrdersList;
         this.dbUtility = dbUtility;
     }
 
@@ -55,6 +59,8 @@ public class ResponseBuilder {
                 processSetQuantityAndPreceedToPlaceOrder(update, telegramUser);
             } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_ORDER_LOOP_FINISH_ORDER)) {
                 processOrderFinishOrAddMoreItem(update, telegramUser);
+            } else if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE)) {
+                processMyOrderResponse(update, telegramUser);
             } else {
                 requestForErrorResponder(update, telegramUser);
             }
@@ -80,16 +86,15 @@ public class ResponseBuilder {
     }
 
     public void processOrderRequestAndProceedToLocationRequest(Update update, TelegramUserDTO telegramUser) {
-        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order")) {
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order") ||
+            (update.hasMessage() && update.getMessage().getText().equals("New Order"))) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);
             requestLocation.requestLocation(update);
-        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("myOrder")) {
-
-        } else if (update.hasMessage() && update.getMessage().getText().equals("New Order")) {
-            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);
-            requestLocation.requestLocation(update);
-        } else if (update.hasMessage() && update.getMessage().getText().equals("My Orders")) {
-
+        } else if ((update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("myOrder")) ||
+            (update.hasMessage() && update.getMessage().getText().equals("My Orders"))) {
+            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE);
+            requestForMyOrdersList.sendTitle(update);
+            requestForMyOrdersList.requestForMyOrdersList(update, telegramUser);
         } else if (update.hasMessage() && update.getMessage().getText().equals("Help")) {
 
         } else if (update.hasMessage() && update.getMessage().getText().equals("Setting")) {
@@ -172,6 +177,25 @@ public class ResponseBuilder {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
             dbUtility.cancelOrder(telegramUser);
             requestForMenu.requestForMenu(update, telegramUser);
+        } else {
+            requestForErrorResponder(update, telegramUser);
+        }
+    }
+
+    public void processMyOrderResponse(Update update, TelegramUserDTO telegramUser) {
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("C_")) {
+            dbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(2)), OrderStatus.CANCELED_BY_USER);
+        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("R_")) {
+            dbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(2)), OrderStatus.CANCELED_BY_USER);
+        }  else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order") ||
+            (update.hasMessage() && update.getMessage().getText().equals("New Order"))) {
+            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);
+            requestLocation.requestLocation(update);
+        } else if ((update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("myOrder")) ||
+            (update.hasMessage() && update.getMessage().getText().equals("My Orders"))) {
+            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE);
+            requestForMyOrdersList.sendTitle(update);
+            requestForMyOrdersList.requestForMyOrdersList(update, telegramUser);
         } else {
             requestForErrorResponder(update, telegramUser);
         }

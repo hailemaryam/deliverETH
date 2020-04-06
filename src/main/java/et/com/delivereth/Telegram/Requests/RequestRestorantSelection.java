@@ -9,12 +9,16 @@ import et.com.delivereth.service.dto.RestorantDTO;
 import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.ByteArrayInputStream;
@@ -34,13 +38,14 @@ public class RequestRestorantSelection {
     }
 
     public void requestRestorantSelection(Update update, TelegramUserDTO telegramUser) {
-        List<RestorantDTO> restorantList = dbUtility.getRestorantList(telegramUser);
-        restorantList.forEach(restorantDTO -> {
+        Page<RestorantDTO> restorantList = dbUtility.getRestorantList(telegramUser);
+        restorantList.toList().forEach(restorantDTO -> {
             sendRestorant(restorantDTO, update);
         });
-        if (restorantList.size() == 0) {
+        if (restorantList.toList().size() == 0 || !restorantList.hasNext()) {
             sendNoMoreItem(update);
-        } else if (restorantList.size() > 1) {
+            dbUtility.cancelOrder(telegramUser);
+        } else if (restorantList.hasNext()) {
             sendLoadMoreButton(update);
         }
     }
@@ -60,7 +65,7 @@ public class RequestRestorantSelection {
         }
         InputStream inputStream = new ByteArrayInputStream(restorantDTO.getIconImage());
         response.setPhoto(restorantDTO.getName(), inputStream);
-        response.setCaption(restorantDTO.getDescription());
+        response.setCaption(restorantDTO.getName());
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -81,7 +86,7 @@ public class RequestRestorantSelection {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("");
+        response.setText("Want to list more restaurant.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -95,11 +100,49 @@ public class RequestRestorantSelection {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("There are no more Items.");
+        response.setText("There are no more restaurant to laod.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
             logger.error("Error Sending Message {}", response);
         }
     }
+    public void sendTitle(Update update){
+        SendMessage response = new SendMessage();
+        if (update.hasMessage()){
+            response.setChatId(update.getMessage().getChatId());
+        } else if (update.hasCallbackQuery()) {
+            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
+        }
+        response.setText("<b>Choose restaurant from this list</b>");
+        response.setParseMode("HTML");
+        response.setReplyMarkup(orderKeyBoardMenu());
+        try {
+            telegramSender.execute(response);
+        } catch (TelegramApiException e) {
+            logger.error("Error Sending Message {}", response);
+        }
+    }
+
+    public ReplyKeyboardMarkup orderKeyBoardMenu() {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        List<KeyboardRow> keyboardRowList = new ArrayList<>();
+        KeyboardRow keyboardButtons1 = new KeyboardRow();
+        keyboardButtons1.add(new KeyboardButton()
+            .setText("New Order"));
+        keyboardButtons1.add(new KeyboardButton()
+            .setText("My Orders"));
+        KeyboardRow keyboardButtons2 = new KeyboardRow();
+        keyboardButtons2.add(new KeyboardButton()
+            .setText("Help"));
+        keyboardButtons2.add(new KeyboardButton()
+            .setText("Setting"));
+        keyboardRowList.add(keyboardButtons1);
+        keyboardRowList.add(keyboardButtons2);
+        replyKeyboardMarkup.setKeyboard(keyboardRowList);
+        return  replyKeyboardMarkup;
+    }
+
 }

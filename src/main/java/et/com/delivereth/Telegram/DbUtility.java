@@ -9,7 +9,9 @@ import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -24,20 +26,24 @@ public class DbUtility {
     private final TelegramUserService telegramUserService;
     private final TelegramUserQueryService telegramUserQueryService;
     private final OrderService orderService;
+    private final OrderQueryService orderQueryService;
     private final OrderedFoodService orderedFoodService;
     private final OrderedFoodQueryService orderedFoodQueryService;
-    private final KeyValuPairHolderService keyValuPairHolderService;
+    private final KeyValuPairHolderQueryService keyValuPairHolderQueryService;
+    private final RestorantService restorantService;
     private final RestorantQueryService restorantQueryService;
     private final FoodQueryService foodQueryService;
     private final FoodService foodService;
 
-    public DbUtility(TelegramUserService telegramUserService, TelegramUserQueryService telegramUserQueryService, OrderService orderService, OrderedFoodService orderedFoodService, OrderedFoodQueryService orderedFoodQueryService, KeyValuPairHolderService keyValuPairHolderService, RestorantQueryService restorantQueryService, FoodQueryService foodQueryService, FoodService foodService) {
+    public DbUtility(TelegramUserService telegramUserService, TelegramUserQueryService telegramUserQueryService, OrderService orderService, OrderQueryService orderQueryService, OrderedFoodService orderedFoodService, OrderedFoodQueryService orderedFoodQueryService, KeyValuPairHolderQueryService keyValuPairHolderQueryService, RestorantService restorantService, RestorantQueryService restorantQueryService, FoodQueryService foodQueryService, FoodService foodService) {
         this.telegramUserService = telegramUserService;
         this.telegramUserQueryService = telegramUserQueryService;
         this.orderService = orderService;
+        this.orderQueryService = orderQueryService;
         this.orderedFoodService = orderedFoodService;
         this.orderedFoodQueryService = orderedFoodQueryService;
-        this.keyValuPairHolderService = keyValuPairHolderService;
+        this.keyValuPairHolderQueryService = keyValuPairHolderQueryService;
+        this.restorantService = restorantService;
         this.restorantQueryService = restorantQueryService;
         this.foodQueryService = foodQueryService;
         this.foodService = foodService;
@@ -101,29 +107,31 @@ public class DbUtility {
         return order;
     }
     /*Not Finished Request Restorant Based On Location*/
-    public List<RestorantDTO> getRestorantList(TelegramUserDTO telegramUser) {
+    public Page<RestorantDTO> getRestorantList(TelegramUserDTO telegramUser) {
         RestorantCriteria restorantCriteria = new RestorantCriteria();
         OrderDTO order = orderService.findOne(telegramUser.getOrderIdPaused()).get();
         Float latitude = order.getLatitude();
         Float longtitude = order.getLongtude();
         if (telegramUser.getLoadedPage() == null) {
-            telegramUser.setLoadedPage(1);
+            telegramUser.setLoadedPage(0);
         } else {
             telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
         }
-        return restorantQueryService.findByCriteria(restorantCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2)).toList();
+        updateTelegramUser(telegramUser);
+        return restorantQueryService.findByCriteria(restorantCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2));
     }
-    public List<FoodDTO> getFoodList(TelegramUserDTO telegramUser){
+    public Page<FoodDTO> getFoodList(TelegramUserDTO telegramUser){
         FoodCriteria foodCriteria = new FoodCriteria();
         LongFilter longFilter = new LongFilter();
         longFilter.setEquals(telegramUser.getSelectedRestorant());
         foodCriteria.setRestorantId(longFilter);
         if (telegramUser.getLoadedPage() == null) {
-            telegramUser.setLoadedPage(1);
+            telegramUser.setLoadedPage(0);
         } else {
             telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
         }
-        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2)).toList();
+        updateTelegramUser(telegramUser);
+        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2));
     }
     public void addFoodToOrder(Update update, TelegramUserDTO telegramUser){
         OrderDTO order = orderService.findOne(telegramUser.getOrderIdPaused()).get();
@@ -137,7 +145,7 @@ public class DbUtility {
         telegramUserService.save(telegramUser);
     }
     public void setQuantity(Update update, TelegramUserDTO telegramUser){
-        OrderedFoodDTO orderedFood = orderedFoodService.findOne(telegramUser.getOrderIdPaused()).get();
+        OrderedFoodDTO orderedFood = orderedFoodService.findOne(telegramUser.getOrderedFoodIdPaused()).get();
         if (update.hasCallbackQuery()) {
             orderedFood.setQuantity(Integer.valueOf(update.getCallbackQuery().getData().substring(9)));
         } else if (update.hasMessage()){
@@ -166,9 +174,13 @@ public class DbUtility {
     public void updateTelegramUser(TelegramUserDTO telegramUser){
         telegramUserService.save(telegramUser);
     }
-    public KeyValuPairHolderDTO getKeyValuPairHolderRepository(String Key) {
-        Optional<KeyValuPairHolderDTO> one = keyValuPairHolderService.findOne(1L);
-        return one.isPresent()? one.get(): null;
+    public KeyValuPairHolderDTO getKeyValuPairHolderRepository(String key) {
+        KeyValuPairHolderCriteria keyValuPairHolderCriteria = new KeyValuPairHolderCriteria();
+        StringFilter stringFilter = new StringFilter();
+        stringFilter.setEquals(key);
+        keyValuPairHolderCriteria.setKey(stringFilter);
+        List<KeyValuPairHolderDTO> keyValuPairHolderDTOList = keyValuPairHolderQueryService.findByCriteria(keyValuPairHolderCriteria);
+        return keyValuPairHolderDTOList.size() > 0? keyValuPairHolderDTOList.get(0): null;
     }
     public List<OrderedFoodDTO> getOrderedFoods(TelegramUserDTO telegramUser){
         LongFilter longFilter = new LongFilter();
@@ -187,5 +199,22 @@ public class DbUtility {
     }
     public FoodDTO getFood(Long id){
         return foodService.findOne(id).get();
+    }
+    public RestorantDTO getRestorant(Long id){
+        Optional<RestorantDTO> restaurant = restorantService.findOne(id);
+        return restaurant.isPresent()? restaurant.get(): null;
+    }
+
+    public Page<OrderDTO> getMyOrders(TelegramUserDTO telegramUserDTO){
+        List<OrderStatus> orderStatusList = new ArrayList<>();
+        orderStatusList.add(OrderStatus.ORDERED);
+        orderStatusList.add(OrderStatus.WAITING);
+        orderStatusList.add(OrderStatus.CANCELED_BY_RESTORANT);
+        orderStatusList.add(OrderStatus.DELIVERED);
+        OrderCriteria.OrderStatusFilter orderStatusFilter = new OrderCriteria.OrderStatusFilter();
+        orderStatusFilter.setIn(orderStatusList);
+        OrderCriteria orderCriteria = new OrderCriteria();
+        orderCriteria.setOrderStatus(orderStatusFilter);
+        return orderQueryService.findByCriteria(orderCriteria, PageRequest.of(telegramUserDTO.getLoadedPage(), 5));
     }
 }

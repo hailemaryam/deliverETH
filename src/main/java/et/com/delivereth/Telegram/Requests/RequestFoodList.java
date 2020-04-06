@@ -8,6 +8,7 @@ import et.com.delivereth.service.dto.FoodDTO;
 import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -32,13 +33,14 @@ public class RequestFoodList {
         this.dbUtility = dbUtility;
     }
     public void requestFoodList(Update update, TelegramUserDTO telegramUser) {
-        List<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
+        Page<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
         foodList.forEach(foodDTO -> {
             sendFood(foodDTO, update);
         });
-        if (foodList.size() == 0) {
+        if (foodList.toList().size() == 0) {
             sendNoMoreItem(update);
-        } else if (foodList.size() > 1) {
+            dbUtility.cancelOrder(telegramUser);
+        } else if (foodList.hasNext()) {
             sendLoadMoreButton(update);
         }
     }
@@ -79,7 +81,7 @@ public class RequestFoodList {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("");
+        response.setText("Want to list more item.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -93,7 +95,7 @@ public class RequestFoodList {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("There are no more Items.");
+        response.setText("There are no more food item to list.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

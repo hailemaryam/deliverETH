@@ -30,7 +30,7 @@
         {
             "fieldName": "orderStatus",
             "fieldType": "OrderStatus",
-            "fieldValues": "STARTED,ORDERED,WAITING,DELIVERED,CANCELED_BY_RESTORANT,CANCELED_BY_USER"
+            "fieldValues": "STARTED,ORDERED,ACCEPTED_BY_RESTAURANT,ACCEPTED_BY_DRIVER,DELIVERED,CANCELED_BY_RESTAURANT,CANCELED_BY_USER"
         }
     ],
     "relationships": [

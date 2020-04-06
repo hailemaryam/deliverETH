@@ -1,11 +1,11 @@
 id;latitude;longtude;location_description;total_price;date;additional_note;order_status
-1;48469;32217;../fake-data/blob/hipster.txt;input Legacy Rupiah;2020-03-21T16:14:46;../fake-data/blob/hipster.txt;CANCELED_BY_RESTORANT
-2;20742;55341;../fake-data/blob/hipster.txt;Legacy;2020-03-22T03:43:21;../fake-data/blob/hipster.txt;WAITING
+1;48469;32217;../fake-data/blob/hipster.txt;input Legacy Rupiah;2020-03-21T16:14:46;../fake-data/blob/hipster.txt;DELIVERED
+2;20742;55341;../fake-data/blob/hipster.txt;Legacy;2020-03-22T03:43:21;../fake-data/blob/hipster.txt;ACCEPTED_BY_DRIVER
 3;96360;61547;../fake-data/blob/hipster.txt;circuit HDD open-source;2020-03-22T15:10:46;../fake-data/blob/hipster.txt;DELIVERED
-4;89808;73814;../fake-data/blob/hipster.txt;Investment Account Slovenia Creek;2020-03-22T05:35:14;../fake-data/blob/hipster.txt;DELIVERED
+4;89808;73814;../fake-data/blob/hipster.txt;Investment Account Slovenia Creek;2020-03-22T05:35:14;../fake-data/blob/hipster.txt;ACCEPTED_BY_DRIVER
 5;29068;66445;../fake-data/blob/hipster.txt;Jewelery;2020-03-21T18:07:03;../fake-data/blob/hipster.txt;ORDERED
 6;67523;26851;../fake-data/blob/hipster.txt;neutral Auto Loan Account Awesome;2020-03-22T04:40:27;../fake-data/blob/hipster.txt;ORDERED
-7;48932;30058;../fake-data/blob/hipster.txt;Gorgeous Regional;2020-03-22T14:20:23;../fake-data/blob/hipster.txt;CANCELED_BY_RESTORANT
+7;48932;30058;../fake-data/blob/hipster.txt;Gorgeous Regional;2020-03-22T14:20:23;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT
 8;4373;67766;../fake-data/blob/hipster.txt;Lead Cambridgeshire Dam;2020-03-22T05:09:25;../fake-data/blob/hipster.txt;CANCELED_BY_USER
-9;73833;78745;../fake-data/blob/hipster.txt;connecting Games TCP;2020-03-22T05:30:18;../fake-data/blob/hipster.txt;CANCELED_BY_RESTORANT
-10;29612;34916;../fake-data/blob/hipster.txt;Garden;2020-03-21T23:38:20;../fake-data/blob/hipster.txt;CANCELED_BY_USER
+9;73833;78745;../fake-data/blob/hipster.txt;connecting Games TCP;2020-03-22T05:30:18;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT
+10;29612;34916;../fake-data/blob/hipster.txt;Garden;2020-03-21T23:38:20;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT

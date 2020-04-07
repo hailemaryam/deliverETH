@@ -12,7 +12,7 @@
 
 eureka:
   instance:
-    hostname: deliver-eth.herokuapp.com
+    hostname: agelgel-delivery.herokuapp.com
     non-secure-port: 80
     prefer-ip-address: false
 

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -36,15 +37,36 @@ public class RequestFoodList {
         this.dbUtility = dbUtility;
     }
     public void requestFoodList(Update update, TelegramUserDTO telegramUser) {
+        telegramUser.setLoadedPage(0);
+        dbUtility.updateTelegramUser(telegramUser);
         Page<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
-        if (!foodList.toList().isEmpty()) {
-            sendFood(update, prepareMenu(foodList));
-        }
         if (foodList.toList().isEmpty()) {
             sendNoMoreItem(update);
             dbUtility.cancelOrder(telegramUser);
-        } else if (foodList.hasNext()) {
-            sendLoadMoreButton(update);
+        } else {
+            sendFood(update,foodList);
+        }
+    }
+    public void requestFoodListNext(Update update, TelegramUserDTO telegramUser) {
+        telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
+        dbUtility.updateTelegramUser(telegramUser);
+        Page<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
+        if (foodList.toList().isEmpty()) {
+            sendNoMoreItem(update);
+            dbUtility.cancelOrder(telegramUser);
+        } else {
+            sendFoodEdit(update,foodList);
+        }
+    }
+    public void requestFoodListPrev(Update update, TelegramUserDTO telegramUser) {
+        telegramUser.setLoadedPage(telegramUser.getLoadedPage() - 1);
+        dbUtility.updateTelegramUser(telegramUser);
+        Page<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
+        if (foodList.toList().isEmpty()) {
+            sendNoMoreItem(update);
+            dbUtility.cancelOrder(telegramUser);
+        } else {
+            sendFoodEdit(update,foodList);
         }
     }
     public String prepareMenu(Page<FoodDTO> foodDTOList){
@@ -63,14 +85,26 @@ public class RequestFoodList {
         }
         return tickes;
     }
-    public void sendFood(Update update, String message){
+    public void sendFood(Update update, Page<FoodDTO> foodDTOPage){
         SendMessage response = new SendMessage();
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText(message);
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        if (foodDTOPage.hasPrevious()) {
+            rowInline.add(new InlineKeyboardButton().setText("<< Prev").setCallbackData("prev"));
+        }
+        if (foodDTOPage.hasNext()) {
+            rowInline.add(new InlineKeyboardButton().setText("Next >>").setCallbackData("next"));
+        }
+        rowsInline.add(rowInline);
+        markupInline.setKeyboard(rowsInline);
+        response.setReplyMarkup(markupInline);
+        response.setText(prepareMenu(foodDTOPage));
         response.setParseMode("HTML");
         try {
             telegramSender.execute(response);
@@ -78,21 +112,29 @@ public class RequestFoodList {
             logger.error("Error Sending Message {}", response);
         }
     }
-    private void sendLoadMoreButton(Update update){
-        SendMessage response = new SendMessage();
+    public void sendFoodEdit(Update update, Page<FoodDTO> foodDTOPage){
+        EditMessageText response = new EditMessageText();
+        if (update.hasMessage()){
+            response.setChatId(update.getMessage().getChatId());
+            response.setMessageId(update.getMessage().getMessageId());
+        } else if (update.hasCallbackQuery()) {
+            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
+            response.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
+        }
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("Load More").setCallbackData("loadMore"));
+        if (foodDTOPage.hasPrevious()) {
+            rowInline.add(new InlineKeyboardButton().setText("<< Prev").setCallbackData("prev"));
+        }
+        if (foodDTOPage.hasNext()) {
+            rowInline.add(new InlineKeyboardButton().setText("Next >>").setCallbackData("next"));
+        }
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
-        if (update.hasMessage()){
-            response.setChatId(update.getMessage().getChatId());
-        } else if (update.hasCallbackQuery()) {
-            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
-        }
-        response.setText("Want to list more item.");
+        response.setText(prepareMenu(foodDTOPage));
+        response.setParseMode("HTML");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -106,7 +148,7 @@ public class RequestFoodList {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("There are no food list.");
+        response.setText("Menu are not added in selected restaurant.");
         response.setReplyMarkup(orderKeyBoardMenu());
         try {
             telegramSender.execute(response);
@@ -122,15 +164,7 @@ public class RequestFoodList {
         KeyboardRow keyboardButtons1 = new KeyboardRow();
         keyboardButtons1.add(new KeyboardButton()
             .setText("Cancel Order"));
-//        keyboardButtons1.add(new KeyboardButton()
-//            .setText("My Orders"));
-//        KeyboardRow keyboardButtons2 = new KeyboardRow();
-//        keyboardButtons2.add(new KeyboardButton()
-//            .setText("Help"));
-//        keyboardButtons2.add(new KeyboardButton()
-//            .setText("Setting"));
         keyboardRowList.add(keyboardButtons1);
-//        keyboardRowList.add(keyboardButtons2);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         return  replyKeyboardMarkup;
     }

@@ -140,8 +140,10 @@ public class ResponseBuilder {
             } catch (NumberFormatException e) {
                 requestForErrorResponder(update, telegramUser);
             }
-        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("loadMore")) {
-            requestFoodList.requestFoodList(update, telegramUser);
+        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("next")) {
+            requestFoodList.requestFoodListNext(update, telegramUser);
+        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("prev")) {
+            requestFoodList.requestFoodListPrev(update, telegramUser);
         } else if (update.hasMessage() && update.getMessage().getText().startsWith("/add_to_cart_")) {
             try {
                 dbUtility.addFoodToOrder(telegramUser, Long.valueOf(update.getMessage().getText().substring(13)));

@@ -157,13 +157,8 @@ public class DbUtility {
         LongFilter longFilter = new LongFilter();
         longFilter.setEquals(telegramUser.getSelectedRestorant());
         foodCriteria.setRestorantId(longFilter);
-        if (telegramUser.getLoadedPage() == null) {
-            telegramUser.setLoadedPage(0);
-        } else {
-            telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
-        }
         updateTelegramUser(telegramUser);
-        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 10));
+        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2));
     }
     public void addFoodToOrder(TelegramUserDTO telegramUser, Long foodId){
         OrderDTO order = orderService.findOne(telegramUser.getOrderIdPaused()).get();

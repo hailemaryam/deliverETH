@@ -163,11 +163,11 @@ public class DbUtility {
             telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
         }
         updateTelegramUser(telegramUser);
-        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2));
+        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 10));
     }
-    public void addFoodToOrder(Update update, TelegramUserDTO telegramUser){
+    public void addFoodToOrder(TelegramUserDTO telegramUser, Long foodId){
         OrderDTO order = orderService.findOne(telegramUser.getOrderIdPaused()).get();
-        FoodDTO food = foodService.findOne(Long.valueOf(update.getCallbackQuery().getData().substring(5))).get();
+        FoodDTO food = foodService.findOne(foodId).get();
         OrderedFoodDTO orderedFood = new OrderedFoodDTO();
         orderedFood.setFoodId(food.getId());
         orderedFood.setQuantity(1);

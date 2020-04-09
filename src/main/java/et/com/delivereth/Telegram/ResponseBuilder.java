@@ -133,11 +133,23 @@ public class ResponseBuilder {
 
     public void processAddItemAndRequestQuanity(Update update, TelegramUserDTO telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("food_")) {
-            dbUtility.addFoodToOrder(update, telegramUser);
-            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY);
-            requestQuantity.requestQuantity(update, telegramUser);
+            try {
+                dbUtility.addFoodToOrder(telegramUser,Long.valueOf(update.getCallbackQuery().getData().substring(5)));
+                dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY);
+                requestQuantity.requestQuantity(update, telegramUser);
+            } catch (NumberFormatException e) {
+                requestForErrorResponder(update, telegramUser);
+            }
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("loadMore")) {
             requestFoodList.requestFoodList(update, telegramUser);
+        } else if (update.hasMessage() && update.getMessage().getText().startsWith("/add_to_cart_")) {
+            try {
+                dbUtility.addFoodToOrder(telegramUser, Long.valueOf(update.getMessage().getText().substring(13)));
+                dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY);
+                requestQuantity.requestQuantity(update, telegramUser);
+            } catch (NumberFormatException e) {
+                requestForErrorResponder(update, telegramUser);
+            }
         } else {
             requestForErrorResponder(update, telegramUser);
         }

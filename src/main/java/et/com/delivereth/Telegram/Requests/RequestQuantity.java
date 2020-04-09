@@ -110,9 +110,11 @@ public class RequestQuantity {
             telegramUser.setLoadedPage(0);
             dbUtility.updateTelegramUser(telegramUser);
         } else {
-            rowInline.add(new InlineKeyboardButton().setText("<<").setCallbackData("prev"));
-            telegramUser.setLoadedPage(telegramUser.getLoadedPage() - 1);
-            dbUtility.updateTelegramUser(telegramUser);
+            if (telegramUser.getLoadedPage() != 0) {
+                rowInline.add(new InlineKeyboardButton().setText("<<").setCallbackData("prev"));
+                telegramUser.setLoadedPage(telegramUser.getLoadedPage() - 1);
+                dbUtility.updateTelegramUser(telegramUser);
+            }
         }
         for (int i = telegramUser.getLoadedPage()*5; i < (telegramUser.getLoadedPage() + 1)*5; i++) {
             if (i != 0) {

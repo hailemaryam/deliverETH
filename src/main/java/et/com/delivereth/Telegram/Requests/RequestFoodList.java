@@ -37,33 +37,41 @@ public class RequestFoodList {
     }
     public void requestFoodList(Update update, TelegramUserDTO telegramUser) {
         Page<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
-        foodList.forEach(foodDTO -> {
-            sendFood(foodDTO, update);
-        });
-        if (foodList.toList().size() == 0) {
+        if (!foodList.toList().isEmpty()) {
+            sendFood(update, prepareMenu(foodList));
+        }
+        if (foodList.toList().isEmpty()) {
             sendNoMoreItem(update);
             dbUtility.cancelOrder(telegramUser);
         } else if (foodList.hasNext()) {
             sendLoadMoreButton(update);
         }
     }
-    public void sendFood(FoodDTO foodDTO, Update update){
-        SendPhoto response = new SendPhoto();
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("Add To Cart").setCallbackData("food_" + foodDTO.getId()));
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
-        response.setReplyMarkup(markupInline);
+    public String prepareMenu(Page<FoodDTO> foodDTOList){
+        String text = "<b>Menu of "+ dbUtility.getRestorant(foodDTOList.toList().get(0).getRestorantId()).getName() + " Page " + (foodDTOList.getPageable().getPageNumber()+1) + "</b>\n";
+        for (FoodDTO foodDTO: foodDTOList){
+            text += "<i>" + foodDTO.getName() + prepareTick(foodDTO) + foodDTO.getPrice() + ": </i><a>/add_to_cart_" + foodDTO.getId() + "</a>\n";
+        }
+        text += "<b>click the add to cart link to select the food.</b>";
+        return text;
+    }
+    public String prepareTick(FoodDTO foodDTO){
+        int size = 60 - foodDTO.getName().length() - foodDTO.getPrice().toString().length();
+        String tickes = "";
+        for (int i = 0;i  < size; i++ ){
+            tickes += "-";
+        }
+        return tickes;
+    }
+    public void sendFood(Update update, String message){
+        SendMessage response = new SendMessage();
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        InputStream inputStream = new ByteArrayInputStream(foodDTO.getIconImage());
-        response.setPhoto(foodDTO.getName(), inputStream);
-        response.setCaption(foodDTO.getName() + " : " + foodDTO.getPrice() + " birr.");
+        response.setText(message);
+        response.setParseMode("HTML");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

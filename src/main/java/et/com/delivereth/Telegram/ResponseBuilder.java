@@ -108,8 +108,7 @@ public class ResponseBuilder {
 
     public void processLocationRequestAndProceedToRestorantRequest(Update update, TelegramUserDTO telegramUser) {
         if (update.hasMessage() && update.getMessage().getLocation() != null) {
-            OrderDTO order = dbUtility.registerOrder(update, telegramUser);
-            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION);
+            dbUtility.registerOrder(update, telegramUser);
             requestRestorantSelection.sendTitle(update);
             requestRestorantSelection.requestRestorantSelection(update, telegramUser);
         } else if ((update.hasMessage() && update.getMessage().getLocation() == null) || update.hasCallbackQuery()) {

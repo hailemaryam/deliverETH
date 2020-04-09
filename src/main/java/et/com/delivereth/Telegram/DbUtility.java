@@ -84,18 +84,22 @@ public class DbUtility {
         return telegramUserDTOList.size() > 0 ? telegramUserDTOList.get(0): null;
     }
     public void cancelOrder(TelegramUserDTO telegramUser) {
-        Optional<OrderDTO> order = orderService.findOne(telegramUser.getOrderIdPaused());
+        Optional<OrderDTO> order = Optional.empty();
+        if (telegramUser.getOrderIdPaused() != null) {
+            order = orderService.findOne(telegramUser.getOrderIdPaused());
+        }
         if (order.isPresent()) {
             OrderDTO orderTobeUpdated = order.get();
             orderTobeUpdated.setOrderStatus(OrderStatus.CANCELED_BY_USER);
             orderTobeUpdated.setDate(Instant.now());
             orderService.save(orderTobeUpdated);
-            telegramUser.setOrderedFoodIdPaused(null);
-            telegramUser.setOrderIdPaused(null);
-            telegramUser.setSelectedRestorant(null);
-            telegramUser.setLoadedPage(null);
-            telegramUserService.save(telegramUser);
         }
+        telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
+        telegramUser.setOrderedFoodIdPaused(null);
+        telegramUser.setOrderIdPaused(null);
+        telegramUser.setSelectedRestorant(null);
+        telegramUser.setLoadedPage(null);
+        telegramUserService.save(telegramUser);
     }
     public void changeOrderStatusById(Long id, OrderStatus orderStatus) {
         Optional<OrderDTO> order = orderService.findOne(id);
@@ -129,6 +133,8 @@ public class DbUtility {
         order.setOrderStatus(OrderStatus.STARTED);
         order = orderService.save(order);
         telegramUser.setOrderIdPaused(order.getId());
+        telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_RESTORANT_SELECTION);
+        telegramUser.setLoadedPage(null);
         telegramUserService.save(telegramUser);
         return order;
     }

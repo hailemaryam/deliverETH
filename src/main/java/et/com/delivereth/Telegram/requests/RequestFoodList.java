@@ -1,6 +1,9 @@
 package et.com.delivereth.Telegram.requests;
 
 import et.com.delivereth.Telegram.DbUtility.DbUtility;
+import et.com.delivereth.Telegram.DbUtility.FoodDbUtitility;
+import et.com.delivereth.Telegram.DbUtility.RestorantDbUtitlity;
+import et.com.delivereth.Telegram.DbUtility.TelegramUserDbUtility;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.service.dto.FoodDTO;
@@ -24,14 +27,22 @@ public class RequestFoodList {
     private final TelegramSender telegramSender;
     private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
     private final DbUtility dbUtility;
-    public RequestFoodList(TelegramSender telegramSender, DbUtility dbUtility) {
+    private final RestorantDbUtitlity restorantDbUtitlity;
+    private final TelegramUserDbUtility telegramUserDbUtility;
+    private final FoodDbUtitility foodDbUtitility;
+
+    public RequestFoodList(TelegramSender telegramSender, DbUtility dbUtility, RestorantDbUtitlity restorantDbUtitlity, TelegramUserDbUtility telegramUserDbUtility, FoodDbUtitility foodDbUtitility) {
         this.telegramSender = telegramSender;
         this.dbUtility = dbUtility;
+        this.restorantDbUtitlity = restorantDbUtitlity;
+        this.telegramUserDbUtility = telegramUserDbUtility;
+        this.foodDbUtitility = foodDbUtitility;
     }
+
     public void requestFoodList(Update update, TelegramUserDTO telegramUser) {
         telegramUser.setLoadedPage(0);
-        dbUtility.updateTelegramUser(telegramUser);
-        Page<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
+        telegramUserDbUtility.updateTelegramUser(telegramUser);
+        Page<FoodDTO> foodList = foodDbUtitility.getFoodList(telegramUser);
         if (foodList.toList().isEmpty()) {
             sendNoMoreItem(update);
             dbUtility.cancelOrder(telegramUser);
@@ -41,8 +52,8 @@ public class RequestFoodList {
     }
     public void requestFoodListNext(Update update, TelegramUserDTO telegramUser) {
         telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
-        dbUtility.updateTelegramUser(telegramUser);
-        Page<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
+        telegramUserDbUtility.updateTelegramUser(telegramUser);
+        Page<FoodDTO> foodList = foodDbUtitility.getFoodList(telegramUser);
         if (foodList.toList().isEmpty()) {
             sendNoMoreItem(update);
             dbUtility.cancelOrder(telegramUser);
@@ -52,8 +63,8 @@ public class RequestFoodList {
     }
     public void requestFoodListPrev(Update update, TelegramUserDTO telegramUser) {
         telegramUser.setLoadedPage(telegramUser.getLoadedPage() - 1);
-        dbUtility.updateTelegramUser(telegramUser);
-        Page<FoodDTO> foodList = dbUtility.getFoodList(telegramUser);
+        telegramUserDbUtility.updateTelegramUser(telegramUser);
+        Page<FoodDTO> foodList = foodDbUtitility.getFoodList(telegramUser);
         if (foodList.toList().isEmpty()) {
             sendNoMoreItem(update);
             dbUtility.cancelOrder(telegramUser);
@@ -62,7 +73,7 @@ public class RequestFoodList {
         }
     }
     public String prepareMenu(Page<FoodDTO> foodDTOList){
-        String text = "<b>Menu of "+ dbUtility.getRestorant(foodDTOList.toList().get(0).getRestorantId()).getName() + " Page " + (foodDTOList.getPageable().getPageNumber()+1) + "</b>\n";
+        String text = "<b>Menu of "+ restorantDbUtitlity.getRestorant(foodDTOList.toList().get(0).getRestorantId()).getName() + " Page " + (foodDTOList.getPageable().getPageNumber()+1) + "</b>\n";
         for (FoodDTO foodDTO: foodDTOList){
             text += "<i>" + foodDTO.getName() + prepareTick(foodDTO) + foodDTO.getPrice() + ": </i><a>/ADD_TO_CART_" + foodDTO.getId() + "</a>\n";
         }

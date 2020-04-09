@@ -1,6 +1,6 @@
 package et.com.delivereth.Telegram;
 
-import et.com.delivereth.Telegram.DbUtility.DbUtility;
+import et.com.delivereth.Telegram.DbUtility.TelegramUserDbUtility;
 import et.com.delivereth.Telegram.processor.MainStepProccessor;
 import et.com.delivereth.Telegram.processor.MainCommandProccessor;
 import et.com.delivereth.Telegram.requests.*;
@@ -11,21 +11,21 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Service
 public class ResponseBuilder {
     private final RequestContact requestContact;
-    private final DbUtility dbUtility;
     private final MainStepProccessor mainStepProccessor;
     private final MainCommandProccessor mainCommandProccessor;
+    private final TelegramUserDbUtility telegramUserDbUtility;
 
-    public ResponseBuilder(RequestContact requestContact, DbUtility dbUtility, MainStepProccessor mainStepProccessor, MainCommandProccessor mainCommandProccessor) {
+    public ResponseBuilder(RequestContact requestContact, MainStepProccessor mainStepProccessor, MainCommandProccessor mainCommandProccessor, TelegramUserDbUtility telegramUserDbUtility) {
         this.requestContact = requestContact;
-        this.dbUtility = dbUtility;
         this.mainStepProccessor = mainStepProccessor;
         this.mainCommandProccessor = mainCommandProccessor;
+        this.telegramUserDbUtility = telegramUserDbUtility;
     }
 
     void getResponse(Update update) {
-        TelegramUserDTO telegramUser = dbUtility.getTelegramUser(update);
+        TelegramUserDTO telegramUser = telegramUserDbUtility.getTelegramUser(update);
         if (telegramUser == null) {
-            dbUtility.registerTelegramUser(update);
+            telegramUserDbUtility.registerTelegramUser(update);
             requestContact.requestContact(update);
         } else if (update.hasMessage()) {
             if (update.getMessage().hasText()) {

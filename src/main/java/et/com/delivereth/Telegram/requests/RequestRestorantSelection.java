@@ -1,6 +1,7 @@
 package et.com.delivereth.Telegram.requests;
 
 import et.com.delivereth.Telegram.DbUtility.DbUtility;
+import et.com.delivereth.Telegram.DbUtility.RestorantDbUtitlity;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.service.dto.RestorantDTO;
@@ -22,14 +23,16 @@ public class RequestRestorantSelection {
     private final TelegramSender telegramSender;
     private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
     private final DbUtility dbUtility;
+    private final RestorantDbUtitlity restorantDbUtitlity;
 
-    public RequestRestorantSelection(TelegramSender telegramSender, DbUtility dbUtility) {
+    public RequestRestorantSelection(TelegramSender telegramSender, DbUtility dbUtility, RestorantDbUtitlity restorantDbUtitlity) {
         this.telegramSender = telegramSender;
         this.dbUtility = dbUtility;
+        this.restorantDbUtitlity = restorantDbUtitlity;
     }
 
     public void requestRestorantSelection(Update update, TelegramUserDTO telegramUser) {
-        Page<RestorantDTO> restorantList = dbUtility.getRestorantList(telegramUser);
+        Page<RestorantDTO> restorantList = restorantDbUtitlity.getRestorantList(telegramUser);
         restorantList.toList().forEach(restorantDTO -> {
             sendRestorant(restorantDTO, update);
         });

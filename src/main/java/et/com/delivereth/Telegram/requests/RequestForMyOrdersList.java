@@ -1,6 +1,6 @@
 package et.com.delivereth.Telegram.requests;
 
-import et.com.delivereth.Telegram.DbUtility.DbUtility;
+import et.com.delivereth.Telegram.DbUtility.*;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.service.dto.*;
@@ -18,21 +18,25 @@ import java.util.List;
 public class RequestForMyOrdersList {
     private final TelegramSender telegramSender;
     private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
-    private final DbUtility dbUtility;
+    private final RestorantDbUtitlity restorantDbUtitlity;
+    private final FoodDbUtitility foodDbUtitility;
+    private final OrderedFoodDbUtility orderedFoodDbUtility;
+    private final OrderDbUtility orderDbUtility;
 
-    public RequestForMyOrdersList(TelegramSender telegramSender, DbUtility dbUtility) {
+    public RequestForMyOrdersList(TelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility, OrderDbUtility orderDbUtility) {
         this.telegramSender = telegramSender;
-        this.dbUtility = dbUtility;
+        this.restorantDbUtitlity = restorantDbUtitlity;
+        this.foodDbUtitility = foodDbUtitility;
+        this.orderedFoodDbUtility = orderedFoodDbUtility;
+        this.orderDbUtility = orderDbUtility;
     }
 
     public void requestForMyOrdersList(Update update, TelegramUserDTO telegramUser) {
-        Page<OrderDTO> orderList = dbUtility.getMyOrders(telegramUser);
+        Page<OrderDTO> orderList = orderDbUtility.getMyOrders(telegramUser);
         if (orderList.toList().size() >0) {
             sendTitle(update);
         }
-        orderList.toList().forEach(orderDTO -> {
-            sendMyOrders(orderDTO, update);
-        });
+        orderList.toList().forEach(orderDTO -> sendMyOrders(orderDTO, update));
         if (orderList.toList().size() == 0) {
             sendNoMoreItem(update);
         } else if (orderList.hasNext()) {
@@ -48,17 +52,17 @@ public class RequestForMyOrdersList {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        List<OrderedFoodDTO> orderedFoodList = dbUtility.getOrderedFoods(orderDTO.getId());
+        List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         String invoice = "";
 
         if (orderedFoodList.size() > 0) {
             invoice = invoice +  "<strong>Restaurant Name: " +
-                dbUtility.getRestorant(dbUtility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId()).getName() +
+                restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId()).getName() +
                 "</strong>\n";
         }
-        Double total = 0D;
+        double total = 0D;
         for (OrderedFoodDTO orderedFood : orderedFoodList) {
-            FoodDTO food = dbUtility.getFood(orderedFood.getFoodId());
+            FoodDTO food = foodDbUtitility.getFood(orderedFood.getFoodId());
             invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n");
             total += orderedFood.getQuantity() * food.getPrice();
         }

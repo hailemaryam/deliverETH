@@ -1,6 +1,9 @@
 package et.com.delivereth.Telegram.requests;
 
 import et.com.delivereth.Telegram.DbUtility.DbUtility;
+import et.com.delivereth.Telegram.DbUtility.FoodDbUtitility;
+import et.com.delivereth.Telegram.DbUtility.OrderedFoodDbUtility;
+import et.com.delivereth.Telegram.DbUtility.RestorantDbUtitlity;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.service.dto.FoodDTO;
 import et.com.delivereth.service.dto.OrderedFoodDTO;
@@ -19,12 +22,17 @@ import java.util.List;
 public class RequestForFinishOrder {
     private final TelegramSender telegramSender;
     private static final Logger logger = LoggerFactory.getLogger(RequestForFinishOrder.class);
-    private final DbUtility dbUtility;
+    public final RestorantDbUtitlity restorantDbUtitlity;
+    private final FoodDbUtitility foodDbUtitility;
+    private final OrderedFoodDbUtility orderedFoodDbUtility;
 
-    public RequestForFinishOrder(TelegramSender telegramSender, DbUtility dbUtility) {
+    public RequestForFinishOrder(TelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility) {
         this.telegramSender = telegramSender;
-        this.dbUtility = dbUtility;
+        this.restorantDbUtitlity = restorantDbUtitlity;
+        this.foodDbUtitility = foodDbUtitility;
+        this.orderedFoodDbUtility = orderedFoodDbUtility;
     }
+
     public void requestForFinishOrder(Update update, TelegramUserDTO telegramUser) {
         SendMessage response = new SendMessage();
         response.setReplyMarkup(Menu.finishOrAddMore());
@@ -33,13 +41,13 @@ public class RequestForFinishOrder {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        List<OrderedFoodDTO> orderedFoodList = dbUtility.getOrderedFoods(telegramUser.getOrderIdPaused());
+        List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(telegramUser.getOrderIdPaused());
         String invoice = "<strong>Restaurant Name: " +
-             dbUtility.getRestorant(telegramUser.getSelectedRestorant()).getName() +
+             restorantDbUtitlity.getRestorant(telegramUser.getSelectedRestorant()).getName() +
             "</strong>\n";
         Double total = 0D;
         for (OrderedFoodDTO orderedFood : orderedFoodList) {
-            FoodDTO food = dbUtility.getFood(orderedFood.getFoodId());
+            FoodDTO food = foodDbUtitility.getFood(orderedFood.getFoodId());
             invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n" );
             total += orderedFood.getQuantity() * food.getPrice();
         }

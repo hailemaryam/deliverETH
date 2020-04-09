@@ -2,6 +2,7 @@ package et.com.delivereth.Telegram.processor;
 
 import et.com.delivereth.Telegram.Constants.ChatStepConstants;
 import et.com.delivereth.Telegram.DbUtility.DbUtility;
+import et.com.delivereth.Telegram.DbUtility.OrderDbUtility;
 import et.com.delivereth.Telegram.requests.*;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.TelegramUserDTO;
@@ -14,19 +15,21 @@ public class WaitingForMyOrderListResponseProcessor {
     private final RequestForMyOrdersList requestForMyOrdersList;
     private final DbUtility dbUtility;
     private final CommandProcessor commandProcessor;
+    private final OrderDbUtility orderDbUtility;
 
-    public WaitingForMyOrderListResponseProcessor(RequestLocation requestLocation, RequestForMyOrdersList requestForMyOrdersList, DbUtility dbUtility, CommandProcessor commandProcessor) {
+    public WaitingForMyOrderListResponseProcessor(RequestLocation requestLocation, RequestForMyOrdersList requestForMyOrdersList, DbUtility dbUtility, CommandProcessor commandProcessor, OrderDbUtility orderDbUtility) {
         this.requestLocation = requestLocation;
         this.requestForMyOrdersList = requestForMyOrdersList;
         this.dbUtility = dbUtility;
         this.commandProcessor = commandProcessor;
+        this.orderDbUtility = orderDbUtility;
     }
 
     void processMyOrderResponse(Update update, TelegramUserDTO telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("C_")) {
-            dbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(2)), OrderStatus.CANCELED_BY_USER);
+            orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(2)), OrderStatus.CANCELED_BY_USER);
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("R_")) {
-            dbUtility.orderRemove(Long.valueOf(update.getCallbackQuery().getData().substring(2)));
+            orderDbUtility.orderRemove(Long.valueOf(update.getCallbackQuery().getData().substring(2)));
         }  else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order") ||
             (update.hasMessage() && update.getMessage().getText().equals("New Order"))) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);

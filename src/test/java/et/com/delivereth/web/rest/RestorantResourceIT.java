@@ -40,6 +40,9 @@ public class RestorantResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_USER_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_USER_NAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
@@ -83,6 +86,7 @@ public class RestorantResourceIT {
     public static Restorant createEntity(EntityManager em) {
         Restorant restorant = new Restorant()
             .name(DEFAULT_NAME)
+            .userName(DEFAULT_USER_NAME)
             .description(DEFAULT_DESCRIPTION)
             .iconImage(DEFAULT_ICON_IMAGE)
             .iconImageContentType(DEFAULT_ICON_IMAGE_CONTENT_TYPE)
@@ -99,6 +103,7 @@ public class RestorantResourceIT {
     public static Restorant createUpdatedEntity(EntityManager em) {
         Restorant restorant = new Restorant()
             .name(UPDATED_NAME)
+            .userName(UPDATED_USER_NAME)
             .description(UPDATED_DESCRIPTION)
             .iconImage(UPDATED_ICON_IMAGE)
             .iconImageContentType(UPDATED_ICON_IMAGE_CONTENT_TYPE)
@@ -129,6 +134,7 @@ public class RestorantResourceIT {
         assertThat(restorantList).hasSize(databaseSizeBeforeCreate + 1);
         Restorant testRestorant = restorantList.get(restorantList.size() - 1);
         assertThat(testRestorant.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testRestorant.getUserName()).isEqualTo(DEFAULT_USER_NAME);
         assertThat(testRestorant.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testRestorant.getIconImage()).isEqualTo(DEFAULT_ICON_IMAGE);
         assertThat(testRestorant.getIconImageContentType()).isEqualTo(DEFAULT_ICON_IMAGE_CONTENT_TYPE);
@@ -169,6 +175,7 @@ public class RestorantResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(restorant.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].iconImageContentType").value(hasItem(DEFAULT_ICON_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].iconImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE))))
@@ -188,6 +195,7 @@ public class RestorantResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(restorant.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.userName").value(DEFAULT_USER_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.iconImageContentType").value(DEFAULT_ICON_IMAGE_CONTENT_TYPE))
             .andExpect(jsonPath("$.iconImage").value(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE)))
@@ -290,6 +298,84 @@ public class RestorantResourceIT {
 
         // Get all the restorantList where name does not contain UPDATED_NAME
         defaultRestorantShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByUserNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where userName equals to DEFAULT_USER_NAME
+        defaultRestorantShouldBeFound("userName.equals=" + DEFAULT_USER_NAME);
+
+        // Get all the restorantList where userName equals to UPDATED_USER_NAME
+        defaultRestorantShouldNotBeFound("userName.equals=" + UPDATED_USER_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByUserNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where userName not equals to DEFAULT_USER_NAME
+        defaultRestorantShouldNotBeFound("userName.notEquals=" + DEFAULT_USER_NAME);
+
+        // Get all the restorantList where userName not equals to UPDATED_USER_NAME
+        defaultRestorantShouldBeFound("userName.notEquals=" + UPDATED_USER_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByUserNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where userName in DEFAULT_USER_NAME or UPDATED_USER_NAME
+        defaultRestorantShouldBeFound("userName.in=" + DEFAULT_USER_NAME + "," + UPDATED_USER_NAME);
+
+        // Get all the restorantList where userName equals to UPDATED_USER_NAME
+        defaultRestorantShouldNotBeFound("userName.in=" + UPDATED_USER_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByUserNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where userName is not null
+        defaultRestorantShouldBeFound("userName.specified=true");
+
+        // Get all the restorantList where userName is null
+        defaultRestorantShouldNotBeFound("userName.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllRestorantsByUserNameContainsSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where userName contains DEFAULT_USER_NAME
+        defaultRestorantShouldBeFound("userName.contains=" + DEFAULT_USER_NAME);
+
+        // Get all the restorantList where userName contains UPDATED_USER_NAME
+        defaultRestorantShouldNotBeFound("userName.contains=" + UPDATED_USER_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByUserNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where userName does not contain DEFAULT_USER_NAME
+        defaultRestorantShouldNotBeFound("userName.doesNotContain=" + DEFAULT_USER_NAME);
+
+        // Get all the restorantList where userName does not contain UPDATED_USER_NAME
+        defaultRestorantShouldBeFound("userName.doesNotContain=" + UPDATED_USER_NAME);
     }
 
 
@@ -477,6 +563,7 @@ public class RestorantResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(restorant.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].iconImageContentType").value(hasItem(DEFAULT_ICON_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].iconImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE))))
@@ -530,6 +617,7 @@ public class RestorantResourceIT {
         em.detach(updatedRestorant);
         updatedRestorant
             .name(UPDATED_NAME)
+            .userName(UPDATED_USER_NAME)
             .description(UPDATED_DESCRIPTION)
             .iconImage(UPDATED_ICON_IMAGE)
             .iconImageContentType(UPDATED_ICON_IMAGE_CONTENT_TYPE)
@@ -547,6 +635,7 @@ public class RestorantResourceIT {
         assertThat(restorantList).hasSize(databaseSizeBeforeUpdate);
         Restorant testRestorant = restorantList.get(restorantList.size() - 1);
         assertThat(testRestorant.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testRestorant.getUserName()).isEqualTo(UPDATED_USER_NAME);
         assertThat(testRestorant.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testRestorant.getIconImage()).isEqualTo(UPDATED_ICON_IMAGE);
         assertThat(testRestorant.getIconImageContentType()).isEqualTo(UPDATED_ICON_IMAGE_CONTENT_TYPE);

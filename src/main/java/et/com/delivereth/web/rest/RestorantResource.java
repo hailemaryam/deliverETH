@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -56,7 +57,7 @@ public class RestorantResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/restorants")
-    public ResponseEntity<RestorantDTO> createRestorant(@RequestBody RestorantDTO restorantDTO) throws URISyntaxException {
+    public ResponseEntity<RestorantDTO> createRestorant(@Valid @RequestBody RestorantDTO restorantDTO) throws URISyntaxException {
         log.debug("REST request to save Restorant : {}", restorantDTO);
         if (restorantDTO.getId() != null) {
             throw new BadRequestAlertException("A new restorant cannot already have an ID", ENTITY_NAME, "idexists");
@@ -77,7 +78,7 @@ public class RestorantResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/restorants")
-    public ResponseEntity<RestorantDTO> updateRestorant(@RequestBody RestorantDTO restorantDTO) throws URISyntaxException {
+    public ResponseEntity<RestorantDTO> updateRestorant(@Valid @RequestBody RestorantDTO restorantDTO) throws URISyntaxException {
         log.debug("REST request to update Restorant : {}", restorantDTO);
         if (restorantDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

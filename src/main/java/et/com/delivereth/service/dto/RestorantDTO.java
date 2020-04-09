@@ -1,5 +1,6 @@
 package et.com.delivereth.service.dto;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Lob;
@@ -12,6 +13,9 @@ public class RestorantDTO implements Serializable {
     private Long id;
 
     private String name;
+
+    @Pattern(regexp = "^[-a-zA-Z0-9@\\.+_]+$")
+    private String userName;
 
     @Lob
     private String description;
@@ -39,6 +43,14 @@ public class RestorantDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getDescription() {
@@ -107,6 +119,7 @@ public class RestorantDTO implements Serializable {
         return "RestorantDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", userName='" + getUserName() + "'" +
             ", description='" + getDescription() + "'" +
             ", iconImage='" + getIconImage() + "'" +
             ", latitude='" + getLatitude() + "'" +

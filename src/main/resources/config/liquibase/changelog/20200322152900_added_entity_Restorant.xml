@@ -18,6 +18,9 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="user_name" type="varchar(255)">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_restorant_user_name" />
+            </column>
             <column name="description" type="${clobType}">
                 <constraints nullable="true" />
             </column>
@@ -57,6 +60,7 @@
                   tableName="restorant">
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
+            <column name="user_name" type="string"/>
             <column name="description" type="clob"/>
             <column name="icon_image" type="blob"/>
             <column name="icon_image_content_type" type="string"/>

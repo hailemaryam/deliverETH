@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(RestorantService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Restorant(0, 'AAAAAAA', 'AAAAAAA', 'image/png', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new Restorant(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'image/png', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -55,6 +55,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             name: 'BBBBBB',
+            userName: 'BBBBBB',
             description: 'BBBBBB',
             iconImage: 'BBBBBB',
             latitude: 'BBBBBB',
@@ -76,6 +77,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             name: 'BBBBBB',
+            userName: 'BBBBBB',
             description: 'BBBBBB',
             iconImage: 'BBBBBB',
             latitude: 'BBBBBB',

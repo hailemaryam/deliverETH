@@ -6,6 +6,15 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "userName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "unique",
+                "pattern"
+            ],
+            "fieldValidateRulesPattern": "^[-a-zA-Z0-9@\\.+_]+$"
+        },
+        {
             "fieldName": "description",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text"

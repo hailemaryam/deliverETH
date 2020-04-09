@@ -24,6 +24,7 @@
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
                     <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="userName"><span>User Name</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="iconImage"><span>Icon Image</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="latitude"><span>Latitude</span> <fa-icon icon="sort"></fa-icon></th>
@@ -35,6 +36,7 @@
                 <tr *ngFor="let restorant of restorants ;trackBy: trackId">
                     <td><a [routerLink]="['/restorant', restorant.id, 'view']">{{ restorant.id }}</a></td>
                     <td>{{ restorant.name }}</td>
+                    <td>{{ restorant.userName }}</td>
                     <td>{{ restorant.description }}</td>
                     <td>
                         <a *ngIf="restorant.iconImage" (click)="openFile(restorant.iconImageContentType, restorant.iconImage)">

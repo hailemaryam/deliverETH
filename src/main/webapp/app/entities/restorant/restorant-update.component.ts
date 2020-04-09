@@ -20,6 +20,7 @@ export class RestorantUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     name: [],
+    userName: [null, [Validators.pattern('^[-a-zA-Z0-9@\\.+_]+$')]],
     description: [],
     iconImage: [],
     iconImageContentType: [],
@@ -46,6 +47,7 @@ export class RestorantUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: restorant.id,
       name: restorant.name,
+      userName: restorant.userName,
       description: restorant.description,
       iconImage: restorant.iconImage,
       iconImageContentType: restorant.iconImageContentType,
@@ -99,6 +101,7 @@ export class RestorantUpdateComponent implements OnInit {
       ...new Restorant(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
+      userName: this.editForm.get(['userName'])!.value,
       description: this.editForm.get(['description'])!.value,
       iconImageContentType: this.editForm.get(['iconImageContentType'])!.value,
       iconImage: this.editForm.get(['iconImage'])!.value,

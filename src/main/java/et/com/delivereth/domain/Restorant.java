@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -28,6 +29,10 @@ public class Restorant implements Serializable {
 
     @Column(name = "name")
     private String name;
+
+    @Pattern(regexp = "^[-a-zA-Z0-9@\\.+_]+$")
+    @Column(name = "user_name", unique = true)
+    private String userName;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
@@ -71,6 +76,19 @@ public class Restorant implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public Restorant userName(String userName) {
+        this.userName = userName;
+        return this;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getDescription() {
@@ -185,6 +203,7 @@ public class Restorant implements Serializable {
         return "Restorant{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", userName='" + getUserName() + "'" +
             ", description='" + getDescription() + "'" +
             ", iconImage='" + getIconImage() + "'" +
             ", iconImageContentType='" + getIconImageContentType() + "'" +

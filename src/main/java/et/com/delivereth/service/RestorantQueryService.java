@@ -94,6 +94,9 @@ public class RestorantQueryService extends QueryService<Restorant> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), Restorant_.name));
             }
+            if (criteria.getUserName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getUserName(), Restorant_.userName));
+            }
             if (criteria.getLatitude() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getLatitude(), Restorant_.latitude));
             }

@@ -28,6 +28,8 @@ public class RestorantCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
+    private StringFilter userName;
+
     private StringFilter latitude;
 
     private StringFilter longtude;
@@ -40,6 +42,7 @@ public class RestorantCriteria implements Serializable, Criteria {
     public RestorantCriteria(RestorantCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.userName = other.userName == null ? null : other.userName.copy();
         this.latitude = other.latitude == null ? null : other.latitude.copy();
         this.longtude = other.longtude == null ? null : other.longtude.copy();
         this.foodId = other.foodId == null ? null : other.foodId.copy();
@@ -64,6 +67,14 @@ public class RestorantCriteria implements Serializable, Criteria {
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getUserName() {
+        return userName;
+    }
+
+    public void setUserName(StringFilter userName) {
+        this.userName = userName;
     }
 
     public StringFilter getLatitude() {
@@ -103,6 +114,7 @@ public class RestorantCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(userName, that.userName) &&
             Objects.equals(latitude, that.latitude) &&
             Objects.equals(longtude, that.longtude) &&
             Objects.equals(foodId, that.foodId);
@@ -113,6 +125,7 @@ public class RestorantCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         name,
+        userName,
         latitude,
         longtude,
         foodId
@@ -124,6 +137,7 @@ public class RestorantCriteria implements Serializable, Criteria {
         return "RestorantCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (userName != null ? "userName=" + userName + ", " : "") +
                 (latitude != null ? "latitude=" + latitude + ", " : "") +
                 (longtude != null ? "longtude=" + longtude + ", " : "") +
                 (foodId != null ? "foodId=" + foodId + ", " : "") +

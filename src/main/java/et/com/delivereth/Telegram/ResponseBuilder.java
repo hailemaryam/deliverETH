@@ -103,7 +103,6 @@ public class ResponseBuilder {
             dbUtility.cancelOrder(telegramUser);
         }
         dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE);
-        requestForMyOrdersList.sendTitle(update);
         requestForMyOrdersList.requestForMyOrdersList(update, telegramUser);
     }
 
@@ -129,7 +128,6 @@ public class ResponseBuilder {
         } else if ((update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("myOrder")) ||
             (update.hasMessage() && update.getMessage().getText().equals("\uD83D\uDCE6 My Orders"))) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE);
-            requestForMyOrdersList.sendTitle(update);
             requestForMyOrdersList.requestForMyOrdersList(update, telegramUser);
         } else if (update.hasMessage() && update.getMessage().getText().equals("\uD83D\uDCD6 Help")) {
 

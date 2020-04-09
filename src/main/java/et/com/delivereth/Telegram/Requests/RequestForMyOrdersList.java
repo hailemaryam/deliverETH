@@ -60,7 +60,7 @@ public class RequestForMyOrdersList {
 
         if (orderedFoodList.size() > 0) {
             invoice = invoice +  "<strong>Restaurant Name: " +
-                dbUtility.getRestorant(dbUtility.getFood(orderedFoodList.get(0).getFoodId()).getId()).getName() +
+                dbUtility.getRestorant(dbUtility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId()).getName() +
                 "</strong>\n";
         }
         Double total = 0D;

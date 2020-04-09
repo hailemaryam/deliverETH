@@ -1,6 +1,6 @@
 package et.com.delivereth.Telegram;
 
-import org.springframework.beans.factory.annotation.Value;
+import et.com.delivereth.Telegram.Constants.TelegramBotConstant;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.bots.DefaultBotOptions;

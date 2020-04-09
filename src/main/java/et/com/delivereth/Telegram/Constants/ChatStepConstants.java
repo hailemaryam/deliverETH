@@ -1,4 +1,4 @@
-package et.com.delivereth.Telegram;
+package et.com.delivereth.Telegram.Constants;
 
 public class ChatStepConstants {
     public static String WAITING_FOR_CONTACT_RESPONSE = "1";

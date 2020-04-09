@@ -1,6 +1,6 @@
 package et.com.delivereth.Telegram.Requests;
 
-import et.com.delivereth.Telegram.DbUtility;
+import et.com.delivereth.Telegram.DbUtility.DbUtility;
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.service.dto.TelegramUserDTO;

@@ -1,12 +1,11 @@
 package et.com.delivereth.Telegram;
 
+import et.com.delivereth.Telegram.Constants.TelegramBotConstant;
 import et.com.delivereth.Telegram.Requests.RequestErrorResponder;
-import liquibase.pro.packaged.T;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 

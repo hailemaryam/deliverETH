@@ -1,8 +1,7 @@
-package et.com.delivereth.Telegram;
+package et.com.delivereth.Telegram.DbUtility;
 
-import et.com.delivereth.domain.*;
+import et.com.delivereth.Telegram.Constants.ChatStepConstants;
 import et.com.delivereth.domain.enumeration.OrderStatus;
-import et.com.delivereth.repository.*;
 import et.com.delivereth.service.*;
 import et.com.delivereth.service.dto.*;
 import io.github.jhipster.service.filter.LongFilter;
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

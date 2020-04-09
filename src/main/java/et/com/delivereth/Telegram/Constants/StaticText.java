@@ -1,4 +1,4 @@
-package et.com.delivereth.Telegram;
+package et.com.delivereth.Telegram.Constants;
 
 public class StaticText {
     public static String addMore = "➕ Add More";

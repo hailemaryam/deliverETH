@@ -1,8 +1,7 @@
 package et.com.delivereth.Telegram.Requests;
 
-import et.com.delivereth.Telegram.DbUtility;
+import et.com.delivereth.Telegram.DbUtility.DbUtility;
 import et.com.delivereth.Telegram.TelegramSender;
-import et.com.delivereth.domain.Food;
 import et.com.delivereth.service.dto.FoodDTO;
 import et.com.delivereth.service.dto.OrderedFoodDTO;
 import et.com.delivereth.service.dto.TelegramUserDTO;
@@ -12,11 +11,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

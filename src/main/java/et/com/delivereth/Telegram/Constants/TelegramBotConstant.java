@@ -1,4 +1,4 @@
-package et.com.delivereth.Telegram;
+package et.com.delivereth.Telegram.Constants;
 
 public class TelegramBotConstant {
     public static String BOT_TOKEN = "860857039:AAEo3n3qOUWDwRULRHXVUcvtVToOd2nSl8Q";

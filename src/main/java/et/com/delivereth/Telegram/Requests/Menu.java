@@ -1,6 +1,6 @@
 package et.com.delivereth.Telegram.Requests;
 
-import et.com.delivereth.Telegram.StaticText;
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.OrderDTO;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;

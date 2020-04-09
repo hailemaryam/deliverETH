@@ -3,8 +3,11 @@ package et.com.delivereth.Telegram;
 import et.com.delivereth.Telegram.Constants.ChatStepConstants;
 import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.DbUtility;
+import et.com.delivereth.Telegram.DbUtility.RestorantDbUtitlity;
 import et.com.delivereth.Telegram.Requests.*;
 import et.com.delivereth.domain.enumeration.OrderStatus;
+import et.com.delivereth.service.dto.OrderDTO;
+import et.com.delivereth.service.dto.RestorantDTO;
 import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +27,10 @@ public class ResponseBuilder {
     private final RequestErrorResponder requestErrorResponder;
     private final RequestForMyOrdersList requestForMyOrdersList;
     private final RequestForHelp requestForHelp;
+    private final RestorantDbUtitlity restorantDbUtitlity;
     private final DbUtility dbUtility;
 
-    public ResponseBuilder(RequestContact requestContact, RequestForMenu requestForMenu, RequestLocation requestLocation, RequestRestorantSelection requestRestorantSelection, RequestFoodList requestFoodList, RequestQuantity requestQuantity, RequestForFinishOrder requestForFinishOrder, RequestErrorResponder requestErrorResponder, RequestForMyOrdersList requestForMyOrdersList, RequestForHelp requestForHelp, DbUtility dbUtility) {
+    public ResponseBuilder(RequestContact requestContact, RequestForMenu requestForMenu, RequestLocation requestLocation, RequestRestorantSelection requestRestorantSelection, RequestFoodList requestFoodList, RequestQuantity requestQuantity, RequestForFinishOrder requestForFinishOrder, RequestErrorResponder requestErrorResponder, RequestForMyOrdersList requestForMyOrdersList, RequestForHelp requestForHelp, RestorantDbUtitlity restorantDbUtitlity, DbUtility dbUtility) {
         this.requestContact = requestContact;
         this.requestForMenu = requestForMenu;
         this.requestLocation = requestLocation;
@@ -37,6 +41,7 @@ public class ResponseBuilder {
         this.requestErrorResponder = requestErrorResponder;
         this.requestForMyOrdersList = requestForMyOrdersList;
         this.requestForHelp = requestForHelp;
+        this.restorantDbUtitlity = restorantDbUtitlity;
         this.dbUtility = dbUtility;
     }
 
@@ -153,19 +158,13 @@ public class ResponseBuilder {
     }
 
     public void processRestorantSelectionAndProceedToFoodSelection(Update update, TelegramUserDTO telegramUser) {
-        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("menu_")) {
+        if(update.hasMessage() && update.getMessage().getText().startsWith("/SHOW_")) {
             try {
                 dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM);
-                telegramUser.setSelectedRestorant(Long.valueOf(update.getCallbackQuery().getData().substring(5)));
-                dbUtility.updateTelegramUser(telegramUser);
-                requestFoodList.requestFoodList(update, telegramUser);
-            } catch (NumberFormatException e) {
-                requestForErrorResponder(update, telegramUser);
-            }
-        } else if(update.hasMessage() && update.getMessage().getText().startsWith("/SHOW_MENU_")) {
-            try {
-                dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM);
-                telegramUser.setSelectedRestorant(Long.valueOf(update.getMessage().getText().substring(11)));
+                String restorantUserName = update.getMessage().getText().substring(6);
+                restorantUserName = restorantUserName.substring(0, restorantUserName.length() - 5);
+                RestorantDTO restorantDTO = restorantDbUtitlity.getRestorant(restorantUserName);
+                telegramUser.setSelectedRestorant(restorantDTO.getId());
                 dbUtility.updateTelegramUser(telegramUser);
                 requestFoodList.requestFoodList(update, telegramUser);
             } catch (NumberFormatException e) {

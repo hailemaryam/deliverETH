@@ -46,7 +46,7 @@ public class RequestForFinishOrder {
             invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n" );
             total += orderedFood.getQuantity() * food.getPrice();
         }
-        invoice = invoice + "<b>Total = " + total +"</b>";
+        invoice = invoice + "<b>\uD83D\uDCB5 Total = " + total +"</b>";
         response.setText(invoice);
         response.setParseMode("HTML");
         try {
@@ -62,7 +62,7 @@ public class RequestForFinishOrder {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("Your order has been successfully registered.");
+        response.setText("\uD83D\uDC68\u200D\uD83C\uDF73 Your order has been successfully registered.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

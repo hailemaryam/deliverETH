@@ -38,8 +38,8 @@ public class RequestForMenu {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("New Order").setCallbackData("order"));
-        rowInline.add(new InlineKeyboardButton().setText("My Orders").setCallbackData("myOrder"));
+        rowInline.add(new InlineKeyboardButton().setText("\uD83D\uDD16 New Order").setCallbackData("order"));
+        rowInline.add(new InlineKeyboardButton().setText("\uD83D\uDCDD My Orders").setCallbackData("myOrder"));
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
@@ -48,13 +48,10 @@ public class RequestForMenu {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-//        KeyValuPairHolderDTO orderImage = dbUtility.getKeyValuPairHolderRepository("OrderImage");
-//        InputStream inputStream = new ByteArrayInputStream(orderImage.getValueImage());
-//        response.setPhoto(orderImage.getKey(), inputStream);
-        response.setText("<b>currently we are delivering @</b>\n" +
-            "<i>* hayat</i>\n" +
-            "<i>* semit</i>\n" +
-            "<i>* bole</i>\n");
+        response.setText("<b>We are currently delivering to everywhere in Addis Ababa, Ethiopia \uD83C\uDDEA\uD83C\uDDF9</b>\n");
+//            "<i>* hayat</i>\n" +
+//            "<i>* semit</i>\n" +
+//            "<i>* bole</i>\n");
         response.setParseMode("HTML");
         try {
             telegramSender.execute(response);

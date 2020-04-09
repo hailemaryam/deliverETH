@@ -33,7 +33,7 @@ public class RequestErrorResponder {
         }
         SendMessage response = new SendMessage();
         response.setChatId(chatId.toString());
-        response.setText("<b>Improper Command</b>\n" +
+        response.setText("<b>❗️ Improper Command</b>\n" +
             "Your request could not be processed. you need to choose or write proper commands.");
         response.setParseMode("HTML");
         try {

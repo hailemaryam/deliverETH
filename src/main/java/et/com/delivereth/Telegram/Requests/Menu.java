@@ -16,9 +16,9 @@ public class Menu {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("Add More Item").setCallbackData("addMoreItem"));
-        rowInline.add(new InlineKeyboardButton().setText("Order").setCallbackData("finishOrder"));
-        rowInline.add(new InlineKeyboardButton().setText("Cancel").setCallbackData("cancelOrder"));
+        rowInline.add(new InlineKeyboardButton().setText("➕ Add More").setCallbackData("addMoreItem"));
+        rowInline.add(new InlineKeyboardButton().setText("✅ Finish").setCallbackData("finishOrder"));
+        rowInline.add(new InlineKeyboardButton().setText("\uD83D\uDEAB Cancel").setCallbackData("cancelOrder"));
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         return markupInline;
@@ -56,14 +56,14 @@ public class Menu {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardButtons1 = new KeyboardRow();
         keyboardButtons1.add(new KeyboardButton()
-            .setText("New Order"));
+            .setText("\uD83D\uDD16 New Order"));
         keyboardButtons1.add(new KeyboardButton()
-            .setText("My Orders"));
+            .setText("\uD83D\uDCE6 My Orders"));
         KeyboardRow keyboardButtons2 = new KeyboardRow();
         keyboardButtons2.add(new KeyboardButton()
-            .setText("Cancel Order"));
+            .setText("\uD83D\uDEAB Cancel Order"));
         keyboardButtons2.add(new KeyboardButton()
-            .setText("Help"));
+            .setText("\uD83D\uDCD6 Help"));
         keyboardRowList.add(keyboardButtons1);
         keyboardRowList.add(keyboardButtons2);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
@@ -77,12 +77,12 @@ public class Menu {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow shareLocationButton = new KeyboardRow();
         shareLocationButton.add(new KeyboardButton()
-            .setText("Share Location")
+            .setText("\uD83D\uDCCD Share Location")
             .setRequestLocation(true));
         keyboardRowList.add(shareLocationButton);
         KeyboardRow cancelButton = new KeyboardRow();
         cancelButton.add(new KeyboardButton()
-            .setText("Cancel Order"));
+            .setText("❌ Cancel Order"));
         keyboardRowList.add(cancelButton);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         return  replyKeyboardMarkup;
@@ -95,11 +95,11 @@ public class Menu {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow shareContactButton = new KeyboardRow();
         shareContactButton.add(new KeyboardButton()
-            .setText("Share Contact").setRequestContact(true));
+            .setText("☎️ Share Contact").setRequestContact(true));
         keyboardRowList.add(shareContactButton);
         KeyboardRow cancelButton = new KeyboardRow();
         cancelButton.add(new KeyboardButton()
-            .setText("Cancel"));
+            .setText("❌  Cancel"));
         keyboardRowList.add(cancelButton);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         return  replyKeyboardMarkup;

@@ -49,7 +49,7 @@ public class RequestForMyOrdersList {
 
     private void sendMyOrders(OrderDTO orderDTO, Update update) {
         SendMessage response = new SendMessage();
-        response.setReplyMarkup(myOrderInlineKeyBoard(orderDTO));
+        response.setReplyMarkup(Menu.myOrderInlineKeyBoard(orderDTO));
         if (update.hasMessage()) {
             response.setChatId(update.getMessage().getChatId());
         } else if (update.hasCallbackQuery()) {
@@ -82,13 +82,7 @@ public class RequestForMyOrdersList {
 
     private void sendLoadMoreButton(Update update) {
         SendMessage response = new SendMessage();
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("Load More").setCallbackData("loadMore"));
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
-        response.setReplyMarkup(markupInline);
+        response.setReplyMarkup(Menu.loadMore());
         if (update.hasMessage()) {
             response.setChatId(update.getMessage().getChatId());
         } else if (update.hasCallbackQuery()) {
@@ -126,48 +120,11 @@ public class RequestForMyOrdersList {
         }
         response.setText("<b>Your Order List</b>");
         response.setParseMode("HTML");
-        response.setReplyMarkup(orderKeyBoardMenu());
+        response.setReplyMarkup(Menu.orderKeyBoardMenu());
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
             logger.error("Error Sending Message {}", response);
         }
-    }
-
-    public ReplyKeyboardMarkup orderKeyBoardMenu() {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
-        List<KeyboardRow> keyboardRowList = new ArrayList<>();
-        KeyboardRow keyboardButtons1 = new KeyboardRow();
-        keyboardButtons1.add(new KeyboardButton()
-            .setText("New Order"));
-        keyboardButtons1.add(new KeyboardButton()
-            .setText("My Orders"));
-        KeyboardRow keyboardButtons2 = new KeyboardRow();
-//        keyboardButtons2.add(new KeyboardButton()
-//            .setText("Help"));
-//        keyboardButtons2.add(new KeyboardButton()
-//            .setText("Setting"));
-        keyboardRowList.add(keyboardButtons1);
-//        keyboardRowList.add(keyboardButtons2);
-        replyKeyboardMarkup.setKeyboard(keyboardRowList);
-        return replyKeyboardMarkup;
-    }
-    public InlineKeyboardMarkup myOrderInlineKeyBoard(OrderDTO orderDTO){
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT) ||
-            orderDTO.getOrderStatus().equals(OrderStatus.DELIVERED)) {
-            rowInline.add(new InlineKeyboardButton().setText("Remove").setCallbackData("R_" + orderDTO.getId()));
-        }
-        if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT) ||
-            orderDTO.getOrderStatus().equals(OrderStatus.ORDERED)) {
-            rowInline.add(new InlineKeyboardButton().setText("Cancel").setCallbackData("C_" + orderDTO.getId()));
-        }
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
-        return markupInline;
     }
 }

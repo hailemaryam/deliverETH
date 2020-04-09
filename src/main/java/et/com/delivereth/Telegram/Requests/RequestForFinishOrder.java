@@ -30,15 +30,7 @@ public class RequestForFinishOrder {
     }
     public void requestForFinishOrder(Update update, TelegramUserDTO telegramUser) {
         SendMessage response = new SendMessage();
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("Add More Item").setCallbackData("addMoreItem"));
-        rowInline.add(new InlineKeyboardButton().setText("Order").setCallbackData("finishOrder"));
-        rowInline.add(new InlineKeyboardButton().setText("Cancel").setCallbackData("cancelOrder"));
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
-        response.setReplyMarkup(markupInline);
+        response.setReplyMarkup(Menu.finishOrAddMore());
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
         } else if (update.hasCallbackQuery()) {

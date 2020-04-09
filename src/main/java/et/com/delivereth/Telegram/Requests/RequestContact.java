@@ -31,7 +31,7 @@ public class RequestContact {
 
     public void requestContact(Update update) {
         SendMessage response = new SendMessage();
-        response.setReplyMarkup(prepareShareContactReplyButton());
+        response.setReplyMarkup(Menu.prepareShareContactReplyButton());
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
             response.setText("Welcome " + update.getMessage().getFrom().getUserName() + ".we need your contact for registration. click share button to share your contact.");
@@ -47,7 +47,7 @@ public class RequestContact {
     }
     public void requestContactAgain(Update update) {
         SendMessage response = new SendMessage();
-        response.setReplyMarkup(prepareShareContactReplyButton());
+        response.setReplyMarkup(Menu.prepareShareContactReplyButton());
         if (update.hasMessage()) {
             response.setChatId(update.getMessage().getChatId());
         } else if (update.hasCallbackQuery()){
@@ -59,21 +59,5 @@ public class RequestContact {
         } catch (TelegramApiException e) {
             logger.error("Error Sending Message {}", response);
         }
-    }
-    private ReplyKeyboardMarkup prepareShareContactReplyButton() {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setOneTimeKeyboard(true);
-        replyKeyboardMarkup.setSelective(true);
-        List<KeyboardRow> keyboardRowList = new ArrayList<>();
-        KeyboardRow shareContactButton = new KeyboardRow();
-        shareContactButton.add(new KeyboardButton()
-            .setText("Share Contact").setRequestContact(true));
-        keyboardRowList.add(shareContactButton);
-        KeyboardRow cancelButton = new KeyboardRow();
-        cancelButton.add(new KeyboardButton()
-            .setText("Cancel"));
-        keyboardRowList.add(cancelButton);
-        replyKeyboardMarkup.setKeyboard(keyboardRowList);
-        return  replyKeyboardMarkup;
     }
 }

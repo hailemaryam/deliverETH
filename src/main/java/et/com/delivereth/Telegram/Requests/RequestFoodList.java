@@ -149,23 +149,11 @@ public class RequestFoodList {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
         response.setText("Menu are not added in selected restaurant.");
-        response.setReplyMarkup(orderKeyBoardMenu());
+        response.setReplyMarkup(Menu.orderKeyBoardMenu());
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
             logger.error("Error Sending Message {}", response);
         }
-    }
-    public ReplyKeyboardMarkup orderKeyBoardMenu() {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
-        List<KeyboardRow> keyboardRowList = new ArrayList<>();
-        KeyboardRow keyboardButtons1 = new KeyboardRow();
-        keyboardButtons1.add(new KeyboardButton()
-            .setText("Cancel Order"));
-        keyboardRowList.add(keyboardButtons1);
-        replyKeyboardMarkup.setKeyboard(keyboardRowList);
-        return  replyKeyboardMarkup;
     }
 }

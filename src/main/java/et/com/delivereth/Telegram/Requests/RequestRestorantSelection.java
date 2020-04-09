@@ -51,13 +51,6 @@ public class RequestRestorantSelection {
     }
     private void sendRestorant(RestorantDTO restorantDTO, Update update){
         SendPhoto response = new SendPhoto();
-//        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-//        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-//        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-//        rowInline.add(new InlineKeyboardButton().setText("Show Menu").setCallbackData("menu_" + restorantDTO.getId()));
-//        rowsInline.add(rowInline);
-//        markupInline.setKeyboard(rowsInline);
-//        response.setReplyMarkup(markupInline);
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
         } else if (update.hasCallbackQuery()) {
@@ -77,13 +70,7 @@ public class RequestRestorantSelection {
     }
     private void sendLoadMoreButton(Update update){
         SendMessage response = new SendMessage();
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("Load More >>").setCallbackData("loadMore"));
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
-        response.setReplyMarkup(markupInline);
+        response.setReplyMarkup(Menu.loadMore());
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
         } else if (update.hasCallbackQuery()) {
@@ -119,34 +106,11 @@ public class RequestRestorantSelection {
         }
         response.setText("<b>Choose restaurant from this list</b>");
         response.setParseMode("HTML");
-        response.setReplyMarkup(orderKeyBoardMenu());
+        response.setReplyMarkup(Menu.orderKeyBoardMenu());
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
             logger.error("Error Sending Message {}", response);
         }
     }
-
-    public ReplyKeyboardMarkup orderKeyBoardMenu() {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
-        replyKeyboardMarkup.setResizeKeyboard(false);
-        List<KeyboardRow> keyboardRowList = new ArrayList<>();
-        KeyboardRow keyboardButtons1 = new KeyboardRow();
-        keyboardButtons1.add(new KeyboardButton()
-            .setText("Cancel Order"));
-//        keyboardButtons1.add(new KeyboardButton()
-//            .setText("My Orders"));
-//        KeyboardRow keyboardButtons2 = new KeyboardRow();
-//        keyboardButtons2.add(new KeyboardButton()
-//            .setText("Help"));
-//        keyboardButtons2.add(new KeyboardButton()
-//            .setText("Setting"));
-        keyboardRowList.add(keyboardButtons1);
-//        keyboardRowList.add(keyboardButtons2);
-        replyKeyboardMarkup.setKeyboard(keyboardRowList);
-        return  replyKeyboardMarkup;
-    }
-
 }

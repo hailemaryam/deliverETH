@@ -160,7 +160,7 @@ public class ResponseBuilder {
             } catch (NumberFormatException e) {
                 requestForErrorResponder(update, telegramUser);
             }
-        } else if(update.hasMessage() && update.getMessage().getText().startsWith("/show_menu_")) {
+        } else if(update.hasMessage() && update.getMessage().getText().startsWith("/SHOW_MENU_")) {
             try {
                 dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM);
                 telegramUser.setSelectedRestorant(Long.valueOf(update.getMessage().getText().substring(11)));
@@ -189,7 +189,7 @@ public class ResponseBuilder {
             requestFoodList.requestFoodListNext(update, telegramUser);
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("prev")) {
             requestFoodList.requestFoodListPrev(update, telegramUser);
-        } else if (update.hasMessage() && update.getMessage().getText().startsWith("/add_to_cart_")) {
+        } else if (update.hasMessage() && update.getMessage().getText().startsWith("/ADD_TO_CART_")) {
             try {
                 dbUtility.addFoodToOrder(telegramUser, Long.valueOf(update.getMessage().getText().substring(13)));
                 dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY);

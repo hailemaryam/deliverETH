@@ -59,7 +59,7 @@ public class RequestRestorantSelection {
         InputStream inputStream = new ByteArrayInputStream(restorantDTO.getIconImage());
         response.setPhoto(restorantDTO.getName(), inputStream);
         String caption = "<b>"+restorantDTO.getName() + "</b>\n" +
-            "<i>To View Menu: </i><a>/show_menu_" + restorantDTO.getId() + "</a>";
+            "<i>To View Menu: </i><a>/SHOW_MENU_" + restorantDTO.getId() + "</a>";
         response.setCaption(caption);
         response.setParseMode("HTML");
         try {

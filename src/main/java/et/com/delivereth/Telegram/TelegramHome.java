@@ -1,6 +1,6 @@
 package et.com.delivereth.Telegram;
 
-import et.com.delivereth.Telegram.Constants.TelegramBotConstant;
+import et.com.delivereth.Telegram.Constants.TelegramBotConstantCredentials;
 import et.com.delivereth.Telegram.requests.RequestErrorResponder;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -15,8 +15,8 @@ import javax.annotation.PostConstruct;
 public class TelegramHome extends TelegramLongPollingBot {
 
     private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
-    private String token = TelegramBotConstant.BOT_TOKEN;
-    private String username = TelegramBotConstant.BOT_USER_NAME;
+    private String token = TelegramBotConstantCredentials.BOT_TOKEN;
+    private String username = TelegramBotConstantCredentials.BOT_USER_NAME;
     private final ResponseBuilder responseBuilder;
     private final RequestErrorResponder requestErrorResponder;
 

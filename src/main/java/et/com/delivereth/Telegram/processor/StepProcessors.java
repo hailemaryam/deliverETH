@@ -1,4 +1,4 @@
-package et.com.delivereth.Telegram;
+package et.com.delivereth.Telegram.processor;
 
 import et.com.delivereth.Telegram.Constants.ChatStepConstants;
 import et.com.delivereth.Telegram.Constants.StaticText;

@@ -1,6 +1,6 @@
 package et.com.delivereth.Telegram;
 
-import et.com.delivereth.Telegram.Constants.TelegramBotConstant;
+import et.com.delivereth.Telegram.Constants.TelegramBotConstantCredentials;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.ApiContext;
 
 @Component
 public class TelegramSender extends DefaultAbsSender {
-    private String token = TelegramBotConstant.BOT_TOKEN;
+    private String token = TelegramBotConstantCredentials.BOT_TOKEN;
     public TelegramSender() {
         this((DefaultBotOptions) ApiContext.getInstance(DefaultBotOptions.class));
     }

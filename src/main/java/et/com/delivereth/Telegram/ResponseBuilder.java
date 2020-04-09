@@ -120,10 +120,23 @@ public class ResponseBuilder {
 
     public void processRestorantSelectionAndProceedToFoodSelection(Update update, TelegramUserDTO telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("menu_")) {
-            dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM);
-            telegramUser.setSelectedRestorant(Long.valueOf(update.getCallbackQuery().getData().substring(5)));
-            dbUtility.updateTelegramUser(telegramUser);
-            requestFoodList.requestFoodList(update, telegramUser);
+            try {
+                dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM);
+                telegramUser.setSelectedRestorant(Long.valueOf(update.getCallbackQuery().getData().substring(5)));
+                dbUtility.updateTelegramUser(telegramUser);
+                requestFoodList.requestFoodList(update, telegramUser);
+            } catch (NumberFormatException e) {
+                requestForErrorResponder(update, telegramUser);
+            }
+        } else if(update.hasMessage() && update.getMessage().getText().startsWith("/show_menu_")) {
+            try {
+                dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_ADD_ITEM);
+                telegramUser.setSelectedRestorant(Long.valueOf(update.getMessage().getText().substring(11)));
+                dbUtility.updateTelegramUser(telegramUser);
+                requestFoodList.requestFoodList(update, telegramUser);
+            } catch (NumberFormatException e) {
+                requestForErrorResponder(update, telegramUser);
+            }
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("loadMore")) {
             requestRestorantSelection.requestRestorantSelection(update, telegramUser);
         } else {

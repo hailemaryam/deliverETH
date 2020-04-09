@@ -51,13 +51,13 @@ public class RequestRestorantSelection {
     }
     private void sendRestorant(RestorantDTO restorantDTO, Update update){
         SendPhoto response = new SendPhoto();
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("Show Menu").setCallbackData("menu_" + restorantDTO.getId()));
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
-        response.setReplyMarkup(markupInline);
+//        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+//        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+//        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+//        rowInline.add(new InlineKeyboardButton().setText("Show Menu").setCallbackData("menu_" + restorantDTO.getId()));
+//        rowsInline.add(rowInline);
+//        markupInline.setKeyboard(rowsInline);
+//        response.setReplyMarkup(markupInline);
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
         } else if (update.hasCallbackQuery()) {
@@ -65,7 +65,10 @@ public class RequestRestorantSelection {
         }
         InputStream inputStream = new ByteArrayInputStream(restorantDTO.getIconImage());
         response.setPhoto(restorantDTO.getName(), inputStream);
-        response.setCaption(restorantDTO.getName());
+        String caption = "<b>"+restorantDTO.getName() + "</b>\n" +
+            "<i>To View Menu: </i><a>/show_menu_" + restorantDTO.getId() + "</a>";
+        response.setCaption(caption);
+        response.setParseMode("HTML");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -77,7 +80,7 @@ public class RequestRestorantSelection {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("Load More").setCallbackData("loadMore"));
+        rowInline.add(new InlineKeyboardButton().setText("Load More >>").setCallbackData("loadMore"));
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         response.setReplyMarkup(markupInline);
@@ -128,6 +131,7 @@ public class RequestRestorantSelection {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
+        replyKeyboardMarkup.setResizeKeyboard(false);
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardButtons1 = new KeyboardRow();
         keyboardButtons1.add(new KeyboardButton()

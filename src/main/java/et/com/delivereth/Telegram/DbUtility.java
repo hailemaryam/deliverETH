@@ -158,7 +158,7 @@ public class DbUtility {
         longFilter.setEquals(telegramUser.getSelectedRestorant());
         foodCriteria.setRestorantId(longFilter);
         updateTelegramUser(telegramUser);
-        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2));
+        return foodQueryService.findByCriteria(foodCriteria, PageRequest.of(telegramUser.getLoadedPage(), 10));
     }
     public void addFoodToOrder(TelegramUserDTO telegramUser, Long foodId){
         OrderDTO order = orderService.findOne(telegramUser.getOrderIdPaused()).get();

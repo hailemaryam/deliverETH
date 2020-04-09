@@ -78,7 +78,7 @@ public class RequestFoodList {
         return text;
     }
     public String prepareTick(FoodDTO foodDTO){
-        int size = 60 - foodDTO.getName().length() - foodDTO.getPrice().toString().length();
+        int size = 40 - foodDTO.getName().length() - foodDTO.getPrice().toString().length();
         String tickes = "";
         for (int i = 0;i  < size; i++ ){
             tickes += "-";

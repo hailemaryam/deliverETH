@@ -1,6 +1,7 @@
 package et.com.delivereth.Telegram.Requests;
 
 import et.com.delivereth.Telegram.DbUtility;
+import et.com.delivereth.Telegram.StaticText;
 import et.com.delivereth.Telegram.TelegramSender;
 import et.com.delivereth.domain.TelegramUser;
 import et.com.delivereth.service.dto.KeyValuPairHolderDTO;
@@ -38,7 +39,7 @@ public class RequestForMenu {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("\uD83D\uDD16 New Order").setCallbackData("order"));
+        rowInline.add(new InlineKeyboardButton().setText(StaticText.newOrder).setCallbackData("order"));
         rowInline.add(new InlineKeyboardButton().setText("\uD83D\uDCDD My Orders").setCallbackData("myOrder"));
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);

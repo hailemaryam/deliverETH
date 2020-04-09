@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.Requests;
 
+import et.com.delivereth.Telegram.StaticText;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.OrderDTO;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -16,9 +17,9 @@ public class Menu {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText("➕ Add More").setCallbackData("addMoreItem"));
-        rowInline.add(new InlineKeyboardButton().setText("✅ Finish").setCallbackData("finishOrder"));
-        rowInline.add(new InlineKeyboardButton().setText("\uD83D\uDEAB Cancel").setCallbackData("cancelOrder"));
+        rowInline.add(new InlineKeyboardButton().setText(StaticText.addMore).setCallbackData("addMoreItem"));
+        rowInline.add(new InlineKeyboardButton().setText(StaticText.finishOrder).setCallbackData("finishOrder"));
+        rowInline.add(new InlineKeyboardButton().setText(StaticText.cancel).setCallbackData("cancelOrder"));
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         return markupInline;
@@ -29,11 +30,11 @@ public class Menu {
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT) ||
             orderDTO.getOrderStatus().equals(OrderStatus.DELIVERED)) {
-            rowInline.add(new InlineKeyboardButton().setText("Remove").setCallbackData("R_" + orderDTO.getId()));
+            rowInline.add(new InlineKeyboardButton().setText(StaticText.removeOrder).setCallbackData("R_" + orderDTO.getId()));
         }
         if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT) ||
             orderDTO.getOrderStatus().equals(OrderStatus.ORDERED)) {
-            rowInline.add(new InlineKeyboardButton().setText("Cancel").setCallbackData("C_" + orderDTO.getId()));
+            rowInline.add(new InlineKeyboardButton().setText(StaticText.cancel).setCallbackData("C_" + orderDTO.getId()));
         }
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
@@ -56,14 +57,14 @@ public class Menu {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardButtons1 = new KeyboardRow();
         keyboardButtons1.add(new KeyboardButton()
-            .setText("\uD83D\uDD16 New Order"));
+            .setText(StaticText.newOrder));
         keyboardButtons1.add(new KeyboardButton()
-            .setText("\uD83D\uDCE6 My Orders"));
+            .setText(StaticText.myOrders));
         KeyboardRow keyboardButtons2 = new KeyboardRow();
         keyboardButtons2.add(new KeyboardButton()
-            .setText("\uD83D\uDEAB Cancel Order"));
+            .setText(StaticText.cancelOrder));
         keyboardButtons2.add(new KeyboardButton()
-            .setText("\uD83D\uDCD6 Help"));
+            .setText(StaticText.help));
         keyboardRowList.add(keyboardButtons1);
         keyboardRowList.add(keyboardButtons2);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
@@ -77,12 +78,12 @@ public class Menu {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow shareLocationButton = new KeyboardRow();
         shareLocationButton.add(new KeyboardButton()
-            .setText("\uD83D\uDCCD Share Location")
+            .setText(StaticText.shareLocation)
             .setRequestLocation(true));
         keyboardRowList.add(shareLocationButton);
         KeyboardRow cancelButton = new KeyboardRow();
         cancelButton.add(new KeyboardButton()
-            .setText("❌ Cancel Order"));
+            .setText(StaticText.cancelOrder));
         keyboardRowList.add(cancelButton);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         return  replyKeyboardMarkup;
@@ -95,11 +96,11 @@ public class Menu {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow shareContactButton = new KeyboardRow();
         shareContactButton.add(new KeyboardButton()
-            .setText("☎️ Share Contact").setRequestContact(true));
+            .setText(StaticText.shareContact).setRequestContact(true));
         keyboardRowList.add(shareContactButton);
         KeyboardRow cancelButton = new KeyboardRow();
         cancelButton.add(new KeyboardButton()
-            .setText("❌  Cancel"));
+            .setText(StaticText.cancel));
         keyboardRowList.add(cancelButton);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         return  replyKeyboardMarkup;

@@ -44,16 +44,16 @@ public class ResponseBuilder {
             dbUtility.registerTelegramUser(update);
             requestContact.requestContact(update);
         } else if (update.hasMessage() && update.getMessage().hasText() &&
-            (update.getMessage().getText().equals("\uD83D\uDEAB Cancel Order") || update.getMessage().getText().equals("/cancel"))) {
+            (update.getMessage().getText().equals(StaticText.cancelOrder) || update.getMessage().getText().equals("/cancel"))) {
             cancelOrder(update, telegramUser);
         } else if (update.hasMessage() && update.getMessage().hasText() &&
-            (update.getMessage().getText().equals("\uD83D\uDD16 New Order") || update.getMessage().getText().equals("/new_order"))) {
+            (update.getMessage().getText().equals(StaticText.newOrder) || update.getMessage().getText().equals("/new_order"))) {
             newOrder(update, telegramUser);
         } else if (update.hasMessage() && update.getMessage().hasText() &&
-            (update.getMessage().getText().equals("\uD83D\uDCE6 My Orders") || update.getMessage().getText().equals("/my_orders"))) {
+            (update.getMessage().getText().equals(StaticText.myOrders) || update.getMessage().getText().equals("/my_orders"))) {
             myOrder(update, telegramUser);
         } else if (update.hasMessage() && update.getMessage().hasText() &&
-            (update.getMessage().getText().equals("\uD83D\uDCD6 Help") || update.getMessage().getText().equals("/help"))) {
+            (update.getMessage().getText().equals(StaticText.help) || update.getMessage().getText().equals("/help"))) {
             help(update, telegramUser);
         } else {
             if (telegramUser.getConversationMetaData().equals(ChatStepConstants.WAITING_FOR_CONTACT_RESPONSE)) {
@@ -122,14 +122,14 @@ public class ResponseBuilder {
 
     public void processOrderMenuRequestAndProceedToLocationRequest(Update update, TelegramUserDTO telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order") ||
-            (update.hasMessage() && update.getMessage().getText().equals("\uD83D\uDD16 New Order"))) {
+            (update.hasMessage() && update.getMessage().getText().equals(StaticText.newOrder))) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);
             requestLocation.requestLocation(update);
         } else if ((update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("myOrder")) ||
-            (update.hasMessage() && update.getMessage().getText().equals("\uD83D\uDCE6 My Orders"))) {
+            (update.hasMessage() && update.getMessage().getText().equals(StaticText.myOrders))) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE);
             requestForMyOrdersList.requestForMyOrdersList(update, telegramUser);
-        } else if (update.hasMessage() && update.getMessage().getText().equals("\uD83D\uDCD6 Help")) {
+        } else if (update.hasMessage() && update.getMessage().getText().equals(StaticText.help)) {
 
         } else if (update.hasMessage() && update.getMessage().getText().equals("Setting")) {
 

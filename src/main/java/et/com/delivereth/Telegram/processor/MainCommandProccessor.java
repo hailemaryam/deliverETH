@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
-public class StepLessCommandProccessor {
-    private final StepProcessors stepProcessors;
+public class MainCommandProccessor {
+    private final CommandProcessor commandProcessor;
     private final MainStepProccessor mainStepProccessor;
 
-    public StepLessCommandProccessor(StepProcessors stepProcessors, MainStepProccessor mainStepProccessor) {
-        this.stepProcessors = stepProcessors;
+    public MainCommandProccessor(CommandProcessor commandProcessor, MainStepProccessor mainStepProccessor) {
+        this.commandProcessor = commandProcessor;
         this.mainStepProccessor = mainStepProccessor;
     }
 
@@ -20,19 +20,19 @@ public class StepLessCommandProccessor {
         switch (update.getMessage().getText()) {
             case StaticText.cancelOrder:
             case BotCommands.cancel:
-                stepProcessors.cancelOrder(update, telegramUser);
+                commandProcessor.cancelOrder(update, telegramUser);
                 break;
             case StaticText.newOrder:
             case BotCommands.newOrder:
-                stepProcessors.newOrder(update, telegramUser);
+                commandProcessor.newOrder(update, telegramUser);
                 break;
             case StaticText.myOrders:
             case BotCommands.myOrders:
-                stepProcessors.myOrder(update, telegramUser);
+                commandProcessor.myOrder(update, telegramUser);
                 break;
             case StaticText.help:
             case BotCommands.help:
-                stepProcessors.help(update, telegramUser);
+                commandProcessor.help(update, telegramUser);
                 break;
             default:
                 mainStepProccessor.mainStepProcessor(update, telegramUser);

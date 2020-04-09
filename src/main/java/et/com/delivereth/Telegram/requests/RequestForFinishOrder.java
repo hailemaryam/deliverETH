@@ -1,4 +1,4 @@
-package et.com.delivereth.Telegram.Requests;
+package et.com.delivereth.Telegram.requests;
 
 import et.com.delivereth.Telegram.DbUtility.DbUtility;
 import et.com.delivereth.Telegram.TelegramSender;

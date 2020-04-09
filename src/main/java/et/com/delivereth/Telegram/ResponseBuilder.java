@@ -1,7 +1,7 @@
 package et.com.delivereth.Telegram;
 
 import et.com.delivereth.Telegram.DbUtility.DbUtility;
-import et.com.delivereth.Telegram.Requests.*;
+import et.com.delivereth.Telegram.requests.*;
 import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;

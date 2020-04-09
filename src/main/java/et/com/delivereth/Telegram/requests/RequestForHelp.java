@@ -1,4 +1,4 @@
-package et.com.delivereth.Telegram.Requests;
+package et.com.delivereth.Telegram.requests;
 
 import et.com.delivereth.Telegram.TelegramHome;
 import et.com.delivereth.Telegram.TelegramSender;

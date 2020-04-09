@@ -1,7 +1,7 @@
 package et.com.delivereth.Telegram;
 
 import et.com.delivereth.Telegram.Constants.TelegramBotConstant;
-import et.com.delivereth.Telegram.Requests.RequestErrorResponder;
+import et.com.delivereth.Telegram.requests.RequestErrorResponder;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.slf4j.Logger;

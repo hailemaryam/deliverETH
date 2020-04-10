@@ -152,7 +152,7 @@ public class RequestFoodList {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
         response.setText("Menu are not added in selected restaurant.");
-        response.setReplyMarkup(Menu.orderKeyBoardMenu());
+        response.setReplyMarkup(Menu.orderKeyBoardMenu(true));
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

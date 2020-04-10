@@ -100,7 +100,7 @@ public class RequestRestorantSelection {
         }
         response.setText("<b>Choose restaurant from this list</b>");
         response.setParseMode("HTML");
-        response.setReplyMarkup(Menu.orderKeyBoardMenu());
+        response.setReplyMarkup(Menu.orderKeyBoardMenu(true));
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

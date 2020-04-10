@@ -68,6 +68,7 @@ public class RequestForFinishOrder {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
+        response.setReplyMarkup(Menu.orderKeyBoardMenu(false));
         response.setText("\uD83D\uDC68\u200D\uD83C\uDF73 Your order has been successfully registered.");
         try {
             telegramSender.execute(response);

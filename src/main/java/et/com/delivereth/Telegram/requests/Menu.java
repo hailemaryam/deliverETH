@@ -49,7 +49,7 @@ public class Menu {
         markupInline.setKeyboard(rowsInline);
         return markupInline;
     }
-    public static ReplyKeyboardMarkup orderKeyBoardMenu() {
+    public static ReplyKeyboardMarkup orderKeyBoardMenu(boolean showCancel) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setOneTimeKeyboard(true);
@@ -61,8 +61,10 @@ public class Menu {
         keyboardButtons1.add(new KeyboardButton()
             .setText(StaticText.myOrders));
         KeyboardRow keyboardButtons2 = new KeyboardRow();
-        keyboardButtons2.add(new KeyboardButton()
-            .setText(StaticText.cancelOrder));
+        if (showCancel) {
+            keyboardButtons2.add(new KeyboardButton()
+                .setText(StaticText.cancelOrder));
+        }
         keyboardButtons2.add(new KeyboardButton()
             .setText(StaticText.help));
         keyboardRowList.add(keyboardButtons1);

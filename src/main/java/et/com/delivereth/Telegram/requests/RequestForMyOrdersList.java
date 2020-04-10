@@ -117,7 +117,7 @@ public class RequestForMyOrdersList {
         }
         response.setText("<b>Your Order List</b>");
         response.setParseMode("HTML");
-        response.setReplyMarkup(Menu.orderKeyBoardMenu());
+        response.setReplyMarkup(Menu.orderKeyBoardMenu(false));
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

@@ -91,5 +91,8 @@ public class OrderDbUtility {
         telegramUserDbUtility.updateTelegramUser(telegramUser);
         return orderQueryService.findByCriteria(orderCriteria, PageRequest.of(telegramUser.getLoadedPage(), 5));
     }
-
+    public OrderDTO getOrderById(Long orderId){
+        Optional<OrderDTO> order = orderService.findOne(orderId);
+        return order.orElse(null);
+    }
 }

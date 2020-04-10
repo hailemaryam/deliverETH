@@ -52,7 +52,7 @@ public class Menu {
     public static ReplyKeyboardMarkup orderKeyBoardMenu() {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardButtons1 = new KeyboardRow();

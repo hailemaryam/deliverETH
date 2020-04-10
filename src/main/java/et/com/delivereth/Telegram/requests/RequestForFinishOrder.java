@@ -1,13 +1,10 @@
 package et.com.delivereth.Telegram.requests;
 
-import et.com.delivereth.Telegram.DbUtility.DbUtility;
-import et.com.delivereth.Telegram.DbUtility.FoodDbUtitility;
-import et.com.delivereth.Telegram.DbUtility.OrderedFoodDbUtility;
-import et.com.delivereth.Telegram.DbUtility.RestorantDbUtitlity;
+import et.com.delivereth.Telegram.DbUtility.*;
+import et.com.delivereth.Telegram.OtherUtility.DistanceCalculator;
 import et.com.delivereth.Telegram.TelegramSender;
-import et.com.delivereth.service.dto.FoodDTO;
-import et.com.delivereth.service.dto.OrderedFoodDTO;
-import et.com.delivereth.service.dto.TelegramUserDTO;
+import et.com.delivereth.domain.TelegramUser;
+import et.com.delivereth.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,12 +22,14 @@ public class RequestForFinishOrder {
     public final RestorantDbUtitlity restorantDbUtitlity;
     private final FoodDbUtitility foodDbUtitility;
     private final OrderedFoodDbUtility orderedFoodDbUtility;
+    private final OrderDbUtility orderDbUtility;
 
-    public RequestForFinishOrder(TelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility) {
+    public RequestForFinishOrder(TelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility, OrderDbUtility orderDbUtility) {
         this.telegramSender = telegramSender;
         this.restorantDbUtitlity = restorantDbUtitlity;
         this.foodDbUtitility = foodDbUtitility;
         this.orderedFoodDbUtility = orderedFoodDbUtility;
+        this.orderDbUtility = orderDbUtility;
     }
 
     public void requestForFinishOrder(Update update, TelegramUserDTO telegramUser) {
@@ -42,8 +41,10 @@ public class RequestForFinishOrder {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(telegramUser.getOrderIdPaused());
+        RestorantDTO restorant = restorantDbUtitlity.getRestorant(telegramUser.getSelectedRestorant());
+        Double transportaionFee = transportaionFee(telegramUser, restorant);
         String invoice = "<strong>Restaurant Name: " +
-             restorantDbUtitlity.getRestorant(telegramUser.getSelectedRestorant()).getName() +
+             restorant.getName() +
             "</strong>\n";
         Double total = 0D;
         for (OrderedFoodDTO orderedFood : orderedFoodList) {
@@ -51,7 +52,9 @@ public class RequestForFinishOrder {
             invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n" );
             total += orderedFood.getQuantity() * food.getPrice();
         }
-        invoice = invoice + "<b>\uD83D\uDCB5 Total = " + total +"</b>";
+        invoice = invoice + "<b>\uD83D\uDCB5 Total = " + total +"</b>\n";
+        invoice = invoice + "<b>\uD83D\uDCB5 Transportation Fee = " + transportaionFee +"</b>\n";
+        invoice = invoice + "<b>\uD83D\uDCB5 Grand Total = " + (transportaionFee + total) +"</b>\n";
         response.setText(invoice);
         response.setParseMode("HTML");
         try {
@@ -59,6 +62,20 @@ public class RequestForFinishOrder {
         } catch (TelegramApiException e) {
             logger.error("Error Sending Message {}", response);
         }
+    }
+    private Double transportaionFee(TelegramUserDTO telegramUser, RestorantDTO restorantDTO){
+        OrderDTO orderDTO;
+        if (telegramUser.getOrderIdPaused() != null) {
+            orderDTO = orderDbUtility.getOrderById(telegramUser.getOrderIdPaused());
+            double distance = DistanceCalculator.distance(
+                orderDTO.getLatitude().doubleValue(),
+                restorantDTO.getLatitude().doubleValue(),
+                orderDTO.getLongtude().doubleValue(),
+                restorantDTO.getLongtude().doubleValue()
+            ,0,0);
+            return distance < 5000 ? 75 * 1.12 : (75 + (distance - 5000) * 10) * 1.12;
+        }
+        return null;
     }
     public void responseForFinishOrder(Update update){
         responsePopUpForCancelOrder(update);

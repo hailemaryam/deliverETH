@@ -9,14 +9,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class RestaurantMainStepProccessor {
     private final RestaurantCommandProcessor restaurantCommandProcessor;
     private final RestaurantWaitingForContactResponseProcessor restaurantWaitingForContactResponseProcessor;
-    private final RestaurantWaitingForMenuPageResponseProcessor restaurantWaitingForMenuPageResponseProcessor;
-    private final RestaurantWaitingForMyOrderListResponseProcessor restaurantWaitingForMyOrderListResponseProcessor;
 
-    public RestaurantMainStepProccessor(RestaurantCommandProcessor restaurantCommandProcessor, RestaurantWaitingForContactResponseProcessor restaurantWaitingForContactResponseProcessor, RestaurantWaitingForMenuPageResponseProcessor restaurantWaitingForMenuPageResponseProcessor, RestaurantWaitingForMyOrderListResponseProcessor restaurantWaitingForMyOrderListResponseProcessor) {
+    public RestaurantMainStepProccessor(RestaurantCommandProcessor restaurantCommandProcessor, RestaurantWaitingForContactResponseProcessor restaurantWaitingForContactResponseProcessor) {
         this.restaurantCommandProcessor = restaurantCommandProcessor;
         this.restaurantWaitingForContactResponseProcessor = restaurantWaitingForContactResponseProcessor;
-        this.restaurantWaitingForMenuPageResponseProcessor = restaurantWaitingForMenuPageResponseProcessor;
-        this.restaurantWaitingForMyOrderListResponseProcessor = restaurantWaitingForMyOrderListResponseProcessor;
     }
 
     public void mainStepProcessor(Update update, TelegramRestaurantUserDTO telegramUser){

@@ -19,7 +19,7 @@ public class RestaurantMainCommandProccessor {
 
     public void commandProccessor(Update update, TelegramRestaurantUserDTO telegramUser){
         switch (update.getMessage().getText()) {
-            case StaticText.cancelOrder:
+//            case StaticText.cancelOrder:
 //            case BotCommands.cancel:
 //                restaurantCommandProcessor.cancelOrder(update, telegramUser);
 //                break;

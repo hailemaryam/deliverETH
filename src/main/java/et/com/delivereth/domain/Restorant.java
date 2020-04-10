@@ -47,10 +47,10 @@ public class Restorant implements Serializable {
     private String iconImageContentType;
 
     @Column(name = "latitude")
-    private String latitude;
+    private Float latitude;
 
     @Column(name = "longtude")
-    private String longtude;
+    private Float longtude;
 
     @OneToMany(mappedBy = "restorant")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -130,29 +130,29 @@ public class Restorant implements Serializable {
         this.iconImageContentType = iconImageContentType;
     }
 
-    public String getLatitude() {
+    public Float getLatitude() {
         return latitude;
     }
 
-    public Restorant latitude(String latitude) {
+    public Restorant latitude(Float latitude) {
         this.latitude = latitude;
         return this;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongtude() {
+    public Float getLongtude() {
         return longtude;
     }
 
-    public Restorant longtude(String longtude) {
+    public Restorant longtude(Float longtude) {
         this.longtude = longtude;
         return this;
     }
 
-    public void setLongtude(String longtude) {
+    public void setLongtude(Float longtude) {
         this.longtude = longtude;
     }
 
@@ -207,8 +207,8 @@ public class Restorant implements Serializable {
             ", description='" + getDescription() + "'" +
             ", iconImage='" + getIconImage() + "'" +
             ", iconImageContentType='" + getIconImageContentType() + "'" +
-            ", latitude='" + getLatitude() + "'" +
-            ", longtude='" + getLongtude() + "'" +
+            ", latitude=" + getLatitude() +
+            ", longtude=" + getLongtude() +
             "}";
     }
 }

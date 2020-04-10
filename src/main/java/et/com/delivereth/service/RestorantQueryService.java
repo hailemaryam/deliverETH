@@ -98,10 +98,10 @@ public class RestorantQueryService extends QueryService<Restorant> {
                 specification = specification.and(buildStringSpecification(criteria.getUserName(), Restorant_.userName));
             }
             if (criteria.getLatitude() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLatitude(), Restorant_.latitude));
+                specification = specification.and(buildRangeSpecification(criteria.getLatitude(), Restorant_.latitude));
             }
             if (criteria.getLongtude() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLongtude(), Restorant_.longtude));
+                specification = specification.and(buildRangeSpecification(criteria.getLongtude(), Restorant_.longtude));
             }
             if (criteria.getFoodId() != null) {
                 specification = specification.and(buildSpecification(criteria.getFoodId(),

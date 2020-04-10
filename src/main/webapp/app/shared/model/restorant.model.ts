@@ -7,8 +7,8 @@ export interface IRestorant {
   description?: any;
   iconImageContentType?: string;
   iconImage?: any;
-  latitude?: string;
-  longtude?: string;
+  latitude?: number;
+  longtude?: number;
   foods?: IFood[];
 }
 
@@ -20,8 +20,8 @@ export class Restorant implements IRestorant {
     public description?: any,
     public iconImageContentType?: string,
     public iconImage?: any,
-    public latitude?: string,
-    public longtude?: string,
+    public latitude?: number,
+    public longtude?: number,
     public foods?: IFood[]
   ) {}
 }

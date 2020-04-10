@@ -26,11 +26,11 @@
         },
         {
             "fieldName": "latitude",
-            "fieldType": "String"
+            "fieldType": "Float"
         },
         {
             "fieldName": "longtude",
-            "fieldType": "String"
+            "fieldType": "Float"
         }
     ],
     "relationships": [

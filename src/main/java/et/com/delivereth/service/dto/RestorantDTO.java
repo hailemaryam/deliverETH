@@ -24,9 +24,9 @@ public class RestorantDTO implements Serializable {
     private byte[] iconImage;
 
     private String iconImageContentType;
-    private String latitude;
+    private Float latitude;
 
-    private String longtude;
+    private Float longtude;
 
     
     public Long getId() {
@@ -77,19 +77,19 @@ public class RestorantDTO implements Serializable {
         this.iconImageContentType = iconImageContentType;
     }
 
-    public String getLatitude() {
+    public Float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongtude() {
+    public Float getLongtude() {
         return longtude;
     }
 
-    public void setLongtude(String longtude) {
+    public void setLongtude(Float longtude) {
         this.longtude = longtude;
     }
 
@@ -122,8 +122,8 @@ public class RestorantDTO implements Serializable {
             ", userName='" + getUserName() + "'" +
             ", description='" + getDescription() + "'" +
             ", iconImage='" + getIconImage() + "'" +
-            ", latitude='" + getLatitude() + "'" +
-            ", longtude='" + getLongtude() + "'" +
+            ", latitude=" + getLatitude() +
+            ", longtude=" + getLongtude() +
             "}";
     }
 }

@@ -51,11 +51,13 @@ public class RestorantResourceIT {
     private static final String DEFAULT_ICON_IMAGE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_ICON_IMAGE_CONTENT_TYPE = "image/png";
 
-    private static final String DEFAULT_LATITUDE = "AAAAAAAAAA";
-    private static final String UPDATED_LATITUDE = "BBBBBBBBBB";
+    private static final Float DEFAULT_LATITUDE = 1F;
+    private static final Float UPDATED_LATITUDE = 2F;
+    private static final Float SMALLER_LATITUDE = 1F - 1F;
 
-    private static final String DEFAULT_LONGTUDE = "AAAAAAAAAA";
-    private static final String UPDATED_LONGTUDE = "BBBBBBBBBB";
+    private static final Float DEFAULT_LONGTUDE = 1F;
+    private static final Float UPDATED_LONGTUDE = 2F;
+    private static final Float SMALLER_LONGTUDE = 1F - 1F;
 
     @Autowired
     private RestorantRepository restorantRepository;
@@ -179,8 +181,8 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].iconImageContentType").value(hasItem(DEFAULT_ICON_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].iconImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE))))
-            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE)))
-            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE)));
+            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
+            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())));
     }
     
     @Test
@@ -199,8 +201,8 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.iconImageContentType").value(DEFAULT_ICON_IMAGE_CONTENT_TYPE))
             .andExpect(jsonPath("$.iconImage").value(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE)))
-            .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE))
-            .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE));
+            .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE.doubleValue()))
+            .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE.doubleValue()));
     }
 
 
@@ -430,30 +432,57 @@ public class RestorantResourceIT {
         // Get all the restorantList where latitude is null
         defaultRestorantShouldNotBeFound("latitude.specified=false");
     }
-                @Test
+
+    @Test
     @Transactional
-    public void getAllRestorantsByLatitudeContainsSomething() throws Exception {
+    public void getAllRestorantsByLatitudeIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         restorantRepository.saveAndFlush(restorant);
 
-        // Get all the restorantList where latitude contains DEFAULT_LATITUDE
-        defaultRestorantShouldBeFound("latitude.contains=" + DEFAULT_LATITUDE);
+        // Get all the restorantList where latitude is greater than or equal to DEFAULT_LATITUDE
+        defaultRestorantShouldBeFound("latitude.greaterThanOrEqual=" + DEFAULT_LATITUDE);
 
-        // Get all the restorantList where latitude contains UPDATED_LATITUDE
-        defaultRestorantShouldNotBeFound("latitude.contains=" + UPDATED_LATITUDE);
+        // Get all the restorantList where latitude is greater than or equal to UPDATED_LATITUDE
+        defaultRestorantShouldNotBeFound("latitude.greaterThanOrEqual=" + UPDATED_LATITUDE);
     }
 
     @Test
     @Transactional
-    public void getAllRestorantsByLatitudeNotContainsSomething() throws Exception {
+    public void getAllRestorantsByLatitudeIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         restorantRepository.saveAndFlush(restorant);
 
-        // Get all the restorantList where latitude does not contain DEFAULT_LATITUDE
-        defaultRestorantShouldNotBeFound("latitude.doesNotContain=" + DEFAULT_LATITUDE);
+        // Get all the restorantList where latitude is less than or equal to DEFAULT_LATITUDE
+        defaultRestorantShouldBeFound("latitude.lessThanOrEqual=" + DEFAULT_LATITUDE);
 
-        // Get all the restorantList where latitude does not contain UPDATED_LATITUDE
-        defaultRestorantShouldBeFound("latitude.doesNotContain=" + UPDATED_LATITUDE);
+        // Get all the restorantList where latitude is less than or equal to SMALLER_LATITUDE
+        defaultRestorantShouldNotBeFound("latitude.lessThanOrEqual=" + SMALLER_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByLatitudeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where latitude is less than DEFAULT_LATITUDE
+        defaultRestorantShouldNotBeFound("latitude.lessThan=" + DEFAULT_LATITUDE);
+
+        // Get all the restorantList where latitude is less than UPDATED_LATITUDE
+        defaultRestorantShouldBeFound("latitude.lessThan=" + UPDATED_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByLatitudeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where latitude is greater than DEFAULT_LATITUDE
+        defaultRestorantShouldNotBeFound("latitude.greaterThan=" + DEFAULT_LATITUDE);
+
+        // Get all the restorantList where latitude is greater than SMALLER_LATITUDE
+        defaultRestorantShouldBeFound("latitude.greaterThan=" + SMALLER_LATITUDE);
     }
 
 
@@ -508,30 +537,57 @@ public class RestorantResourceIT {
         // Get all the restorantList where longtude is null
         defaultRestorantShouldNotBeFound("longtude.specified=false");
     }
-                @Test
+
+    @Test
     @Transactional
-    public void getAllRestorantsByLongtudeContainsSomething() throws Exception {
+    public void getAllRestorantsByLongtudeIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         restorantRepository.saveAndFlush(restorant);
 
-        // Get all the restorantList where longtude contains DEFAULT_LONGTUDE
-        defaultRestorantShouldBeFound("longtude.contains=" + DEFAULT_LONGTUDE);
+        // Get all the restorantList where longtude is greater than or equal to DEFAULT_LONGTUDE
+        defaultRestorantShouldBeFound("longtude.greaterThanOrEqual=" + DEFAULT_LONGTUDE);
 
-        // Get all the restorantList where longtude contains UPDATED_LONGTUDE
-        defaultRestorantShouldNotBeFound("longtude.contains=" + UPDATED_LONGTUDE);
+        // Get all the restorantList where longtude is greater than or equal to UPDATED_LONGTUDE
+        defaultRestorantShouldNotBeFound("longtude.greaterThanOrEqual=" + UPDATED_LONGTUDE);
     }
 
     @Test
     @Transactional
-    public void getAllRestorantsByLongtudeNotContainsSomething() throws Exception {
+    public void getAllRestorantsByLongtudeIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         restorantRepository.saveAndFlush(restorant);
 
-        // Get all the restorantList where longtude does not contain DEFAULT_LONGTUDE
-        defaultRestorantShouldNotBeFound("longtude.doesNotContain=" + DEFAULT_LONGTUDE);
+        // Get all the restorantList where longtude is less than or equal to DEFAULT_LONGTUDE
+        defaultRestorantShouldBeFound("longtude.lessThanOrEqual=" + DEFAULT_LONGTUDE);
 
-        // Get all the restorantList where longtude does not contain UPDATED_LONGTUDE
-        defaultRestorantShouldBeFound("longtude.doesNotContain=" + UPDATED_LONGTUDE);
+        // Get all the restorantList where longtude is less than or equal to SMALLER_LONGTUDE
+        defaultRestorantShouldNotBeFound("longtude.lessThanOrEqual=" + SMALLER_LONGTUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByLongtudeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where longtude is less than DEFAULT_LONGTUDE
+        defaultRestorantShouldNotBeFound("longtude.lessThan=" + DEFAULT_LONGTUDE);
+
+        // Get all the restorantList where longtude is less than UPDATED_LONGTUDE
+        defaultRestorantShouldBeFound("longtude.lessThan=" + UPDATED_LONGTUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByLongtudeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where longtude is greater than DEFAULT_LONGTUDE
+        defaultRestorantShouldNotBeFound("longtude.greaterThan=" + DEFAULT_LONGTUDE);
+
+        // Get all the restorantList where longtude is greater than SMALLER_LONGTUDE
+        defaultRestorantShouldBeFound("longtude.greaterThan=" + SMALLER_LONGTUDE);
     }
 
 
@@ -567,8 +623,8 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].iconImageContentType").value(hasItem(DEFAULT_ICON_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].iconImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE))))
-            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE)))
-            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE)));
+            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
+            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())));
 
         // Check, that the count call also returns 1
         restRestorantMockMvc.perform(get("/api/restorants/count?sort=id,desc&" + filter))

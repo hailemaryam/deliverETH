@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(RestorantService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Restorant(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'image/png', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new Restorant(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'image/png', 'AAAAAAA', 0, 0);
     });
 
     describe('Service methods', () => {
@@ -58,8 +58,8 @@ describe('Service Tests', () => {
             userName: 'BBBBBB',
             description: 'BBBBBB',
             iconImage: 'BBBBBB',
-            latitude: 'BBBBBB',
-            longtude: 'BBBBBB'
+            latitude: 1,
+            longtude: 1
           },
           elemDefault
         );
@@ -80,8 +80,8 @@ describe('Service Tests', () => {
             userName: 'BBBBBB',
             description: 'BBBBBB',
             iconImage: 'BBBBBB',
-            latitude: 'BBBBBB',
-            longtude: 'BBBBBB'
+            latitude: 1,
+            longtude: 1
           },
           elemDefault
         );

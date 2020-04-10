@@ -30,9 +30,9 @@ public class RestorantCriteria implements Serializable, Criteria {
 
     private StringFilter userName;
 
-    private StringFilter latitude;
+    private FloatFilter latitude;
 
-    private StringFilter longtude;
+    private FloatFilter longtude;
 
     private LongFilter foodId;
 
@@ -77,19 +77,19 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.userName = userName;
     }
 
-    public StringFilter getLatitude() {
+    public FloatFilter getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(StringFilter latitude) {
+    public void setLatitude(FloatFilter latitude) {
         this.latitude = latitude;
     }
 
-    public StringFilter getLongtude() {
+    public FloatFilter getLongtude() {
         return longtude;
     }
 
-    public void setLongtude(StringFilter longtude) {
+    public void setLongtude(FloatFilter longtude) {
         this.longtude = longtude;
     }
 

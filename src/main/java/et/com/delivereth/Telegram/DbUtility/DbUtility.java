@@ -1,6 +1,7 @@
 package et.com.delivereth.Telegram.DbUtility;
 
 import et.com.delivereth.Telegram.Constants.ChatStepConstants;
+import et.com.delivereth.Telegram.OtherUtility.DistanceCalculator;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.*;
 import et.com.delivereth.service.dto.*;
@@ -15,11 +16,15 @@ public class DbUtility {
     private final TelegramUserService telegramUserService;
     private final OrderService orderService;
     private final OrderedFoodService orderedFoodService;
+    private final RestorantService restorantService;
+    private final OrderedFoodDbUtility orderedFoodDbUtility;
 
-    public DbUtility(TelegramUserService telegramUserService, OrderService orderService, OrderedFoodService orderedFoodService) {
+    public DbUtility(TelegramUserService telegramUserService, OrderService orderService, OrderedFoodService orderedFoodService, RestorantService restorantService, OrderedFoodDbUtility orderedFoodDbUtility) {
         this.telegramUserService = telegramUserService;
         this.orderService = orderService;
         this.orderedFoodService = orderedFoodService;
+        this.restorantService = restorantService;
+        this.orderedFoodDbUtility = orderedFoodDbUtility;
     }
 
     public void cancelOrder(TelegramUserDTO telegramUser) {
@@ -56,8 +61,12 @@ public class DbUtility {
     }
     public void finishOrder(TelegramUserDTO telegramUser){
         Optional<OrderDTO> orderDto = orderService.findOne(telegramUser.getOrderIdPaused());
+        Optional<RestorantDTO> restaurantOptional = restorantService.findOne(telegramUser.getSelectedRestorant());
         OrderDTO order = orderDto.orElse(null);
-        if (order != null) {
+        RestorantDTO restorant = restaurantOptional.orElse(null);
+        if (order != null && restaurantOptional != null) {
+            order.setTotalPrice(orderedFoodDbUtility.getTotalFee(order.getId()));
+            order.setTransportationFee(transportaionFee(telegramUser, restorant).floatValue());
             order.setOrderStatus(OrderStatus.ORDERED);
             order.setDate(Instant.now());
             orderService.save(order);
@@ -69,6 +78,21 @@ public class DbUtility {
         telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
         telegramUserService.save(telegramUser);
     }
+    public Double transportaionFee(TelegramUserDTO telegramUser, RestorantDTO restorantDTO){
+        OrderDTO orderDTO;
+        if (telegramUser.getOrderIdPaused() != null) {
+            orderDTO = orderService.findOne(telegramUser.getOrderIdPaused()).get();
+            double distance = DistanceCalculator.distance(
+                orderDTO.getLatitude().doubleValue(),
+                restorantDTO.getLatitude().doubleValue(),
+                orderDTO.getLongtude().doubleValue(),
+                restorantDTO.getLongtude().doubleValue()
+                ,0,0);
+            return distance < 5000 ? 75 * 1.12 : (75 + (distance - 5000) * 10) * 1.12;
+        }
+        return null;
+    }
+
     public void updateStep(TelegramUserDTO telegramUser, String step){
         telegramUser.setConversationMetaData(step);
         telegramUser.setLoadedPage(null);

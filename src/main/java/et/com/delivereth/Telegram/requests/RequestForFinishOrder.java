@@ -1,9 +1,7 @@
 package et.com.delivereth.Telegram.requests;
 
 import et.com.delivereth.Telegram.DbUtility.*;
-import et.com.delivereth.Telegram.OtherUtility.DistanceCalculator;
 import et.com.delivereth.Telegram.TelegramSender;
-import et.com.delivereth.domain.TelegramUser;
 import et.com.delivereth.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +20,14 @@ public class RequestForFinishOrder {
     public final RestorantDbUtitlity restorantDbUtitlity;
     private final FoodDbUtitility foodDbUtitility;
     private final OrderedFoodDbUtility orderedFoodDbUtility;
-    private final OrderDbUtility orderDbUtility;
+    private final DbUtility dbUtility;
 
-    public RequestForFinishOrder(TelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility, OrderDbUtility orderDbUtility) {
+    public RequestForFinishOrder(TelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility, DbUtility dbUtility) {
         this.telegramSender = telegramSender;
         this.restorantDbUtitlity = restorantDbUtitlity;
         this.foodDbUtitility = foodDbUtitility;
         this.orderedFoodDbUtility = orderedFoodDbUtility;
-        this.orderDbUtility = orderDbUtility;
+        this.dbUtility = dbUtility;
     }
 
     public void requestForFinishOrder(Update update, TelegramUserDTO telegramUser) {
@@ -42,7 +40,7 @@ public class RequestForFinishOrder {
         }
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(telegramUser.getOrderIdPaused());
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(telegramUser.getSelectedRestorant());
-        Double transportaionFee = transportaionFee(telegramUser, restorant);
+        Double transportaionFee = dbUtility.transportaionFee(telegramUser, restorant);
         String invoice = "<strong>Restaurant Name: " +
              restorant.getName() +
             "</strong>\n";
@@ -62,20 +60,6 @@ public class RequestForFinishOrder {
         } catch (TelegramApiException e) {
             logger.error("Error Sending Message {}", response);
         }
-    }
-    private Double transportaionFee(TelegramUserDTO telegramUser, RestorantDTO restorantDTO){
-        OrderDTO orderDTO;
-        if (telegramUser.getOrderIdPaused() != null) {
-            orderDTO = orderDbUtility.getOrderById(telegramUser.getOrderIdPaused());
-            double distance = DistanceCalculator.distance(
-                orderDTO.getLatitude().doubleValue(),
-                restorantDTO.getLatitude().doubleValue(),
-                orderDTO.getLongtude().doubleValue(),
-                restorantDTO.getLongtude().doubleValue()
-            ,0,0);
-            return distance < 5000 ? 75 * 1.12 : (75 + (distance - 5000) * 10) * 1.12;
-        }
-        return null;
     }
     public void responseForFinishOrder(Update update){
         responsePopUpForCancelOrder(update);

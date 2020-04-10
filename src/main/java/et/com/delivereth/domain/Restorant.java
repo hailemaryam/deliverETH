@@ -1,5 +1,6 @@
 package et.com.delivereth.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
@@ -55,6 +56,11 @@ public class Restorant implements Serializable {
     @OneToMany(mappedBy = "restorant")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Food> foods = new HashSet<>();
+
+    @ManyToMany(mappedBy = "restorants")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private Set<TelegramRestaurantUser> telegramRestaurantUsers = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -179,6 +185,31 @@ public class Restorant implements Serializable {
 
     public void setFoods(Set<Food> foods) {
         this.foods = foods;
+    }
+
+    public Set<TelegramRestaurantUser> getTelegramRestaurantUsers() {
+        return telegramRestaurantUsers;
+    }
+
+    public Restorant telegramRestaurantUsers(Set<TelegramRestaurantUser> telegramRestaurantUsers) {
+        this.telegramRestaurantUsers = telegramRestaurantUsers;
+        return this;
+    }
+
+    public Restorant addTelegramRestaurantUser(TelegramRestaurantUser telegramRestaurantUser) {
+        this.telegramRestaurantUsers.add(telegramRestaurantUser);
+        telegramRestaurantUser.getRestorants().add(this);
+        return this;
+    }
+
+    public Restorant removeTelegramRestaurantUser(TelegramRestaurantUser telegramRestaurantUser) {
+        this.telegramRestaurantUsers.remove(telegramRestaurantUser);
+        telegramRestaurantUser.getRestorants().remove(this);
+        return this;
+    }
+
+    public void setTelegramRestaurantUsers(Set<TelegramRestaurantUser> telegramRestaurantUsers) {
+        this.telegramRestaurantUsers = telegramRestaurantUsers;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

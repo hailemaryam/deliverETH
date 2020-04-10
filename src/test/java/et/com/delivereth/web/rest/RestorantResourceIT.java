@@ -3,6 +3,7 @@ package et.com.delivereth.web.rest;
 import et.com.delivereth.DeliverEthApp;
 import et.com.delivereth.domain.Restorant;
 import et.com.delivereth.domain.Food;
+import et.com.delivereth.domain.TelegramRestaurantUser;
 import et.com.delivereth.repository.RestorantRepository;
 import et.com.delivereth.service.RestorantService;
 import et.com.delivereth.service.dto.RestorantDTO;
@@ -608,6 +609,26 @@ public class RestorantResourceIT {
 
         // Get all the restorantList where food equals to foodId + 1
         defaultRestorantShouldNotBeFound("foodId.equals=" + (foodId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByTelegramRestaurantUserIsEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+        TelegramRestaurantUser telegramRestaurantUser = TelegramRestaurantUserResourceIT.createEntity(em);
+        em.persist(telegramRestaurantUser);
+        em.flush();
+        restorant.addTelegramRestaurantUser(telegramRestaurantUser);
+        restorantRepository.saveAndFlush(restorant);
+        Long telegramRestaurantUserId = telegramRestaurantUser.getId();
+
+        // Get all the restorantList where telegramRestaurantUser equals to telegramRestaurantUserId
+        defaultRestorantShouldBeFound("telegramRestaurantUserId.equals=" + telegramRestaurantUserId);
+
+        // Get all the restorantList where telegramRestaurantUser equals to telegramRestaurantUserId + 1
+        defaultRestorantShouldNotBeFound("telegramRestaurantUserId.equals=" + (telegramRestaurantUserId + 1));
     }
 
     /**

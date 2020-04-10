@@ -52,6 +52,9 @@ public class CacheConfiguration {
             createCache(cm, et.com.delivereth.domain.Order.class.getName() + ".orderedFoods");
             createCache(cm, et.com.delivereth.domain.OrderedFood.class.getName());
             createCache(cm, et.com.delivereth.domain.KeyValuPairHolder.class.getName());
+            createCache(cm, et.com.delivereth.domain.TelegramRestaurantUser.class.getName());
+            createCache(cm, et.com.delivereth.domain.TelegramRestaurantUser.class.getName() + ".restorants");
+            createCache(cm, et.com.delivereth.domain.Restorant.class.getName() + ".telegramRestaurantUsers");
             // jhipster-needle-ehcache-add-entry
         };
     }

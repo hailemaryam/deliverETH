@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity TelegramRestaurantUser.
+    -->
+    <changeSet id="20200410222100-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="telegram_restaurant_user_id"
+                                 baseTableName="telegram_restaurant_user_restorant"
+                                 constraintName="telegram_restaurant_user_resto_telegram_restaurant_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="telegram_restaurant_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="restorant_id"
+                                 baseTableName="telegram_restaurant_user_restorant"
+                                 constraintName="fk_telegram_restaurant_user_restorant_restorant_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="restorant"/>
+        
+    </changeSet>
+</databaseChangeLog>

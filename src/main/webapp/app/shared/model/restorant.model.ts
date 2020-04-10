@@ -1,4 +1,5 @@
 import { IFood } from 'app/shared/model/food.model';
+import { ITelegramRestaurantUser } from 'app/shared/model/telegram-restaurant-user.model';
 
 export interface IRestorant {
   id?: number;
@@ -10,6 +11,7 @@ export interface IRestorant {
   latitude?: number;
   longtude?: number;
   foods?: IFood[];
+  telegramRestaurantUsers?: ITelegramRestaurantUser[];
 }
 
 export class Restorant implements IRestorant {
@@ -22,6 +24,7 @@ export class Restorant implements IRestorant {
     public iconImage?: any,
     public latitude?: number,
     public longtude?: number,
-    public foods?: IFood[]
+    public foods?: IFood[],
+    public telegramRestaurantUsers?: ITelegramRestaurantUser[]
   ) {}
 }

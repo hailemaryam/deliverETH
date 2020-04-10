@@ -1,0 +1,77 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-telegram-restaurant-user-heading">Create or edit a Telegram Restaurant User</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_firstName">First Name</label>
+                    <input type="text" class="form-control" name="firstName" id="field_firstName"
+                           formControlName="firstName"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_lastName">Last Name</label>
+                    <input type="text" class="form-control" name="lastName" id="field_lastName"
+                           formControlName="lastName"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_userName">User Name</label>
+                    <input type="text" class="form-control" name="userName" id="field_userName"
+                           formControlName="userName"/>
+                    <div *ngIf="editForm.get('userName')!.invalid && (editForm.get('userName')!.dirty || editForm.get('userName')!.touched)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_chatId">Chat Id</label>
+                    <input type="text" class="form-control" name="chatId" id="field_chatId"
+                           formControlName="chatId"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_phone">Phone</label>
+                    <input type="text" class="form-control" name="phone" id="field_phone"
+                           formControlName="phone"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_conversationMetaData">Conversation Meta Data</label>
+                    <input type="text" class="form-control" name="conversationMetaData" id="field_conversationMetaData"
+                           formControlName="conversationMetaData"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_loadedPage">Loaded Page</label>
+                    <input type="number" class="form-control" name="loadedPage" id="field_loadedPage"
+                           formControlName="loadedPage"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="field_restorants">Restorant</label>
+                    <select class="form-control" id="field_restorants" multiple name="restorants" formControlName="restorants">
+                        <option [ngValue]="getSelected(editForm.get('restorants')!.value, restorantOption)" *ngFor="let restorantOption of restorants; trackBy: trackById">{{ restorantOption.name }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

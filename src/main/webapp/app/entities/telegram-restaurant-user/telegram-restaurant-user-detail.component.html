@@ -1,0 +1,60 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="telegramRestaurantUser">
+            <h2><span>Telegram Restaurant User</span> {{ telegramRestaurantUser.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>First Name</span></dt>
+                <dd>
+                    <span>{{ telegramRestaurantUser.firstName }}</span>
+                </dd>
+                <dt><span>Last Name</span></dt>
+                <dd>
+                    <span>{{ telegramRestaurantUser.lastName }}</span>
+                </dd>
+                <dt><span>User Name</span></dt>
+                <dd>
+                    <span>{{ telegramRestaurantUser.userName }}</span>
+                </dd>
+                <dt><span>Chat Id</span></dt>
+                <dd>
+                    <span>{{ telegramRestaurantUser.chatId }}</span>
+                </dd>
+                <dt><span>Phone</span></dt>
+                <dd>
+                    <span>{{ telegramRestaurantUser.phone }}</span>
+                </dd>
+                <dt><span>Conversation Meta Data</span></dt>
+                <dd>
+                    <span>{{ telegramRestaurantUser.conversationMetaData }}</span>
+                </dd>
+                <dt><span>Loaded Page</span></dt>
+                <dd>
+                    <span>{{ telegramRestaurantUser.loadedPage }}</span>
+                </dd>
+                <dt><span>Restorant</span></dt>
+                <dd>
+                    <span *ngFor="let restorant of telegramRestaurantUser.restorants; let last = last">
+                        <a [routerLink]="['/restorant', restorant?.id, 'view']">{{ restorant.name }}</a>{{ last ? '' : ', ' }}
+                    </span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/telegram-restaurant-user', telegramRestaurantUser.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

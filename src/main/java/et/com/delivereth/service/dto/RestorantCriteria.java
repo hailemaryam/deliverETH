@@ -36,6 +36,8 @@ public class RestorantCriteria implements Serializable, Criteria {
 
     private LongFilter foodId;
 
+    private LongFilter telegramRestaurantUserId;
+
     public RestorantCriteria() {
     }
 
@@ -46,6 +48,7 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.latitude = other.latitude == null ? null : other.latitude.copy();
         this.longtude = other.longtude == null ? null : other.longtude.copy();
         this.foodId = other.foodId == null ? null : other.foodId.copy();
+        this.telegramRestaurantUserId = other.telegramRestaurantUserId == null ? null : other.telegramRestaurantUserId.copy();
     }
 
     @Override
@@ -101,6 +104,14 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.foodId = foodId;
     }
 
+    public LongFilter getTelegramRestaurantUserId() {
+        return telegramRestaurantUserId;
+    }
+
+    public void setTelegramRestaurantUserId(LongFilter telegramRestaurantUserId) {
+        this.telegramRestaurantUserId = telegramRestaurantUserId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -117,7 +128,8 @@ public class RestorantCriteria implements Serializable, Criteria {
             Objects.equals(userName, that.userName) &&
             Objects.equals(latitude, that.latitude) &&
             Objects.equals(longtude, that.longtude) &&
-            Objects.equals(foodId, that.foodId);
+            Objects.equals(foodId, that.foodId) &&
+            Objects.equals(telegramRestaurantUserId, that.telegramRestaurantUserId);
     }
 
     @Override
@@ -128,7 +140,8 @@ public class RestorantCriteria implements Serializable, Criteria {
         userName,
         latitude,
         longtude,
-        foodId
+        foodId,
+        telegramRestaurantUserId
         );
     }
 
@@ -141,6 +154,7 @@ public class RestorantCriteria implements Serializable, Criteria {
                 (latitude != null ? "latitude=" + latitude + ", " : "") +
                 (longtude != null ? "longtude=" + longtude + ", " : "") +
                 (foodId != null ? "foodId=" + foodId + ", " : "") +
+                (telegramRestaurantUserId != null ? "telegramRestaurantUserId=" + telegramRestaurantUserId + ", " : "") +
             "}";
     }
 

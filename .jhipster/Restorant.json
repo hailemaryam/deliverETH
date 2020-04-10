@@ -39,6 +39,14 @@
             "otherEntityName": "food",
             "otherEntityRelationshipName": "restorant",
             "relationshipName": "food"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "telegramRestaurantUser",
+            "otherEntityRelationshipName": "restorant",
+            "relationshipName": "telegramRestaurantUser",
+            "otherEntityField": "userName",
+            "ownerSide": false
         }
     ],
     "changelogDate": "20200322152900",

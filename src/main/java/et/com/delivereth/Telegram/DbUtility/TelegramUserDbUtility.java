@@ -1,6 +1,6 @@
 package et.com.delivereth.Telegram.DbUtility;
 
-import et.com.delivereth.Telegram.Constants.ChatStepConstants;
+import et.com.delivereth.Telegram.telegramUser.ChatStepConstants;
 import et.com.delivereth.service.TelegramUserQueryService;
 import et.com.delivereth.service.TelegramUserService;
 import et.com.delivereth.service.dto.TelegramUserCriteria;

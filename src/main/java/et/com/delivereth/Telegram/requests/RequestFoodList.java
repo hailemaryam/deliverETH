@@ -75,7 +75,7 @@ public class RequestFoodList {
     public String prepareMenu(Page<FoodDTO> foodDTOList){
         String text = "<b>Menu of "+ restorantDbUtitlity.getRestorant(foodDTOList.toList().get(0).getRestorantId()).getName() + " Page " + (foodDTOList.getPageable().getPageNumber()+1) + "</b>\n";
         for (FoodDTO foodDTO: foodDTOList){
-            text += "<i>" + foodDTO.getName() + prepareTick(foodDTO) + foodDTO.getPrice() + ": </i><a>/ADD_TO_CART_" + foodDTO.getId() + "</a>\n";
+            text += "<i>" + foodDTO.getId() + ". " + foodDTO.getName() + prepareTick(foodDTO) + foodDTO.getPrice() + ": </i><a>/ADD_TO_CART_" + foodDTO.getId() + "</a>\n";
         }
         text += "<b>click the add to cart link to select the food.</b>";
         return text;

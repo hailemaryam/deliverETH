@@ -31,6 +31,11 @@ public class DistanceCalculator {
     }
 
     public static void main(String[] args) {
-
+        double lat1 = 53.32055555555556;
+        double lat2 = 53.31861111111111;
+        double lon1 = -1.7297222222222221;
+        double lon2 = -1.6997222222222223;
+        System.out.println(distance(lat1, lat2,
+            lon1, lon2, 0,0) + " M");
     }
 }

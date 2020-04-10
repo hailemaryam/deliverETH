@@ -28,7 +28,7 @@ public class RequestForHelp {
         }
         SendMessage response = new SendMessage();
         response.setChatId(chatId.toString());
-        response.setText("<b>Help</b>\n" +
+        response.setText("<b>\uD83D\uDCD6 Help</b>\n" +
             "DeliverEth is the first Ethiopian telegram bot to bring you fresh foods where ever you are.\n" +
             "Order your favorite dish from your favorite restaurant and it will be delivered at your door steps.\n");
         response.setParseMode("HTML");

@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramRestorant.requests;
 
+import et.com.delivereth.Telegram.telegramRestorant.main.RestaurantTelegramSender;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramSender;
 import org.slf4j.Logger;
@@ -12,9 +13,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Service
 public class RestaurantRequestForHelp {
     private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
-    private final TelegramSender telegramSender;
+    private final RestaurantTelegramSender telegramSender;
 
-    public RestaurantRequestForHelp(TelegramSender telegramSender) {
+    public RestaurantRequestForHelp(RestaurantTelegramSender telegramSender) {
         this.telegramSender = telegramSender;
     }
 
@@ -28,7 +29,7 @@ public class RestaurantRequestForHelp {
         }
         SendMessage response = new SendMessage();
         response.setChatId(chatId.toString());
-        response.setText("<b>Help</b>\n" +
+        response.setText("<b>\uD83D\uDCD6 Help</b>\n" +
             "DeliverEth is the first Ethiopian telegram bot to bring you fresh foods where ever you are.\n" +
             "Order your favorite dish from your favorite restaurant and it will be delivered at your door steps.\n");
         response.setParseMode("HTML");

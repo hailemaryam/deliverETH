@@ -18,8 +18,8 @@ public class RestaurantMainCommandProccessor {
     }
 
     public void commandProccessor(Update update, TelegramRestaurantUserDTO telegramUser){
-//        switch (update.getMessage().getText()) {
-//            case StaticText.cancelOrder:
+        switch (update.getMessage().getText()) {
+            case StaticText.cancelOrder:
 //            case BotCommands.cancel:
 //                restaurantCommandProcessor.cancelOrder(update, telegramUser);
 //                break;
@@ -31,13 +31,13 @@ public class RestaurantMainCommandProccessor {
 //            case BotCommands.myOrders:
 //                restaurantCommandProcessor.myOrder(update, telegramUser);
 //                break;
-//            case StaticText.help:
-//            case BotCommands.help:
-//                restaurantCommandProcessor.help(update, telegramUser);
-//                break;
-//            default:
-//                restaurantMainStepProccessor.mainStepProcessor(update, telegramUser);
-//                break;
-//        }
+            case StaticText.help:
+            case BotCommands.help:
+                restaurantCommandProcessor.help(update, telegramUser);
+                break;
+            default:
+                restaurantMainStepProccessor.mainStepProcessor(update, telegramUser);
+                break;
+        }
     }
 }

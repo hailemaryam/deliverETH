@@ -41,7 +41,7 @@ public class RequestForFinishOrder {
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(telegramUser.getOrderIdPaused());
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(telegramUser.getSelectedRestorant());
         Double transportaionFee = dbUtility.transportaionFee(telegramUser, restorant);
-        String invoice = "<strong>Restaurant Name: " +
+        String invoice = "<strong>\uD83C\uDFE1 Restaurant Name: " +
              restorant.getName() +
             "</strong>\n";
         Double total = orderedFoodDbUtility.getTotalFee(telegramUser.getOrderIdPaused()).doubleValue();

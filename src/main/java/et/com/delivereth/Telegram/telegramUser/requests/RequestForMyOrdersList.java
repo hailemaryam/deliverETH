@@ -56,7 +56,7 @@ public class RequestForMyOrdersList {
         String invoice = "";
 
         if (orderedFoodList.size() > 0) {
-            invoice = invoice +  "<strong>Restaurant Name: " +
+            invoice = invoice +  "<strong>\uD83C\uDFE1 Restaurant Name: " +
                 restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId()).getName() +
                 "</strong>\n";
         }

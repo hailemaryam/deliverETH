@@ -1,11 +1,11 @@
-id;latitude;longtude;location_description;total_price;date;additional_note;order_status
-1;48469;32217;../fake-data/blob/hipster.txt;input Legacy Rupiah;2020-03-21T16:14:46;../fake-data/blob/hipster.txt;CANCELED_BY_USER
-2;20742;55341;../fake-data/blob/hipster.txt;Legacy;2020-03-22T03:43:21;../fake-data/blob/hipster.txt;DELIVERED
-3;96360;61547;../fake-data/blob/hipster.txt;circuit HDD open-source;2020-03-22T15:10:46;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT
-4;89808;73814;../fake-data/blob/hipster.txt;Investment Account Slovenia Creek;2020-03-22T05:35:14;../fake-data/blob/hipster.txt;DELIVERED
-5;29068;66445;../fake-data/blob/hipster.txt;Jewelery;2020-03-21T18:07:03;../fake-data/blob/hipster.txt;ORDERED
-6;67523;26851;../fake-data/blob/hipster.txt;neutral Auto Loan Account Awesome;2020-03-22T04:40:27;../fake-data/blob/hipster.txt;ORDERED
-7;48932;30058;../fake-data/blob/hipster.txt;Gorgeous Regional;2020-03-22T14:20:23;../fake-data/blob/hipster.txt;CANCELED_BY_USER
-8;4373;67766;../fake-data/blob/hipster.txt;Lead Cambridgeshire Dam;2020-03-22T05:09:25;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT_AND_REMOVED
-9;73833;78745;../fake-data/blob/hipster.txt;connecting Games TCP;2020-03-22T05:30:18;../fake-data/blob/hipster.txt;DELIVERED_AND_REMOVED
-10;29612;34916;../fake-data/blob/hipster.txt;Garden;2020-03-21T23:38:20;../fake-data/blob/hipster.txt;DELIVERED_AND_REMOVED
+id;latitude;longtude;location_description;total_price;transportation_fee;date;additional_note;order_status
+1;48469;32217;../fake-data/blob/hipster.txt;74058;74141;2020-03-21T21:40:56;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT
+2;67263;6249;../fake-data/blob/hipster.txt;69947;20742;2020-03-22T02:14:04;../fake-data/blob/hipster.txt;DELIVERED
+3;50210;44495;../fake-data/blob/hipster.txt;39702;48734;2020-03-21T20:49:02;../fake-data/blob/hipster.txt;ORDERED
+4;87953;61371;../fake-data/blob/hipster.txt;36148;67206;2020-03-22T15:10:46;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT
+5;89808;73814;../fake-data/blob/hipster.txt;70320;61533;2020-03-22T04:03:46;../fake-data/blob/hipster.txt;CANCELED_BY_USER
+6;14645;14754;../fake-data/blob/hipster.txt;44552;59066;2020-03-21T16:31:51;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT_AND_REMOVED
+7;12713;38593;../fake-data/blob/hipster.txt;84224;19200;2020-03-21T23:18:39;../fake-data/blob/hipster.txt;CANCELED_BY_USER
+8;59271;85604;../fake-data/blob/hipster.txt;9776;56864;2020-03-22T04:40:27;../fake-data/blob/hipster.txt;ORDERED
+9;48932;30058;../fake-data/blob/hipster.txt;45390;9978;2020-03-22T08:40:03;../fake-data/blob/hipster.txt;ACCEPTED_BY_DRIVER
+10;79375;89583;../fake-data/blob/hipster.txt;73672;4373;2020-03-21T23:15:09;../fake-data/blob/hipster.txt;ACCEPTED_BY_DRIVER

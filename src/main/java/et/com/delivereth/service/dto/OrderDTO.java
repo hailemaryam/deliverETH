@@ -20,7 +20,9 @@ public class OrderDTO implements Serializable {
     @Lob
     private String locationDescription;
 
-    private String totalPrice;
+    private Float totalPrice;
+
+    private Float transportationFee;
 
     private Instant date;
 
@@ -66,12 +68,20 @@ public class OrderDTO implements Serializable {
         this.locationDescription = locationDescription;
     }
 
-    public String getTotalPrice() {
+    public Float getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(String totalPrice) {
+    public void setTotalPrice(Float totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Float getTransportationFee() {
+        return transportationFee;
+    }
+
+    public void setTransportationFee(Float transportationFee) {
+        this.transportationFee = transportationFee;
     }
 
     public Instant getDate() {
@@ -142,7 +152,8 @@ public class OrderDTO implements Serializable {
             ", latitude=" + getLatitude() +
             ", longtude=" + getLongtude() +
             ", locationDescription='" + getLocationDescription() + "'" +
-            ", totalPrice='" + getTotalPrice() + "'" +
+            ", totalPrice=" + getTotalPrice() +
+            ", transportationFee=" + getTransportationFee() +
             ", date='" + getDate() + "'" +
             ", additionalNote='" + getAdditionalNote() + "'" +
             ", orderStatus='" + getOrderStatus() + "'" +

@@ -24,7 +24,10 @@
             <column name="location_description" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="total_price" type="varchar(255)">
+            <column name="total_price" type="${floatType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="transportation_fee" type="${floatType}">
                 <constraints nullable="true" />
             </column>
             <column name="date" type="datetime">
@@ -66,7 +69,8 @@
             <column name="latitude" type="numeric"/>
             <column name="longtude" type="numeric"/>
             <column name="location_description" type="clob"/>
-            <column name="total_price" type="string"/>
+            <column name="total_price" type="numeric"/>
+            <column name="transportation_fee" type="numeric"/>
             <column name="date" type="datetime"/>
             <column name="additional_note" type="clob"/>
             <column name="order_status" type="string"/>

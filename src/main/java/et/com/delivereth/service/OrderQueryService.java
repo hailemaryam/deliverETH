@@ -98,7 +98,10 @@ public class OrderQueryService extends QueryService<Order> {
                 specification = specification.and(buildRangeSpecification(criteria.getLongtude(), Order_.longtude));
             }
             if (criteria.getTotalPrice() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getTotalPrice(), Order_.totalPrice));
+                specification = specification.and(buildRangeSpecification(criteria.getTotalPrice(), Order_.totalPrice));
+            }
+            if (criteria.getTransportationFee() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getTransportationFee(), Order_.transportationFee));
             }
             if (criteria.getDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDate(), Order_.date));

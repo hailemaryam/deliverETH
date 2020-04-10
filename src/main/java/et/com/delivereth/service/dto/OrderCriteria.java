@@ -50,7 +50,9 @@ public class OrderCriteria implements Serializable, Criteria {
 
     private FloatFilter longtude;
 
-    private StringFilter totalPrice;
+    private FloatFilter totalPrice;
+
+    private FloatFilter transportationFee;
 
     private InstantFilter date;
 
@@ -68,6 +70,7 @@ public class OrderCriteria implements Serializable, Criteria {
         this.latitude = other.latitude == null ? null : other.latitude.copy();
         this.longtude = other.longtude == null ? null : other.longtude.copy();
         this.totalPrice = other.totalPrice == null ? null : other.totalPrice.copy();
+        this.transportationFee = other.transportationFee == null ? null : other.transportationFee.copy();
         this.date = other.date == null ? null : other.date.copy();
         this.orderStatus = other.orderStatus == null ? null : other.orderStatus.copy();
         this.orderedFoodId = other.orderedFoodId == null ? null : other.orderedFoodId.copy();
@@ -103,12 +106,20 @@ public class OrderCriteria implements Serializable, Criteria {
         this.longtude = longtude;
     }
 
-    public StringFilter getTotalPrice() {
+    public FloatFilter getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(StringFilter totalPrice) {
+    public void setTotalPrice(FloatFilter totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public FloatFilter getTransportationFee() {
+        return transportationFee;
+    }
+
+    public void setTransportationFee(FloatFilter transportationFee) {
+        this.transportationFee = transportationFee;
     }
 
     public InstantFilter getDate() {
@@ -158,6 +169,7 @@ public class OrderCriteria implements Serializable, Criteria {
             Objects.equals(latitude, that.latitude) &&
             Objects.equals(longtude, that.longtude) &&
             Objects.equals(totalPrice, that.totalPrice) &&
+            Objects.equals(transportationFee, that.transportationFee) &&
             Objects.equals(date, that.date) &&
             Objects.equals(orderStatus, that.orderStatus) &&
             Objects.equals(orderedFoodId, that.orderedFoodId) &&
@@ -171,6 +183,7 @@ public class OrderCriteria implements Serializable, Criteria {
         latitude,
         longtude,
         totalPrice,
+        transportationFee,
         date,
         orderStatus,
         orderedFoodId,
@@ -185,6 +198,7 @@ public class OrderCriteria implements Serializable, Criteria {
                 (latitude != null ? "latitude=" + latitude + ", " : "") +
                 (longtude != null ? "longtude=" + longtude + ", " : "") +
                 (totalPrice != null ? "totalPrice=" + totalPrice + ", " : "") +
+                (transportationFee != null ? "transportationFee=" + transportationFee + ", " : "") +
                 (date != null ? "date=" + date + ", " : "") +
                 (orderStatus != null ? "orderStatus=" + orderStatus + ", " : "") +
                 (orderedFoodId != null ? "orderedFoodId=" + orderedFoodId + ", " : "") +

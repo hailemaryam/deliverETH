@@ -16,7 +16,11 @@
         },
         {
             "fieldName": "totalPrice",
-            "fieldType": "String"
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "transportationFee",
+            "fieldType": "Float"
         },
         {
             "fieldName": "date",

@@ -27,6 +27,7 @@
                     <th scope="col"  jhiSortBy="longtude"><span>Longtude</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="locationDescription"><span>Location Description</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="totalPrice"><span>Total Price</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="transportationFee"><span>Transportation Fee</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="date"><span>Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="additionalNote"><span>Additional Note</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="orderStatus"><span>Order Status</span> <fa-icon icon="sort"></fa-icon></th>
@@ -41,6 +42,7 @@
                     <td>{{ order.longtude }}</td>
                     <td>{{ order.locationDescription }}</td>
                     <td>{{ order.totalPrice }}</td>
+                    <td>{{ order.transportationFee }}</td>
                     <td>{{ order.date | date:'medium' }}</td>
                     <td>{{ order.additionalNote }}</td>
                     <td>{{ order.orderStatus }}</td>

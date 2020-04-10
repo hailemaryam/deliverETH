@@ -52,8 +52,13 @@ public class OrderResourceIT {
     private static final String DEFAULT_LOCATION_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_LOCATION_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_TOTAL_PRICE = "AAAAAAAAAA";
-    private static final String UPDATED_TOTAL_PRICE = "BBBBBBBBBB";
+    private static final Float DEFAULT_TOTAL_PRICE = 1F;
+    private static final Float UPDATED_TOTAL_PRICE = 2F;
+    private static final Float SMALLER_TOTAL_PRICE = 1F - 1F;
+
+    private static final Float DEFAULT_TRANSPORTATION_FEE = 1F;
+    private static final Float UPDATED_TRANSPORTATION_FEE = 2F;
+    private static final Float SMALLER_TRANSPORTATION_FEE = 1F - 1F;
 
     private static final Instant DEFAULT_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -96,6 +101,7 @@ public class OrderResourceIT {
             .longtude(DEFAULT_LONGTUDE)
             .locationDescription(DEFAULT_LOCATION_DESCRIPTION)
             .totalPrice(DEFAULT_TOTAL_PRICE)
+            .transportationFee(DEFAULT_TRANSPORTATION_FEE)
             .date(DEFAULT_DATE)
             .additionalNote(DEFAULT_ADDITIONAL_NOTE)
             .orderStatus(DEFAULT_ORDER_STATUS);
@@ -113,6 +119,7 @@ public class OrderResourceIT {
             .longtude(UPDATED_LONGTUDE)
             .locationDescription(UPDATED_LOCATION_DESCRIPTION)
             .totalPrice(UPDATED_TOTAL_PRICE)
+            .transportationFee(UPDATED_TRANSPORTATION_FEE)
             .date(UPDATED_DATE)
             .additionalNote(UPDATED_ADDITIONAL_NOTE)
             .orderStatus(UPDATED_ORDER_STATUS);
@@ -144,6 +151,7 @@ public class OrderResourceIT {
         assertThat(testOrder.getLongtude()).isEqualTo(DEFAULT_LONGTUDE);
         assertThat(testOrder.getLocationDescription()).isEqualTo(DEFAULT_LOCATION_DESCRIPTION);
         assertThat(testOrder.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
+        assertThat(testOrder.getTransportationFee()).isEqualTo(DEFAULT_TRANSPORTATION_FEE);
         assertThat(testOrder.getDate()).isEqualTo(DEFAULT_DATE);
         assertThat(testOrder.getAdditionalNote()).isEqualTo(DEFAULT_ADDITIONAL_NOTE);
         assertThat(testOrder.getOrderStatus()).isEqualTo(DEFAULT_ORDER_STATUS);
@@ -184,7 +192,8 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].locationDescription").value(hasItem(DEFAULT_LOCATION_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE)))
+            .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.doubleValue())))
+            .andExpect(jsonPath("$.[*].transportationFee").value(hasItem(DEFAULT_TRANSPORTATION_FEE.doubleValue())))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].additionalNote").value(hasItem(DEFAULT_ADDITIONAL_NOTE.toString())))
             .andExpect(jsonPath("$.[*].orderStatus").value(hasItem(DEFAULT_ORDER_STATUS.toString())));
@@ -204,7 +213,8 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE.doubleValue()))
             .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE.doubleValue()))
             .andExpect(jsonPath("$.locationDescription").value(DEFAULT_LOCATION_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE))
+            .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE.doubleValue()))
+            .andExpect(jsonPath("$.transportationFee").value(DEFAULT_TRANSPORTATION_FEE.doubleValue()))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
             .andExpect(jsonPath("$.additionalNote").value(DEFAULT_ADDITIONAL_NOTE.toString()))
             .andExpect(jsonPath("$.orderStatus").value(DEFAULT_ORDER_STATUS.toString()));
@@ -491,30 +501,162 @@ public class OrderResourceIT {
         // Get all the orderList where totalPrice is null
         defaultOrderShouldNotBeFound("totalPrice.specified=false");
     }
-                @Test
+
+    @Test
     @Transactional
-    public void getAllOrdersByTotalPriceContainsSomething() throws Exception {
+    public void getAllOrdersByTotalPriceIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         orderRepository.saveAndFlush(order);
 
-        // Get all the orderList where totalPrice contains DEFAULT_TOTAL_PRICE
-        defaultOrderShouldBeFound("totalPrice.contains=" + DEFAULT_TOTAL_PRICE);
+        // Get all the orderList where totalPrice is greater than or equal to DEFAULT_TOTAL_PRICE
+        defaultOrderShouldBeFound("totalPrice.greaterThanOrEqual=" + DEFAULT_TOTAL_PRICE);
 
-        // Get all the orderList where totalPrice contains UPDATED_TOTAL_PRICE
-        defaultOrderShouldNotBeFound("totalPrice.contains=" + UPDATED_TOTAL_PRICE);
+        // Get all the orderList where totalPrice is greater than or equal to UPDATED_TOTAL_PRICE
+        defaultOrderShouldNotBeFound("totalPrice.greaterThanOrEqual=" + UPDATED_TOTAL_PRICE);
     }
 
     @Test
     @Transactional
-    public void getAllOrdersByTotalPriceNotContainsSomething() throws Exception {
+    public void getAllOrdersByTotalPriceIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         orderRepository.saveAndFlush(order);
 
-        // Get all the orderList where totalPrice does not contain DEFAULT_TOTAL_PRICE
-        defaultOrderShouldNotBeFound("totalPrice.doesNotContain=" + DEFAULT_TOTAL_PRICE);
+        // Get all the orderList where totalPrice is less than or equal to DEFAULT_TOTAL_PRICE
+        defaultOrderShouldBeFound("totalPrice.lessThanOrEqual=" + DEFAULT_TOTAL_PRICE);
 
-        // Get all the orderList where totalPrice does not contain UPDATED_TOTAL_PRICE
-        defaultOrderShouldBeFound("totalPrice.doesNotContain=" + UPDATED_TOTAL_PRICE);
+        // Get all the orderList where totalPrice is less than or equal to SMALLER_TOTAL_PRICE
+        defaultOrderShouldNotBeFound("totalPrice.lessThanOrEqual=" + SMALLER_TOTAL_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTotalPriceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where totalPrice is less than DEFAULT_TOTAL_PRICE
+        defaultOrderShouldNotBeFound("totalPrice.lessThan=" + DEFAULT_TOTAL_PRICE);
+
+        // Get all the orderList where totalPrice is less than UPDATED_TOTAL_PRICE
+        defaultOrderShouldBeFound("totalPrice.lessThan=" + UPDATED_TOTAL_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTotalPriceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where totalPrice is greater than DEFAULT_TOTAL_PRICE
+        defaultOrderShouldNotBeFound("totalPrice.greaterThan=" + DEFAULT_TOTAL_PRICE);
+
+        // Get all the orderList where totalPrice is greater than SMALLER_TOTAL_PRICE
+        defaultOrderShouldBeFound("totalPrice.greaterThan=" + SMALLER_TOTAL_PRICE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportationFeeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportationFee equals to DEFAULT_TRANSPORTATION_FEE
+        defaultOrderShouldBeFound("transportationFee.equals=" + DEFAULT_TRANSPORTATION_FEE);
+
+        // Get all the orderList where transportationFee equals to UPDATED_TRANSPORTATION_FEE
+        defaultOrderShouldNotBeFound("transportationFee.equals=" + UPDATED_TRANSPORTATION_FEE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportationFeeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportationFee not equals to DEFAULT_TRANSPORTATION_FEE
+        defaultOrderShouldNotBeFound("transportationFee.notEquals=" + DEFAULT_TRANSPORTATION_FEE);
+
+        // Get all the orderList where transportationFee not equals to UPDATED_TRANSPORTATION_FEE
+        defaultOrderShouldBeFound("transportationFee.notEquals=" + UPDATED_TRANSPORTATION_FEE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportationFeeIsInShouldWork() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportationFee in DEFAULT_TRANSPORTATION_FEE or UPDATED_TRANSPORTATION_FEE
+        defaultOrderShouldBeFound("transportationFee.in=" + DEFAULT_TRANSPORTATION_FEE + "," + UPDATED_TRANSPORTATION_FEE);
+
+        // Get all the orderList where transportationFee equals to UPDATED_TRANSPORTATION_FEE
+        defaultOrderShouldNotBeFound("transportationFee.in=" + UPDATED_TRANSPORTATION_FEE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportationFeeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportationFee is not null
+        defaultOrderShouldBeFound("transportationFee.specified=true");
+
+        // Get all the orderList where transportationFee is null
+        defaultOrderShouldNotBeFound("transportationFee.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportationFeeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportationFee is greater than or equal to DEFAULT_TRANSPORTATION_FEE
+        defaultOrderShouldBeFound("transportationFee.greaterThanOrEqual=" + DEFAULT_TRANSPORTATION_FEE);
+
+        // Get all the orderList where transportationFee is greater than or equal to UPDATED_TRANSPORTATION_FEE
+        defaultOrderShouldNotBeFound("transportationFee.greaterThanOrEqual=" + UPDATED_TRANSPORTATION_FEE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportationFeeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportationFee is less than or equal to DEFAULT_TRANSPORTATION_FEE
+        defaultOrderShouldBeFound("transportationFee.lessThanOrEqual=" + DEFAULT_TRANSPORTATION_FEE);
+
+        // Get all the orderList where transportationFee is less than or equal to SMALLER_TRANSPORTATION_FEE
+        defaultOrderShouldNotBeFound("transportationFee.lessThanOrEqual=" + SMALLER_TRANSPORTATION_FEE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportationFeeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportationFee is less than DEFAULT_TRANSPORTATION_FEE
+        defaultOrderShouldNotBeFound("transportationFee.lessThan=" + DEFAULT_TRANSPORTATION_FEE);
+
+        // Get all the orderList where transportationFee is less than UPDATED_TRANSPORTATION_FEE
+        defaultOrderShouldBeFound("transportationFee.lessThan=" + UPDATED_TRANSPORTATION_FEE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportationFeeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportationFee is greater than DEFAULT_TRANSPORTATION_FEE
+        defaultOrderShouldNotBeFound("transportationFee.greaterThan=" + DEFAULT_TRANSPORTATION_FEE);
+
+        // Get all the orderList where transportationFee is greater than SMALLER_TRANSPORTATION_FEE
+        defaultOrderShouldBeFound("transportationFee.greaterThan=" + SMALLER_TRANSPORTATION_FEE);
     }
 
 
@@ -672,7 +814,8 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].locationDescription").value(hasItem(DEFAULT_LOCATION_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE)))
+            .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.doubleValue())))
+            .andExpect(jsonPath("$.[*].transportationFee").value(hasItem(DEFAULT_TRANSPORTATION_FEE.doubleValue())))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].additionalNote").value(hasItem(DEFAULT_ADDITIONAL_NOTE.toString())))
             .andExpect(jsonPath("$.[*].orderStatus").value(hasItem(DEFAULT_ORDER_STATUS.toString())));
@@ -727,6 +870,7 @@ public class OrderResourceIT {
             .longtude(UPDATED_LONGTUDE)
             .locationDescription(UPDATED_LOCATION_DESCRIPTION)
             .totalPrice(UPDATED_TOTAL_PRICE)
+            .transportationFee(UPDATED_TRANSPORTATION_FEE)
             .date(UPDATED_DATE)
             .additionalNote(UPDATED_ADDITIONAL_NOTE)
             .orderStatus(UPDATED_ORDER_STATUS);
@@ -745,6 +889,7 @@ public class OrderResourceIT {
         assertThat(testOrder.getLongtude()).isEqualTo(UPDATED_LONGTUDE);
         assertThat(testOrder.getLocationDescription()).isEqualTo(UPDATED_LOCATION_DESCRIPTION);
         assertThat(testOrder.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
+        assertThat(testOrder.getTransportationFee()).isEqualTo(UPDATED_TRANSPORTATION_FEE);
         assertThat(testOrder.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testOrder.getAdditionalNote()).isEqualTo(UPDATED_ADDITIONAL_NOTE);
         assertThat(testOrder.getOrderStatus()).isEqualTo(UPDATED_ORDER_STATUS);

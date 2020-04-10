@@ -42,7 +42,10 @@ public class Order implements Serializable {
     private String locationDescription;
 
     @Column(name = "total_price")
-    private String totalPrice;
+    private Float totalPrice;
+
+    @Column(name = "transportation_fee")
+    private Float transportationFee;
 
     @Column(name = "date")
     private Instant date;
@@ -112,17 +115,30 @@ public class Order implements Serializable {
         this.locationDescription = locationDescription;
     }
 
-    public String getTotalPrice() {
+    public Float getTotalPrice() {
         return totalPrice;
     }
 
-    public Order totalPrice(String totalPrice) {
+    public Order totalPrice(Float totalPrice) {
         this.totalPrice = totalPrice;
         return this;
     }
 
-    public void setTotalPrice(String totalPrice) {
+    public void setTotalPrice(Float totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Float getTransportationFee() {
+        return transportationFee;
+    }
+
+    public Order transportationFee(Float transportationFee) {
+        this.transportationFee = transportationFee;
+        return this;
+    }
+
+    public void setTransportationFee(Float transportationFee) {
+        this.transportationFee = transportationFee;
     }
 
     public Instant getDate() {
@@ -226,7 +242,8 @@ public class Order implements Serializable {
             ", latitude=" + getLatitude() +
             ", longtude=" + getLongtude() +
             ", locationDescription='" + getLocationDescription() + "'" +
-            ", totalPrice='" + getTotalPrice() + "'" +
+            ", totalPrice=" + getTotalPrice() +
+            ", transportationFee=" + getTransportationFee() +
             ", date='" + getDate() + "'" +
             ", additionalNote='" + getAdditionalNote() + "'" +
             ", orderStatus='" + getOrderStatus() + "'" +

@@ -28,6 +28,8 @@ public class RestorantDTO implements Serializable {
 
     private Float longtude;
 
+    private Integer availableOrderCap;
+
     
     public Long getId() {
         return id;
@@ -93,6 +95,14 @@ public class RestorantDTO implements Serializable {
         this.longtude = longtude;
     }
 
+    public Integer getAvailableOrderCap() {
+        return availableOrderCap;
+    }
+
+    public void setAvailableOrderCap(Integer availableOrderCap) {
+        this.availableOrderCap = availableOrderCap;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -124,6 +134,7 @@ public class RestorantDTO implements Serializable {
             ", iconImage='" + getIconImage() + "'" +
             ", latitude=" + getLatitude() +
             ", longtude=" + getLongtude() +
+            ", availableOrderCap=" + getAvailableOrderCap() +
             "}";
     }
 }

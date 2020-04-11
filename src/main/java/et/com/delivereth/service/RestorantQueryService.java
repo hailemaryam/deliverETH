@@ -103,6 +103,9 @@ public class RestorantQueryService extends QueryService<Restorant> {
             if (criteria.getLongtude() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getLongtude(), Restorant_.longtude));
             }
+            if (criteria.getAvailableOrderCap() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getAvailableOrderCap(), Restorant_.availableOrderCap));
+            }
             if (criteria.getFoodId() != null) {
                 specification = specification.and(buildSpecification(criteria.getFoodId(),
                     root -> root.join(Restorant_.foods, JoinType.LEFT).get(Food_.id)));

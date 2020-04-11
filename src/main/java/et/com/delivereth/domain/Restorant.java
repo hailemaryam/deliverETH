@@ -53,6 +53,9 @@ public class Restorant implements Serializable {
     @Column(name = "longtude")
     private Float longtude;
 
+    @Column(name = "available_order_cap")
+    private Integer availableOrderCap;
+
     @OneToMany(mappedBy = "restorant")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Food> foods = new HashSet<>();
@@ -162,6 +165,19 @@ public class Restorant implements Serializable {
         this.longtude = longtude;
     }
 
+    public Integer getAvailableOrderCap() {
+        return availableOrderCap;
+    }
+
+    public Restorant availableOrderCap(Integer availableOrderCap) {
+        this.availableOrderCap = availableOrderCap;
+        return this;
+    }
+
+    public void setAvailableOrderCap(Integer availableOrderCap) {
+        this.availableOrderCap = availableOrderCap;
+    }
+
     public Set<Food> getFoods() {
         return foods;
     }
@@ -240,6 +256,7 @@ public class Restorant implements Serializable {
             ", iconImageContentType='" + getIconImageContentType() + "'" +
             ", latitude=" + getLatitude() +
             ", longtude=" + getLongtude() +
+            ", availableOrderCap=" + getAvailableOrderCap() +
             "}";
     }
 }

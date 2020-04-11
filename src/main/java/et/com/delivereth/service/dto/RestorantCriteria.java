@@ -34,6 +34,8 @@ public class RestorantCriteria implements Serializable, Criteria {
 
     private FloatFilter longtude;
 
+    private IntegerFilter availableOrderCap;
+
     private LongFilter foodId;
 
     private LongFilter telegramRestaurantUserId;
@@ -47,6 +49,7 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.userName = other.userName == null ? null : other.userName.copy();
         this.latitude = other.latitude == null ? null : other.latitude.copy();
         this.longtude = other.longtude == null ? null : other.longtude.copy();
+        this.availableOrderCap = other.availableOrderCap == null ? null : other.availableOrderCap.copy();
         this.foodId = other.foodId == null ? null : other.foodId.copy();
         this.telegramRestaurantUserId = other.telegramRestaurantUserId == null ? null : other.telegramRestaurantUserId.copy();
     }
@@ -96,6 +99,14 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.longtude = longtude;
     }
 
+    public IntegerFilter getAvailableOrderCap() {
+        return availableOrderCap;
+    }
+
+    public void setAvailableOrderCap(IntegerFilter availableOrderCap) {
+        this.availableOrderCap = availableOrderCap;
+    }
+
     public LongFilter getFoodId() {
         return foodId;
     }
@@ -128,6 +139,7 @@ public class RestorantCriteria implements Serializable, Criteria {
             Objects.equals(userName, that.userName) &&
             Objects.equals(latitude, that.latitude) &&
             Objects.equals(longtude, that.longtude) &&
+            Objects.equals(availableOrderCap, that.availableOrderCap) &&
             Objects.equals(foodId, that.foodId) &&
             Objects.equals(telegramRestaurantUserId, that.telegramRestaurantUserId);
     }
@@ -140,6 +152,7 @@ public class RestorantCriteria implements Serializable, Criteria {
         userName,
         latitude,
         longtude,
+        availableOrderCap,
         foodId,
         telegramRestaurantUserId
         );
@@ -153,6 +166,7 @@ public class RestorantCriteria implements Serializable, Criteria {
                 (userName != null ? "userName=" + userName + ", " : "") +
                 (latitude != null ? "latitude=" + latitude + ", " : "") +
                 (longtude != null ? "longtude=" + longtude + ", " : "") +
+                (availableOrderCap != null ? "availableOrderCap=" + availableOrderCap + ", " : "") +
                 (foodId != null ? "foodId=" + foodId + ", " : "") +
                 (telegramRestaurantUserId != null ? "telegramRestaurantUserId=" + telegramRestaurantUserId + ", " : "") +
             "}";

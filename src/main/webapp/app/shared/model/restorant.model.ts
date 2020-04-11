@@ -10,6 +10,7 @@ export interface IRestorant {
   iconImage?: any;
   latitude?: number;
   longtude?: number;
+  availableOrderCap?: number;
   foods?: IFood[];
   telegramRestaurantUsers?: ITelegramRestaurantUser[];
 }
@@ -24,6 +25,7 @@ export class Restorant implements IRestorant {
     public iconImage?: any,
     public latitude?: number,
     public longtude?: number,
+    public availableOrderCap?: number,
     public foods?: IFood[],
     public telegramRestaurantUsers?: ITelegramRestaurantUser[]
   ) {}

@@ -60,6 +60,10 @@ public class RestorantResourceIT {
     private static final Float UPDATED_LONGTUDE = 2F;
     private static final Float SMALLER_LONGTUDE = 1F - 1F;
 
+    private static final Integer DEFAULT_AVAILABLE_ORDER_CAP = 1;
+    private static final Integer UPDATED_AVAILABLE_ORDER_CAP = 2;
+    private static final Integer SMALLER_AVAILABLE_ORDER_CAP = 1 - 1;
+
     @Autowired
     private RestorantRepository restorantRepository;
 
@@ -94,7 +98,8 @@ public class RestorantResourceIT {
             .iconImage(DEFAULT_ICON_IMAGE)
             .iconImageContentType(DEFAULT_ICON_IMAGE_CONTENT_TYPE)
             .latitude(DEFAULT_LATITUDE)
-            .longtude(DEFAULT_LONGTUDE);
+            .longtude(DEFAULT_LONGTUDE)
+            .availableOrderCap(DEFAULT_AVAILABLE_ORDER_CAP);
         return restorant;
     }
     /**
@@ -111,7 +116,8 @@ public class RestorantResourceIT {
             .iconImage(UPDATED_ICON_IMAGE)
             .iconImageContentType(UPDATED_ICON_IMAGE_CONTENT_TYPE)
             .latitude(UPDATED_LATITUDE)
-            .longtude(UPDATED_LONGTUDE);
+            .longtude(UPDATED_LONGTUDE)
+            .availableOrderCap(UPDATED_AVAILABLE_ORDER_CAP);
         return restorant;
     }
 
@@ -143,6 +149,7 @@ public class RestorantResourceIT {
         assertThat(testRestorant.getIconImageContentType()).isEqualTo(DEFAULT_ICON_IMAGE_CONTENT_TYPE);
         assertThat(testRestorant.getLatitude()).isEqualTo(DEFAULT_LATITUDE);
         assertThat(testRestorant.getLongtude()).isEqualTo(DEFAULT_LONGTUDE);
+        assertThat(testRestorant.getAvailableOrderCap()).isEqualTo(DEFAULT_AVAILABLE_ORDER_CAP);
     }
 
     @Test
@@ -183,7 +190,8 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.[*].iconImageContentType").value(hasItem(DEFAULT_ICON_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].iconImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE))))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
-            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())));
+            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())))
+            .andExpect(jsonPath("$.[*].availableOrderCap").value(hasItem(DEFAULT_AVAILABLE_ORDER_CAP)));
     }
     
     @Test
@@ -203,7 +211,8 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.iconImageContentType").value(DEFAULT_ICON_IMAGE_CONTENT_TYPE))
             .andExpect(jsonPath("$.iconImage").value(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE)))
             .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE.doubleValue()))
-            .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE.doubleValue()));
+            .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE.doubleValue()))
+            .andExpect(jsonPath("$.availableOrderCap").value(DEFAULT_AVAILABLE_ORDER_CAP));
     }
 
 
@@ -594,6 +603,111 @@ public class RestorantResourceIT {
 
     @Test
     @Transactional
+    public void getAllRestorantsByAvailableOrderCapIsEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where availableOrderCap equals to DEFAULT_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldBeFound("availableOrderCap.equals=" + DEFAULT_AVAILABLE_ORDER_CAP);
+
+        // Get all the restorantList where availableOrderCap equals to UPDATED_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldNotBeFound("availableOrderCap.equals=" + UPDATED_AVAILABLE_ORDER_CAP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByAvailableOrderCapIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where availableOrderCap not equals to DEFAULT_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldNotBeFound("availableOrderCap.notEquals=" + DEFAULT_AVAILABLE_ORDER_CAP);
+
+        // Get all the restorantList where availableOrderCap not equals to UPDATED_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldBeFound("availableOrderCap.notEquals=" + UPDATED_AVAILABLE_ORDER_CAP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByAvailableOrderCapIsInShouldWork() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where availableOrderCap in DEFAULT_AVAILABLE_ORDER_CAP or UPDATED_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldBeFound("availableOrderCap.in=" + DEFAULT_AVAILABLE_ORDER_CAP + "," + UPDATED_AVAILABLE_ORDER_CAP);
+
+        // Get all the restorantList where availableOrderCap equals to UPDATED_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldNotBeFound("availableOrderCap.in=" + UPDATED_AVAILABLE_ORDER_CAP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByAvailableOrderCapIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where availableOrderCap is not null
+        defaultRestorantShouldBeFound("availableOrderCap.specified=true");
+
+        // Get all the restorantList where availableOrderCap is null
+        defaultRestorantShouldNotBeFound("availableOrderCap.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByAvailableOrderCapIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where availableOrderCap is greater than or equal to DEFAULT_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldBeFound("availableOrderCap.greaterThanOrEqual=" + DEFAULT_AVAILABLE_ORDER_CAP);
+
+        // Get all the restorantList where availableOrderCap is greater than or equal to UPDATED_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldNotBeFound("availableOrderCap.greaterThanOrEqual=" + UPDATED_AVAILABLE_ORDER_CAP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByAvailableOrderCapIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where availableOrderCap is less than or equal to DEFAULT_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldBeFound("availableOrderCap.lessThanOrEqual=" + DEFAULT_AVAILABLE_ORDER_CAP);
+
+        // Get all the restorantList where availableOrderCap is less than or equal to SMALLER_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldNotBeFound("availableOrderCap.lessThanOrEqual=" + SMALLER_AVAILABLE_ORDER_CAP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByAvailableOrderCapIsLessThanSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where availableOrderCap is less than DEFAULT_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldNotBeFound("availableOrderCap.lessThan=" + DEFAULT_AVAILABLE_ORDER_CAP);
+
+        // Get all the restorantList where availableOrderCap is less than UPDATED_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldBeFound("availableOrderCap.lessThan=" + UPDATED_AVAILABLE_ORDER_CAP);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByAvailableOrderCapIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where availableOrderCap is greater than DEFAULT_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldNotBeFound("availableOrderCap.greaterThan=" + DEFAULT_AVAILABLE_ORDER_CAP);
+
+        // Get all the restorantList where availableOrderCap is greater than SMALLER_AVAILABLE_ORDER_CAP
+        defaultRestorantShouldBeFound("availableOrderCap.greaterThan=" + SMALLER_AVAILABLE_ORDER_CAP);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllRestorantsByFoodIsEqualToSomething() throws Exception {
         // Initialize the database
         restorantRepository.saveAndFlush(restorant);
@@ -645,7 +759,8 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.[*].iconImageContentType").value(hasItem(DEFAULT_ICON_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].iconImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE))))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
-            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())));
+            .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())))
+            .andExpect(jsonPath("$.[*].availableOrderCap").value(hasItem(DEFAULT_AVAILABLE_ORDER_CAP)));
 
         // Check, that the count call also returns 1
         restRestorantMockMvc.perform(get("/api/restorants/count?sort=id,desc&" + filter))
@@ -699,7 +814,8 @@ public class RestorantResourceIT {
             .iconImage(UPDATED_ICON_IMAGE)
             .iconImageContentType(UPDATED_ICON_IMAGE_CONTENT_TYPE)
             .latitude(UPDATED_LATITUDE)
-            .longtude(UPDATED_LONGTUDE);
+            .longtude(UPDATED_LONGTUDE)
+            .availableOrderCap(UPDATED_AVAILABLE_ORDER_CAP);
         RestorantDTO restorantDTO = restorantMapper.toDto(updatedRestorant);
 
         restRestorantMockMvc.perform(put("/api/restorants")
@@ -718,6 +834,7 @@ public class RestorantResourceIT {
         assertThat(testRestorant.getIconImageContentType()).isEqualTo(UPDATED_ICON_IMAGE_CONTENT_TYPE);
         assertThat(testRestorant.getLatitude()).isEqualTo(UPDATED_LATITUDE);
         assertThat(testRestorant.getLongtude()).isEqualTo(UPDATED_LONGTUDE);
+        assertThat(testRestorant.getAvailableOrderCap()).isEqualTo(UPDATED_AVAILABLE_ORDER_CAP);
     }
 
     @Test

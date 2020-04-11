@@ -1,11 +1,11 @@
 id;latitude;longtude;location_description;total_price;transportation_fee;date;additional_note;order_status
-1;48469;32217;../fake-data/blob/hipster.txt;74058;74141;2020-03-21T21:40:56;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT
-2;67263;6249;../fake-data/blob/hipster.txt;69947;20742;2020-03-22T02:14:04;../fake-data/blob/hipster.txt;DELIVERED
+1;48469;32217;../fake-data/blob/hipster.txt;74058;74141;2020-03-21T21:40:56;../fake-data/blob/hipster.txt;DELIVERED
+2;67263;6249;../fake-data/blob/hipster.txt;69947;20742;2020-03-22T02:14:04;../fake-data/blob/hipster.txt;ACCEPTED_BY_DRIVER
 3;50210;44495;../fake-data/blob/hipster.txt;39702;48734;2020-03-21T20:49:02;../fake-data/blob/hipster.txt;ORDERED
 4;87953;61371;../fake-data/blob/hipster.txt;36148;67206;2020-03-22T15:10:46;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT
 5;89808;73814;../fake-data/blob/hipster.txt;70320;61533;2020-03-22T04:03:46;../fake-data/blob/hipster.txt;CANCELED_BY_USER
-6;14645;14754;../fake-data/blob/hipster.txt;44552;59066;2020-03-21T16:31:51;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT_AND_REMOVED
-7;12713;38593;../fake-data/blob/hipster.txt;84224;19200;2020-03-21T23:18:39;../fake-data/blob/hipster.txt;CANCELED_BY_USER
+6;14645;14754;../fake-data/blob/hipster.txt;44552;59066;2020-03-21T16:31:51;../fake-data/blob/hipster.txt;DELIVERED_AND_REMOVED
+7;12713;38593;../fake-data/blob/hipster.txt;84224;19200;2020-03-21T23:18:39;../fake-data/blob/hipster.txt;CANCELED_BY_RESTAURANT
 8;59271;85604;../fake-data/blob/hipster.txt;9776;56864;2020-03-22T04:40:27;../fake-data/blob/hipster.txt;ORDERED
-9;48932;30058;../fake-data/blob/hipster.txt;45390;9978;2020-03-22T08:40:03;../fake-data/blob/hipster.txt;ACCEPTED_BY_DRIVER
+9;48932;30058;../fake-data/blob/hipster.txt;45390;9978;2020-03-22T08:40:03;../fake-data/blob/hipster.txt;READY_FOR_DELIVERY
 10;79375;89583;../fake-data/blob/hipster.txt;73672;4373;2020-03-21T23:15:09;../fake-data/blob/hipster.txt;ACCEPTED_BY_DRIVER

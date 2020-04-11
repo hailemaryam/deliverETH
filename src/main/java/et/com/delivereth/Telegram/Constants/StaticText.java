@@ -17,5 +17,5 @@ public class StaticText {
     public static final String acceptOrder = "\uD83D\uDC4D Accepted";
     public static final String readyForDeliver = "\uD83D\uDED2 Ready For Delivery";
     public static final String rejectOrder = "\uD83D\uDEAB Reject";
-    public static final String sent = "\uD83D\uDEB2 Sent";
+    public static final String sent = "\uD83D\uDEB2 Sent For Delivery";
 }

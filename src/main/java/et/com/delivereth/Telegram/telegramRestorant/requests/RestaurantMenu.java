@@ -23,7 +23,9 @@ public class RestaurantMenu {
         }
         if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT)) {
             rowInline.add(new InlineKeyboardButton().setText(StaticText.readyForDeliver).setCallbackData("ready_" + orderDTO.getId()));
-            rowInline.add(new InlineKeyboardButton().setText(StaticText.sent).setCallbackData("sent_" + orderDTO.getId()));
+        }
+        if (orderDTO.getOrderStatus().equals(OrderStatus.READY_FOR_DELIVERY)) {
+            rowInline.add(new InlineKeyboardButton().setText(StaticText.sent).setCallbackData("send_" + orderDTO.getId()));
         }
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);

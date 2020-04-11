@@ -1,6 +1,7 @@
 package et.com.delivereth.Telegram.telegramRestorant.requests;
 
 import et.com.delivereth.Telegram.DbUtility.*;
+import et.com.delivereth.Telegram.telegramRestorant.ChatStepConstants;
 import et.com.delivereth.Telegram.telegramRestorant.main.RestaurantTelegramSender;
 import et.com.delivereth.service.dto.*;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class RestaurantRequestForNewOrder {
         this.telegramRestaurantUserDbUtility = telegramRestaurantUserDbUtility;
     }
 
-    private void sendNewOrder(OrderDTO orderDTO) {
+    public void sendNewOrder(OrderDTO orderDTO) {
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId());
         List<TelegramRestaurantUserDTO> restaurantUsers = telegramRestaurantUserDbUtility.getRestaurantUsers(restorant);
@@ -36,7 +37,7 @@ public class RestaurantRequestForNewOrder {
             sendNewOrder(telegramRestaurantUserDTO, restorant, orderedFoodList, orderDTO);
         }
     }
-    private void sendNewOrder(TelegramRestaurantUserDTO telegramRestaurantUserDTO, RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO){
+    public void sendNewOrder(TelegramRestaurantUserDTO telegramRestaurantUserDTO, RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO){
         SendMessage response = new SendMessage();
         String invoice = "";
         invoice = invoice +  "<strong>\uD83C\uDFE1 Restaurant Name: " +

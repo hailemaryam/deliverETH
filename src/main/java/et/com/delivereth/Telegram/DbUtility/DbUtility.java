@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.DbUtility;
 
+import et.com.delivereth.Telegram.telegramRestorant.requests.RestaurantRequestForNewOrder;
 import et.com.delivereth.Telegram.telegramUser.ChatStepConstants;
 import et.com.delivereth.Telegram.OtherUtility.DistanceCalculator;
 import et.com.delivereth.domain.enumeration.OrderStatus;
@@ -18,13 +19,15 @@ public class DbUtility {
     private final OrderedFoodService orderedFoodService;
     private final RestorantService restorantService;
     private final OrderedFoodDbUtility orderedFoodDbUtility;
+    private final RestaurantRequestForNewOrder requestForNewOrder;
 
-    public DbUtility(TelegramUserService telegramUserService, OrderService orderService, OrderedFoodService orderedFoodService, RestorantService restorantService, OrderedFoodDbUtility orderedFoodDbUtility) {
+    public DbUtility(TelegramUserService telegramUserService, OrderService orderService, OrderedFoodService orderedFoodService, RestorantService restorantService, OrderedFoodDbUtility orderedFoodDbUtility, RestaurantRequestForNewOrder requestForNewOrder) {
         this.telegramUserService = telegramUserService;
         this.orderService = orderService;
         this.orderedFoodService = orderedFoodService;
         this.restorantService = restorantService;
         this.orderedFoodDbUtility = orderedFoodDbUtility;
+        this.requestForNewOrder = requestForNewOrder;
     }
 
     public void cancelOrder(TelegramUserDTO telegramUser) {
@@ -69,7 +72,7 @@ public class DbUtility {
             order.setTransportationFee(transportaionFee(telegramUser, restorant).floatValue());
             order.setOrderStatus(OrderStatus.ORDERED);
             order.setDate(Instant.now());
-            orderService.save(order);
+            order = orderService.save(order);
         }
         telegramUser.setOrderedFoodIdPaused(null);
         telegramUser.setOrderIdPaused(null);
@@ -77,6 +80,7 @@ public class DbUtility {
         telegramUser.setLoadedPage(null);
         telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
         telegramUserService.save(telegramUser);
+        requestForNewOrder.sendNewOrder(order);
     }
     public Double transportaionFee(TelegramUserDTO telegramUser, RestorantDTO restorantDTO){
         OrderDTO orderDTO;

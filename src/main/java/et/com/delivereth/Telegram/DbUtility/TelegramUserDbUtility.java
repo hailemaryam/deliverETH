@@ -55,6 +55,9 @@ public class TelegramUserDbUtility {
         }
         return telegramUserDTOList.size() > 0 ? telegramUserDTOList.get(0): null;
     }
+    public TelegramUserDTO getTelegramUser(Long id){
+        return telegramUserService.findOne(id).orElse(null);
+    }
     public void updateTelegramUser(TelegramUserDTO telegramUser){
         telegramUserService.save(telegramUser);
     }

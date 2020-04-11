@@ -60,14 +60,15 @@ public class OrderDbUtility {
             orderService.save(orderTobeUpdated);
         }
     }
-    public void changeOrderStatusById(Long id, OrderStatus orderStatus) {
+    public OrderDTO changeOrderStatusById(Long id, OrderStatus orderStatus) {
         Optional<OrderDTO> order = orderService.findOne(id);
         if (order.isPresent()) {
             OrderDTO orderTobeUpdated = order.get();
             orderTobeUpdated.setOrderStatus(orderStatus);
             orderTobeUpdated.setDate(Instant.now());
-            orderService.save(orderTobeUpdated);
+            return orderService.save(orderTobeUpdated);
         }
+        return null;
     }
     public Page<OrderDTO> getMyOrders(TelegramUserDTO telegramUser){
         List<OrderStatus> orderStatusList = new ArrayList<>();

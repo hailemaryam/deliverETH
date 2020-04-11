@@ -10,11 +10,13 @@ public class RestaurantMainStepProccessor {
     private final RestaurantCommandProcessor restaurantCommandProcessor;
     private final RestaurantWaitingForContactResponseProcessor restaurantWaitingForContactResponseProcessor;
     private final RestaurantWaitingForAccountLinkProcessor restaurantWaitingForAccountLinkProcessor;
+    private final RestaurantWaitingForOrderListProcessor restaurantWaitingForOrderListProcessor;
 
-    public RestaurantMainStepProccessor(RestaurantCommandProcessor restaurantCommandProcessor, RestaurantWaitingForContactResponseProcessor restaurantWaitingForContactResponseProcessor, RestaurantWaitingForAccountLinkProcessor restaurantWaitingForAccountLinkProcessor) {
+    public RestaurantMainStepProccessor(RestaurantCommandProcessor restaurantCommandProcessor, RestaurantWaitingForContactResponseProcessor restaurantWaitingForContactResponseProcessor, RestaurantWaitingForAccountLinkProcessor restaurantWaitingForAccountLinkProcessor, RestaurantWaitingForOrderListProcessor restaurantWaitingForOrderListProcessor) {
         this.restaurantCommandProcessor = restaurantCommandProcessor;
         this.restaurantWaitingForContactResponseProcessor = restaurantWaitingForContactResponseProcessor;
         this.restaurantWaitingForAccountLinkProcessor = restaurantWaitingForAccountLinkProcessor;
+        this.restaurantWaitingForOrderListProcessor = restaurantWaitingForOrderListProcessor;
     }
 
     public void mainStepProcessor(Update update, TelegramRestaurantUserDTO telegramUser){
@@ -25,9 +27,9 @@ public class RestaurantMainStepProccessor {
             case ChatStepConstants.WAITING_FOR_ACCOUNT_LINKING_RESPONSE:
                 restaurantWaitingForAccountLinkProcessor.requestUserForAccountLinking(update, telegramUser);
                 break;
-//            case ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE:
-//                restaurantWaitingForMyOrderListResponseProcessor.processMyOrderResponse(update, telegramUser);
-//                break;
+            case ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE:
+                restaurantWaitingForOrderListProcessor.processOrder(update, telegramUser);
+                break;
             default:
                 restaurantCommandProcessor.requestForErrorResponder(update, telegramUser);
                 break;

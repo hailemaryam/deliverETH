@@ -8,24 +8,19 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
-public class RestaurantWaitingForContactResponseProcessor {
+public class RestaurantWaitingForAccountLinkProcessor {
     private final RestaurantRequestContact restaurantRequestContact;
     private final RestaurantRequestForAccountLiking restaurantRequestForAccountLiking;
     private final TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility;
 
-    public RestaurantWaitingForContactResponseProcessor(RestaurantRequestContact restaurantRequestContact, RestaurantRequestForAccountLiking restaurantRequestForAccountLiking, TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility) {
+    public RestaurantWaitingForAccountLinkProcessor(RestaurantRequestContact restaurantRequestContact, RestaurantRequestForAccountLiking restaurantRequestForAccountLiking, TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility) {
         this.restaurantRequestContact = restaurantRequestContact;
         this.restaurantRequestForAccountLiking = restaurantRequestForAccountLiking;
         this.telegramRestaurantUserDbUtility = telegramRestaurantUserDbUtility;
     }
 
-    void processContactAndProceedToOrder(Update update, TelegramRestaurantUserDTO telegramUser) {
-        if (update.getMessage().getContact() != null) {
-            telegramRestaurantUserDbUtility.registerUserPhone(update, telegramUser);
-            restaurantRequestForAccountLiking.requestUserToWait(update, telegramUser);
-        } else {
-            restaurantRequestContact.requestContactAgain(update);
-        }
+    void requestUserForAccountLinking(Update update, TelegramRestaurantUserDTO telegramUser) {
+        restaurantRequestForAccountLiking.requestUserToWaitAgain(update, telegramUser);
     }
 
 }

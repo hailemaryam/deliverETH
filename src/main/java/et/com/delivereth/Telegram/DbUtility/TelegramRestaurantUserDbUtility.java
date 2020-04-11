@@ -1,10 +1,12 @@
 package et.com.delivereth.Telegram.DbUtility;
 
-import et.com.delivereth.Telegram.telegramUser.ChatStepConstants;
+import et.com.delivereth.Telegram.telegramRestorant.ChatStepConstants;
 import et.com.delivereth.service.TelegramRestaurantUserQueryService;
 import et.com.delivereth.service.TelegramRestaurantUserService;
+import et.com.delivereth.service.dto.RestorantDTO;
 import et.com.delivereth.service.dto.TelegramRestaurantUserCriteria;
 import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
+import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -37,7 +39,7 @@ public class TelegramRestaurantUserDbUtility {
     }
     public void registerUserPhone(Update update, TelegramRestaurantUserDTO telegramUser) {
         telegramUser.setPhone(update.getMessage().getContact().getPhoneNumber());
-        telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_MENU_PAGE_RESPONSE);
+        telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_ACCOUNT_LINKING_RESPONSE);
         telegramRestaurantUserService.save(telegramUser);
     }
     public TelegramRestaurantUserDTO getTelegramUser(Update update) {
@@ -59,4 +61,11 @@ public class TelegramRestaurantUserDbUtility {
         telegramRestaurantUserService.save(telegramUser);
     }
 
+    public List<TelegramRestaurantUserDTO> getRestaurantUsers(RestorantDTO restorantDTO) {
+        TelegramRestaurantUserCriteria telegramRestaurantUserCriteria = new TelegramRestaurantUserCriteria();
+        LongFilter longFilter = new LongFilter();
+        longFilter.setEquals(restorantDTO.getId());
+        telegramRestaurantUserCriteria.setRestorantId(longFilter);
+        return telegramRestaurantUserQueryService.findByCriteria(telegramRestaurantUserCriteria);
+    }
 }

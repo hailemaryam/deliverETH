@@ -9,10 +9,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class RestaurantMainStepProccessor {
     private final RestaurantCommandProcessor restaurantCommandProcessor;
     private final RestaurantWaitingForContactResponseProcessor restaurantWaitingForContactResponseProcessor;
+    private final RestaurantWaitingForAccountLinkProcessor restaurantWaitingForAccountLinkProcessor;
 
-    public RestaurantMainStepProccessor(RestaurantCommandProcessor restaurantCommandProcessor, RestaurantWaitingForContactResponseProcessor restaurantWaitingForContactResponseProcessor) {
+    public RestaurantMainStepProccessor(RestaurantCommandProcessor restaurantCommandProcessor, RestaurantWaitingForContactResponseProcessor restaurantWaitingForContactResponseProcessor, RestaurantWaitingForAccountLinkProcessor restaurantWaitingForAccountLinkProcessor) {
         this.restaurantCommandProcessor = restaurantCommandProcessor;
         this.restaurantWaitingForContactResponseProcessor = restaurantWaitingForContactResponseProcessor;
+        this.restaurantWaitingForAccountLinkProcessor = restaurantWaitingForAccountLinkProcessor;
     }
 
     public void mainStepProcessor(Update update, TelegramRestaurantUserDTO telegramUser){
@@ -20,9 +22,9 @@ public class RestaurantMainStepProccessor {
             case ChatStepConstants.WAITING_FOR_CONTACT_RESPONSE:
                 restaurantWaitingForContactResponseProcessor.processContactAndProceedToOrder(update, telegramUser);
                 break;
-//            case ChatStepConstants.WAITING_FOR_ACCOUNT_LINKING_RESPONSE:
-//                restaurantWaitingForMenuPageResponseProcessor.processOrderMenuRequestAndProceedToLocationRequest(update, telegramUser);
-//                break;
+            case ChatStepConstants.WAITING_FOR_ACCOUNT_LINKING_RESPONSE:
+                restaurantWaitingForAccountLinkProcessor.requestUserForAccountLinking(update, telegramUser);
+                break;
 //            case ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE:
 //                restaurantWaitingForMyOrderListResponseProcessor.processMyOrderResponse(update, telegramUser);
 //                break;

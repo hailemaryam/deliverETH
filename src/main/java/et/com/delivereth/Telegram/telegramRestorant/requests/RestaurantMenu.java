@@ -13,28 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantMenu {
-    public static InlineKeyboardMarkup finishOrAddMore(){
+    public static InlineKeyboardMarkup orderActionMenu(OrderDTO orderDTO){
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(new InlineKeyboardButton().setText(StaticText.addMore).setCallbackData("addMoreItem"));
-        rowInline.add(new InlineKeyboardButton().setText(StaticText.finishOrder).setCallbackData("finishOrder"));
-        rowInline.add(new InlineKeyboardButton().setText(StaticText.cancel).setCallbackData("cancelOrder"));
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
-        return markupInline;
-    }
-    public static InlineKeyboardMarkup myOrderInlineKeyBoard(OrderDTO orderDTO){
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT) ||
-            orderDTO.getOrderStatus().equals(OrderStatus.DELIVERED)) {
-            rowInline.add(new InlineKeyboardButton().setText(StaticText.removeOrder).setCallbackData("R_" + orderDTO.getId()));
+        if (orderDTO.getOrderStatus().equals(OrderStatus.ORDERED)) {
+            rowInline.add(new InlineKeyboardButton().setText(StaticText.acceptOrder).setCallbackData("accept_" + orderDTO.getId()));
+            rowInline.add(new InlineKeyboardButton().setText(StaticText.rejectOrder).setCallbackData("reject_" + orderDTO.getId()));
         }
-        if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT) ||
-            orderDTO.getOrderStatus().equals(OrderStatus.ORDERED)) {
-            rowInline.add(new InlineKeyboardButton().setText(StaticText.cancel).setCallbackData("C_" + orderDTO.getId()));
+        if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT)) {
+            rowInline.add(new InlineKeyboardButton().setText(StaticText.readyForDeliver).setCallbackData("ready_" + orderDTO.getId()));
+            rowInline.add(new InlineKeyboardButton().setText(StaticText.sent).setCallbackData("sent_" + orderDTO.getId()));
         }
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);

@@ -81,10 +81,16 @@ public class RestaurantRequestForNewOrder {
         }
     }
     public void responsePopUpForEditOrder(Update update){
+        popUpMessage(update, "\uD83D\uDC68\u200D\uD83C\uDF73 Your order status has been successfully changed.");
+    }
+    public void responsePopUpForAlreadyCanceledByUser(Update update){
+        popUpMessage(update, "❗️ This order already canceled by user.");
+    }
+    public void popUpMessage(Update update, String text){
         AnswerCallbackQuery response = new AnswerCallbackQuery();
         response.setCallbackQueryId(update.getCallbackQuery().getId());
         response.setShowAlert(true);
-        response.setText("\uD83D\uDC68\u200D\uD83C\uDF73 Your order status has been successfully changed.");
+        response.setText(text);
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

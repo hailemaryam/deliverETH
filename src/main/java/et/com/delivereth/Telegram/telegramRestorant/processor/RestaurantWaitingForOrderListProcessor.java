@@ -30,31 +30,46 @@ public class RestaurantWaitingForOrderListProcessor {
 
     public void processOrder(Update update, TelegramRestaurantUserDTO telegramRestaurantUserDTO) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("accept_")) {
-            OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
+            accept(update);
+        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("reject_")) {
+            reject(update);
+        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("ready_")) {
+            readyForDelivery(update);
+        } else {
+            restaurantCommandProcessor.requestForErrorResponder(update, telegramRestaurantUserDTO);
+        }
+    }
+    public void accept(Update update) {
+        OrderDTO orderDTO = orderDbUtility.getOrderById(Long.valueOf(update.getCallbackQuery().getData().substring(7)));
+        if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_USER)) {
+            requestForNewOrder.responsePopUpForAlreadyCanceledByUser(update);
+            requestForNewOrder.editNewOrder(update, orderDTO);
+        } else {
+            orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
                 OrderStatus.ACCEPTED_BY_RESTAURANT);
             requestForNewOrder.editNewOrder(update, orderDTO);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
             requestForMyOrdersList.sendMyOrders(orderDTO, telegramUserDTO.getChatId());
-        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("reject_")) {
-            OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
+        }
+    }
+    public void reject(Update update) {
+        OrderDTO orderDTO = orderDbUtility.getOrderById(Long.valueOf(update.getCallbackQuery().getData().substring(7)));
+        if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_USER)) {
+            requestForNewOrder.responsePopUpForAlreadyCanceledByUser(update);
+            requestForNewOrder.editNewOrder(update, orderDTO);
+        } else {
+            orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
                 OrderStatus.CANCELED_BY_RESTAURANT);
             requestForNewOrder.editNewOrder(update, orderDTO);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
             requestForMyOrdersList.sendMyOrders(orderDTO, telegramUserDTO.getChatId());
-        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("ready_")) {
-            OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(6)),
-                OrderStatus.READY_FOR_DELIVERY);
-            requestForNewOrder.editNewOrder(update, orderDTO);
-            TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-            requestForMyOrdersList.sendMyOrders(orderDTO, telegramUserDTO.getChatId());
-        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("send_")) {
-            OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(5)),
-                OrderStatus.ACCEPTED_BY_DRIVER);
-            requestForNewOrder.editNewOrder(update, orderDTO);
-            TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-            requestForMyOrdersList.sendMyOrders(orderDTO, telegramUserDTO.getChatId());
-        } else {
-            restaurantCommandProcessor.requestForErrorResponder(update, telegramRestaurantUserDTO);
         }
+    }
+    public void readyForDelivery(Update update){
+        OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(6)),
+            OrderStatus.READY_FOR_DELIVERY);
+        requestForNewOrder.editNewOrder(update, orderDTO);
+        TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
+        requestForMyOrdersList.sendMyOrders(orderDTO, telegramUserDTO.getChatId());
     }
 }

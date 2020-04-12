@@ -30,6 +30,8 @@ public class RestorantDTO implements Serializable {
 
     private Integer availableOrderCap;
 
+    private Boolean status;
+
     
     public Long getId() {
         return id;
@@ -103,6 +105,14 @@ public class RestorantDTO implements Serializable {
         this.availableOrderCap = availableOrderCap;
     }
 
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -135,6 +145,7 @@ public class RestorantDTO implements Serializable {
             ", latitude=" + getLatitude() +
             ", longtude=" + getLongtude() +
             ", availableOrderCap=" + getAvailableOrderCap() +
+            ", status='" + isStatus() + "'" +
             "}";
     }
 }

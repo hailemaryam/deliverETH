@@ -64,6 +64,9 @@ public class RestorantResourceIT {
     private static final Integer UPDATED_AVAILABLE_ORDER_CAP = 2;
     private static final Integer SMALLER_AVAILABLE_ORDER_CAP = 1 - 1;
 
+    private static final Boolean DEFAULT_STATUS = false;
+    private static final Boolean UPDATED_STATUS = true;
+
     @Autowired
     private RestorantRepository restorantRepository;
 
@@ -99,7 +102,8 @@ public class RestorantResourceIT {
             .iconImageContentType(DEFAULT_ICON_IMAGE_CONTENT_TYPE)
             .latitude(DEFAULT_LATITUDE)
             .longtude(DEFAULT_LONGTUDE)
-            .availableOrderCap(DEFAULT_AVAILABLE_ORDER_CAP);
+            .availableOrderCap(DEFAULT_AVAILABLE_ORDER_CAP)
+            .status(DEFAULT_STATUS);
         return restorant;
     }
     /**
@@ -117,7 +121,8 @@ public class RestorantResourceIT {
             .iconImageContentType(UPDATED_ICON_IMAGE_CONTENT_TYPE)
             .latitude(UPDATED_LATITUDE)
             .longtude(UPDATED_LONGTUDE)
-            .availableOrderCap(UPDATED_AVAILABLE_ORDER_CAP);
+            .availableOrderCap(UPDATED_AVAILABLE_ORDER_CAP)
+            .status(UPDATED_STATUS);
         return restorant;
     }
 
@@ -150,6 +155,7 @@ public class RestorantResourceIT {
         assertThat(testRestorant.getLatitude()).isEqualTo(DEFAULT_LATITUDE);
         assertThat(testRestorant.getLongtude()).isEqualTo(DEFAULT_LONGTUDE);
         assertThat(testRestorant.getAvailableOrderCap()).isEqualTo(DEFAULT_AVAILABLE_ORDER_CAP);
+        assertThat(testRestorant.isStatus()).isEqualTo(DEFAULT_STATUS);
     }
 
     @Test
@@ -191,7 +197,8 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.[*].iconImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE))))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())))
-            .andExpect(jsonPath("$.[*].availableOrderCap").value(hasItem(DEFAULT_AVAILABLE_ORDER_CAP)));
+            .andExpect(jsonPath("$.[*].availableOrderCap").value(hasItem(DEFAULT_AVAILABLE_ORDER_CAP)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
     
     @Test
@@ -212,7 +219,8 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.iconImage").value(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE)))
             .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE.doubleValue()))
             .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE.doubleValue()))
-            .andExpect(jsonPath("$.availableOrderCap").value(DEFAULT_AVAILABLE_ORDER_CAP));
+            .andExpect(jsonPath("$.availableOrderCap").value(DEFAULT_AVAILABLE_ORDER_CAP))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()));
     }
 
 
@@ -708,6 +716,58 @@ public class RestorantResourceIT {
 
     @Test
     @Transactional
+    public void getAllRestorantsByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where status equals to DEFAULT_STATUS
+        defaultRestorantShouldBeFound("status.equals=" + DEFAULT_STATUS);
+
+        // Get all the restorantList where status equals to UPDATED_STATUS
+        defaultRestorantShouldNotBeFound("status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where status not equals to DEFAULT_STATUS
+        defaultRestorantShouldNotBeFound("status.notEquals=" + DEFAULT_STATUS);
+
+        // Get all the restorantList where status not equals to UPDATED_STATUS
+        defaultRestorantShouldBeFound("status.notEquals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where status in DEFAULT_STATUS or UPDATED_STATUS
+        defaultRestorantShouldBeFound("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS);
+
+        // Get all the restorantList where status equals to UPDATED_STATUS
+        defaultRestorantShouldNotBeFound("status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where status is not null
+        defaultRestorantShouldBeFound("status.specified=true");
+
+        // Get all the restorantList where status is null
+        defaultRestorantShouldNotBeFound("status.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllRestorantsByFoodIsEqualToSomething() throws Exception {
         // Initialize the database
         restorantRepository.saveAndFlush(restorant);
@@ -760,7 +820,8 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.[*].iconImage").value(hasItem(Base64Utils.encodeToString(DEFAULT_ICON_IMAGE))))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())))
-            .andExpect(jsonPath("$.[*].availableOrderCap").value(hasItem(DEFAULT_AVAILABLE_ORDER_CAP)));
+            .andExpect(jsonPath("$.[*].availableOrderCap").value(hasItem(DEFAULT_AVAILABLE_ORDER_CAP)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
 
         // Check, that the count call also returns 1
         restRestorantMockMvc.perform(get("/api/restorants/count?sort=id,desc&" + filter))
@@ -815,7 +876,8 @@ public class RestorantResourceIT {
             .iconImageContentType(UPDATED_ICON_IMAGE_CONTENT_TYPE)
             .latitude(UPDATED_LATITUDE)
             .longtude(UPDATED_LONGTUDE)
-            .availableOrderCap(UPDATED_AVAILABLE_ORDER_CAP);
+            .availableOrderCap(UPDATED_AVAILABLE_ORDER_CAP)
+            .status(UPDATED_STATUS);
         RestorantDTO restorantDTO = restorantMapper.toDto(updatedRestorant);
 
         restRestorantMockMvc.perform(put("/api/restorants")
@@ -835,6 +897,7 @@ public class RestorantResourceIT {
         assertThat(testRestorant.getLatitude()).isEqualTo(UPDATED_LATITUDE);
         assertThat(testRestorant.getLongtude()).isEqualTo(UPDATED_LONGTUDE);
         assertThat(testRestorant.getAvailableOrderCap()).isEqualTo(UPDATED_AVAILABLE_ORDER_CAP);
+        assertThat(testRestorant.isStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test

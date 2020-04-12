@@ -11,6 +11,7 @@ export interface IRestorant {
   latitude?: number;
   longtude?: number;
   availableOrderCap?: number;
+  status?: boolean;
   foods?: IFood[];
   telegramRestaurantUsers?: ITelegramRestaurantUser[];
 }
@@ -26,7 +27,10 @@ export class Restorant implements IRestorant {
     public latitude?: number,
     public longtude?: number,
     public availableOrderCap?: number,
+    public status?: boolean,
     public foods?: IFood[],
     public telegramRestaurantUsers?: ITelegramRestaurantUser[]
-  ) {}
+  ) {
+    this.status = this.status || false;
+  }
 }

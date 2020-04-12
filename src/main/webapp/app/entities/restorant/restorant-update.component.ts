@@ -26,7 +26,8 @@ export class RestorantUpdateComponent implements OnInit {
     iconImageContentType: [],
     latitude: [],
     longtude: [],
-    availableOrderCap: []
+    availableOrderCap: [],
+    status: []
   });
 
   constructor(
@@ -54,7 +55,8 @@ export class RestorantUpdateComponent implements OnInit {
       iconImageContentType: restorant.iconImageContentType,
       latitude: restorant.latitude,
       longtude: restorant.longtude,
-      availableOrderCap: restorant.availableOrderCap
+      availableOrderCap: restorant.availableOrderCap,
+      status: restorant.status
     });
   }
 
@@ -109,7 +111,8 @@ export class RestorantUpdateComponent implements OnInit {
       iconImage: this.editForm.get(['iconImage'])!.value,
       latitude: this.editForm.get(['latitude'])!.value,
       longtude: this.editForm.get(['longtude'])!.value,
-      availableOrderCap: this.editForm.get(['availableOrderCap'])!.value
+      availableOrderCap: this.editForm.get(['availableOrderCap'])!.value,
+      status: this.editForm.get(['status'])!.value
     };
   }
 

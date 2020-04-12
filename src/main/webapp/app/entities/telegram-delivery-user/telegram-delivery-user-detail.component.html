@@ -1,0 +1,54 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="telegramDeliveryUser">
+            <h2><span>Telegram Delivery User</span> {{ telegramDeliveryUser.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>First Name</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.firstName }}</span>
+                </dd>
+                <dt><span>Last Name</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.lastName }}</span>
+                </dd>
+                <dt><span>User Name</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.userName }}</span>
+                </dd>
+                <dt><span>Chat Id</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.chatId }}</span>
+                </dd>
+                <dt><span>Phone</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.phone }}</span>
+                </dd>
+                <dt><span>Conversation Meta Data</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.conversationMetaData }}</span>
+                </dd>
+                <dt><span>Loaded Page</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.loadedPage }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/telegram-delivery-user', telegramDeliveryUser.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

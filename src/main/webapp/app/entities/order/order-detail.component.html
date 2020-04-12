@@ -46,6 +46,12 @@
                         <a [routerLink]="['/telegram-user', order.telegramUserId, 'view']">{{ order.telegramUserUserName }}</a>
                     </div>
                 </dd>
+                <dt><span>Telegram Delivery User</span></dt>
+                <dd>
+                    <div *ngIf="order.telegramDeliveryUserId">
+                        <a [routerLink]="['/telegram-delivery-user', order.telegramDeliveryUserId, 'view']">{{ order.telegramDeliveryUserUserName }}</a>
+                    </div>
+                </dd>
             </dl>
 
             <button type="submit"

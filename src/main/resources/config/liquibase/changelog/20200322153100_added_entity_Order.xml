@@ -42,6 +42,9 @@
             <column name="telegram_user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
+            <column name="telegram_delivery_user_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="jhi_order" columnName="date" columnDataType="datetime"/>

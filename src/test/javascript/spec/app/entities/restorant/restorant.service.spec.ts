@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(RestorantService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Restorant(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'image/png', 'AAAAAAA', 0, 0, 0);
+      elemDefault = new Restorant(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'image/png', 'AAAAAAA', 0, 0, 0, false);
     });
 
     describe('Service methods', () => {
@@ -60,7 +60,8 @@ describe('Service Tests', () => {
             iconImage: 'BBBBBB',
             latitude: 1,
             longtude: 1,
-            availableOrderCap: 1
+            availableOrderCap: 1,
+            status: true
           },
           elemDefault
         );
@@ -83,7 +84,8 @@ describe('Service Tests', () => {
             iconImage: 'BBBBBB',
             latitude: 1,
             longtude: 1,
-            availableOrderCap: 1
+            availableOrderCap: 1,
+            status: true
           },
           elemDefault
         );

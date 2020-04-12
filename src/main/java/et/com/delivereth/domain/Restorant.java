@@ -56,6 +56,9 @@ public class Restorant implements Serializable {
     @Column(name = "available_order_cap")
     private Integer availableOrderCap;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @OneToMany(mappedBy = "restorant")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Food> foods = new HashSet<>();
@@ -178,6 +181,19 @@ public class Restorant implements Serializable {
         this.availableOrderCap = availableOrderCap;
     }
 
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public Restorant status(Boolean status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
     public Set<Food> getFoods() {
         return foods;
     }
@@ -257,6 +273,7 @@ public class Restorant implements Serializable {
             ", latitude=" + getLatitude() +
             ", longtude=" + getLongtude() +
             ", availableOrderCap=" + getAvailableOrderCap() +
+            ", status='" + isStatus() + "'" +
             "}";
     }
 }

@@ -77,6 +77,14 @@
                         <option [ngValue]="telegramUserOption.id" *ngFor="let telegramUserOption of telegramusers; trackBy: trackById">{{ telegramUserOption.userName }}</option>
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_telegramDeliveryUser">Telegram Delivery User</label>
+                    <select class="form-control" id="field_telegramDeliveryUser" name="telegramDeliveryUser" formControlName="telegramDeliveryUserId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="telegramDeliveryUserOption.id" *ngFor="let telegramDeliveryUserOption of telegramdeliveryusers; trackBy: trackById">{{ telegramDeliveryUserOption.userName }}</option>
+                    </select>
+                </div>
             </div>
 
             <div>

@@ -32,6 +32,7 @@
                     <th scope="col"  jhiSortBy="additionalNote"><span>Additional Note</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="orderStatus"><span>Order Status</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="telegramUserUserName"><span>Telegram User</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="telegramDeliveryUserUserName"><span>Telegram Delivery User</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -49,6 +50,11 @@
                     <td>
                         <div *ngIf="order.telegramUserId">
                             <a [routerLink]="['/telegram-user', order.telegramUserId , 'view']" >{{ order.telegramUserUserName }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="order.telegramDeliveryUserId">
+                            <a [routerLink]="['/telegram-delivery-user', order.telegramDeliveryUserId , 'view']" >{{ order.telegramDeliveryUserUserName }}</a>
                         </div>
                     </td>
                     <td class="text-right">

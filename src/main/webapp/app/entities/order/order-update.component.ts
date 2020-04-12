@@ -13,6 +13,10 @@ import { OrderService } from './order.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { ITelegramUser } from 'app/shared/model/telegram-user.model';
 import { TelegramUserService } from 'app/entities/telegram-user/telegram-user.service';
+import { ITelegramDeliveryUser } from 'app/shared/model/telegram-delivery-user.model';
+import { TelegramDeliveryUserService } from 'app/entities/telegram-delivery-user/telegram-delivery-user.service';
+
+type SelectableEntity = ITelegramUser | ITelegramDeliveryUser;
 
 @Component({
   selector: 'jhi-order-update',
@@ -21,6 +25,7 @@ import { TelegramUserService } from 'app/entities/telegram-user/telegram-user.se
 export class OrderUpdateComponent implements OnInit {
   isSaving = false;
   telegramusers: ITelegramUser[] = [];
+  telegramdeliveryusers: ITelegramDeliveryUser[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -32,7 +37,8 @@ export class OrderUpdateComponent implements OnInit {
     date: [],
     additionalNote: [],
     orderStatus: [],
-    telegramUserId: []
+    telegramUserId: [],
+    telegramDeliveryUserId: []
   });
 
   constructor(
@@ -40,6 +46,7 @@ export class OrderUpdateComponent implements OnInit {
     protected eventManager: JhiEventManager,
     protected orderService: OrderService,
     protected telegramUserService: TelegramUserService,
+    protected telegramDeliveryUserService: TelegramDeliveryUserService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -54,6 +61,10 @@ export class OrderUpdateComponent implements OnInit {
       this.updateForm(order);
 
       this.telegramUserService.query().subscribe((res: HttpResponse<ITelegramUser[]>) => (this.telegramusers = res.body || []));
+
+      this.telegramDeliveryUserService
+        .query()
+        .subscribe((res: HttpResponse<ITelegramDeliveryUser[]>) => (this.telegramdeliveryusers = res.body || []));
     });
   }
 
@@ -68,7 +79,8 @@ export class OrderUpdateComponent implements OnInit {
       date: order.date ? order.date.format(DATE_TIME_FORMAT) : null,
       additionalNote: order.additionalNote,
       orderStatus: order.orderStatus,
-      telegramUserId: order.telegramUserId
+      telegramUserId: order.telegramUserId,
+      telegramDeliveryUserId: order.telegramDeliveryUserId
     });
   }
 
@@ -114,7 +126,8 @@ export class OrderUpdateComponent implements OnInit {
       date: this.editForm.get(['date'])!.value ? moment(this.editForm.get(['date'])!.value, DATE_TIME_FORMAT) : undefined,
       additionalNote: this.editForm.get(['additionalNote'])!.value,
       orderStatus: this.editForm.get(['orderStatus'])!.value,
-      telegramUserId: this.editForm.get(['telegramUserId'])!.value
+      telegramUserId: this.editForm.get(['telegramUserId'])!.value,
+      telegramDeliveryUserId: this.editForm.get(['telegramDeliveryUserId'])!.value
     };
   }
 
@@ -134,7 +147,7 @@ export class OrderUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  trackById(index: number, item: ITelegramUser): any {
+  trackById(index: number, item: SelectableEntity): any {
     return item.id;
   }
 }

@@ -32,6 +32,11 @@ import { RouterModule } from '@angular/router';
         path: 'telegram-restaurant-user',
         loadChildren: () =>
           import('./telegram-restaurant-user/telegram-restaurant-user.module').then(m => m.DeliverEthTelegramRestaurantUserModule)
+      },
+      {
+        path: 'telegram-delivery-user',
+        loadChildren: () =>
+          import('./telegram-delivery-user/telegram-delivery-user.module').then(m => m.DeliverEthTelegramDeliveryUserModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

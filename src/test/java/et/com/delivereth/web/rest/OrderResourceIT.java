@@ -4,6 +4,7 @@ import et.com.delivereth.DeliverEthApp;
 import et.com.delivereth.domain.Order;
 import et.com.delivereth.domain.OrderedFood;
 import et.com.delivereth.domain.TelegramUser;
+import et.com.delivereth.domain.TelegramDeliveryUser;
 import et.com.delivereth.repository.OrderRepository;
 import et.com.delivereth.service.OrderService;
 import et.com.delivereth.service.dto.OrderDTO;
@@ -801,6 +802,26 @@ public class OrderResourceIT {
 
         // Get all the orderList where telegramUser equals to telegramUserId + 1
         defaultOrderShouldNotBeFound("telegramUserId.equals=" + (telegramUserId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTelegramDeliveryUserIsEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+        TelegramDeliveryUser telegramDeliveryUser = TelegramDeliveryUserResourceIT.createEntity(em);
+        em.persist(telegramDeliveryUser);
+        em.flush();
+        order.setTelegramDeliveryUser(telegramDeliveryUser);
+        orderRepository.saveAndFlush(order);
+        Long telegramDeliveryUserId = telegramDeliveryUser.getId();
+
+        // Get all the orderList where telegramDeliveryUser equals to telegramDeliveryUserId
+        defaultOrderShouldBeFound("telegramDeliveryUserId.equals=" + telegramDeliveryUserId);
+
+        // Get all the orderList where telegramDeliveryUser equals to telegramDeliveryUserId + 1
+        defaultOrderShouldNotBeFound("telegramDeliveryUserId.equals=" + (telegramDeliveryUserId + 1));
     }
 
     /**

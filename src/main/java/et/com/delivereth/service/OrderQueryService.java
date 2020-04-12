@@ -117,6 +117,10 @@ public class OrderQueryService extends QueryService<Order> {
                 specification = specification.and(buildSpecification(criteria.getTelegramUserId(),
                     root -> root.join(Order_.telegramUser, JoinType.LEFT).get(TelegramUser_.id)));
             }
+            if (criteria.getTelegramDeliveryUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getTelegramDeliveryUserId(),
+                    root -> root.join(Order_.telegramDeliveryUser, JoinType.LEFT).get(TelegramDeliveryUser_.id)));
+            }
         }
         return specification;
     }

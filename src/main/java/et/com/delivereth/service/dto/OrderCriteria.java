@@ -62,6 +62,8 @@ public class OrderCriteria implements Serializable, Criteria {
 
     private LongFilter telegramUserId;
 
+    private LongFilter telegramDeliveryUserId;
+
     public OrderCriteria() {
     }
 
@@ -75,6 +77,7 @@ public class OrderCriteria implements Serializable, Criteria {
         this.orderStatus = other.orderStatus == null ? null : other.orderStatus.copy();
         this.orderedFoodId = other.orderedFoodId == null ? null : other.orderedFoodId.copy();
         this.telegramUserId = other.telegramUserId == null ? null : other.telegramUserId.copy();
+        this.telegramDeliveryUserId = other.telegramDeliveryUserId == null ? null : other.telegramDeliveryUserId.copy();
     }
 
     @Override
@@ -154,6 +157,14 @@ public class OrderCriteria implements Serializable, Criteria {
         this.telegramUserId = telegramUserId;
     }
 
+    public LongFilter getTelegramDeliveryUserId() {
+        return telegramDeliveryUserId;
+    }
+
+    public void setTelegramDeliveryUserId(LongFilter telegramDeliveryUserId) {
+        this.telegramDeliveryUserId = telegramDeliveryUserId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -173,7 +184,8 @@ public class OrderCriteria implements Serializable, Criteria {
             Objects.equals(date, that.date) &&
             Objects.equals(orderStatus, that.orderStatus) &&
             Objects.equals(orderedFoodId, that.orderedFoodId) &&
-            Objects.equals(telegramUserId, that.telegramUserId);
+            Objects.equals(telegramUserId, that.telegramUserId) &&
+            Objects.equals(telegramDeliveryUserId, that.telegramDeliveryUserId);
     }
 
     @Override
@@ -187,7 +199,8 @@ public class OrderCriteria implements Serializable, Criteria {
         date,
         orderStatus,
         orderedFoodId,
-        telegramUserId
+        telegramUserId,
+        telegramDeliveryUserId
         );
     }
 
@@ -203,6 +216,7 @@ public class OrderCriteria implements Serializable, Criteria {
                 (orderStatus != null ? "orderStatus=" + orderStatus + ", " : "") +
                 (orderedFoodId != null ? "orderedFoodId=" + orderedFoodId + ", " : "") +
                 (telegramUserId != null ? "telegramUserId=" + telegramUserId + ", " : "") +
+                (telegramDeliveryUserId != null ? "telegramDeliveryUserId=" + telegramDeliveryUserId + ", " : "") +
             "}";
     }
 

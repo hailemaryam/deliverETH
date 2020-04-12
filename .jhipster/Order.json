@@ -50,6 +50,13 @@
             "otherEntityRelationshipName": "order",
             "relationshipName": "telegramUser",
             "otherEntityField": "userName"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "telegramDeliveryUser",
+            "otherEntityRelationshipName": "order",
+            "relationshipName": "telegramDeliveryUser",
+            "otherEntityField": "userName"
         }
     ],
     "changelogDate": "20200322153100",

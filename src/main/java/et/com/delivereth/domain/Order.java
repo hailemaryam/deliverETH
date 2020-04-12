@@ -67,6 +67,10 @@ public class Order implements Serializable {
     @JsonIgnoreProperties("orders")
     private TelegramUser telegramUser;
 
+    @ManyToOne
+    @JsonIgnoreProperties("orders")
+    private TelegramDeliveryUser telegramDeliveryUser;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -216,6 +220,19 @@ public class Order implements Serializable {
 
     public void setTelegramUser(TelegramUser telegramUser) {
         this.telegramUser = telegramUser;
+    }
+
+    public TelegramDeliveryUser getTelegramDeliveryUser() {
+        return telegramDeliveryUser;
+    }
+
+    public Order telegramDeliveryUser(TelegramDeliveryUser telegramDeliveryUser) {
+        this.telegramDeliveryUser = telegramDeliveryUser;
+        return this;
+    }
+
+    public void setTelegramDeliveryUser(TelegramDeliveryUser telegramDeliveryUser) {
+        this.telegramDeliveryUser = telegramDeliveryUser;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

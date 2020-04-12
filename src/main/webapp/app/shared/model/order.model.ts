@@ -15,6 +15,8 @@ export interface IOrder {
   orderedFoods?: IOrderedFood[];
   telegramUserUserName?: string;
   telegramUserId?: number;
+  telegramDeliveryUserUserName?: string;
+  telegramDeliveryUserId?: number;
 }
 
 export class Order implements IOrder {
@@ -30,6 +32,8 @@ export class Order implements IOrder {
     public orderStatus?: OrderStatus,
     public orderedFoods?: IOrderedFood[],
     public telegramUserUserName?: string,
-    public telegramUserId?: number
+    public telegramUserId?: number,
+    public telegramDeliveryUserUserName?: string,
+    public telegramDeliveryUserId?: number
   ) {}
 }

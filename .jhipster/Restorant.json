@@ -35,6 +35,10 @@
         {
             "fieldName": "availableOrderCap",
             "fieldType": "Integer"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [

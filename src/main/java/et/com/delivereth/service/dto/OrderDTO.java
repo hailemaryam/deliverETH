@@ -35,6 +35,10 @@ public class OrderDTO implements Serializable {
     private Long telegramUserId;
 
     private String telegramUserUserName;
+
+    private Long telegramDeliveryUserId;
+
+    private String telegramDeliveryUserUserName;
     
     public Long getId() {
         return id;
@@ -124,6 +128,22 @@ public class OrderDTO implements Serializable {
         this.telegramUserUserName = telegramUserUserName;
     }
 
+    public Long getTelegramDeliveryUserId() {
+        return telegramDeliveryUserId;
+    }
+
+    public void setTelegramDeliveryUserId(Long telegramDeliveryUserId) {
+        this.telegramDeliveryUserId = telegramDeliveryUserId;
+    }
+
+    public String getTelegramDeliveryUserUserName() {
+        return telegramDeliveryUserUserName;
+    }
+
+    public void setTelegramDeliveryUserUserName(String telegramDeliveryUserUserName) {
+        this.telegramDeliveryUserUserName = telegramDeliveryUserUserName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -159,6 +179,8 @@ public class OrderDTO implements Serializable {
             ", orderStatus='" + getOrderStatus() + "'" +
             ", telegramUserId=" + getTelegramUserId() +
             ", telegramUserUserName='" + getTelegramUserUserName() + "'" +
+            ", telegramDeliveryUserId=" + getTelegramDeliveryUserId() +
+            ", telegramDeliveryUserUserName='" + getTelegramDeliveryUserUserName() + "'" +
             "}";
     }
 }

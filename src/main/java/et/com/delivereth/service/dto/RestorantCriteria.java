@@ -36,6 +36,8 @@ public class RestorantCriteria implements Serializable, Criteria {
 
     private IntegerFilter availableOrderCap;
 
+    private BooleanFilter status;
+
     private LongFilter foodId;
 
     private LongFilter telegramRestaurantUserId;
@@ -50,6 +52,7 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.latitude = other.latitude == null ? null : other.latitude.copy();
         this.longtude = other.longtude == null ? null : other.longtude.copy();
         this.availableOrderCap = other.availableOrderCap == null ? null : other.availableOrderCap.copy();
+        this.status = other.status == null ? null : other.status.copy();
         this.foodId = other.foodId == null ? null : other.foodId.copy();
         this.telegramRestaurantUserId = other.telegramRestaurantUserId == null ? null : other.telegramRestaurantUserId.copy();
     }
@@ -107,6 +110,14 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.availableOrderCap = availableOrderCap;
     }
 
+    public BooleanFilter getStatus() {
+        return status;
+    }
+
+    public void setStatus(BooleanFilter status) {
+        this.status = status;
+    }
+
     public LongFilter getFoodId() {
         return foodId;
     }
@@ -140,6 +151,7 @@ public class RestorantCriteria implements Serializable, Criteria {
             Objects.equals(latitude, that.latitude) &&
             Objects.equals(longtude, that.longtude) &&
             Objects.equals(availableOrderCap, that.availableOrderCap) &&
+            Objects.equals(status, that.status) &&
             Objects.equals(foodId, that.foodId) &&
             Objects.equals(telegramRestaurantUserId, that.telegramRestaurantUserId);
     }
@@ -153,6 +165,7 @@ public class RestorantCriteria implements Serializable, Criteria {
         latitude,
         longtude,
         availableOrderCap,
+        status,
         foodId,
         telegramRestaurantUserId
         );
@@ -167,6 +180,7 @@ public class RestorantCriteria implements Serializable, Criteria {
                 (latitude != null ? "latitude=" + latitude + ", " : "") +
                 (longtude != null ? "longtude=" + longtude + ", " : "") +
                 (availableOrderCap != null ? "availableOrderCap=" + availableOrderCap + ", " : "") +
+                (status != null ? "status=" + status + ", " : "") +
                 (foodId != null ? "foodId=" + foodId + ", " : "") +
                 (telegramRestaurantUserId != null ? "telegramRestaurantUserId=" + telegramRestaurantUserId + ", " : "") +
             "}";

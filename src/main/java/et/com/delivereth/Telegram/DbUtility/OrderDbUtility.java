@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.DbUtility;
 
+import et.com.delivereth.Telegram.telegramTransport.requests.TransportRequestForNewOrder;
 import et.com.delivereth.Telegram.telegramUser.ChatStepConstants;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.*;
@@ -26,11 +27,14 @@ public class OrderDbUtility {
     private final OrderQueryService orderQueryService;
     private final TelegramUserService telegramUserService;
     private final TelegramUserDbUtility telegramUserDbUtility;
-    public OrderDbUtility(OrderService orderService, OrderQueryService orderQueryService, TelegramUserService telegramUserService, TelegramUserDbUtility telegramUserDbUtility) {
+    private final TransportRequestForNewOrder transportRequestForNewOrder;
+
+    public OrderDbUtility(OrderService orderService, OrderQueryService orderQueryService, TelegramUserService telegramUserService, TelegramUserDbUtility telegramUserDbUtility, TransportRequestForNewOrder transportRequestForNewOrder) {
         this.orderService = orderService;
         this.orderQueryService = orderQueryService;
         this.telegramUserService = telegramUserService;
         this.telegramUserDbUtility = telegramUserDbUtility;
+        this.transportRequestForNewOrder = transportRequestForNewOrder;
     }
 
     public OrderDTO registerOrder(Update update, TelegramUserDTO telegramUser) {
@@ -66,7 +70,11 @@ public class OrderDbUtility {
             OrderDTO orderTobeUpdated = order.get();
             orderTobeUpdated.setOrderStatus(orderStatus);
             orderTobeUpdated.setDate(Instant.now());
-            return orderService.save(orderTobeUpdated);
+            orderTobeUpdated = orderService.save(orderTobeUpdated);
+            if (orderTobeUpdated.getOrderStatus().equals(OrderStatus.READY_FOR_DELIVERY)){
+                transportRequestForNewOrder.sendNewOrder(orderTobeUpdated);
+            }
+            return orderTobeUpdated;
         }
         return null;
     }

@@ -26,7 +26,7 @@ public class TransportRequestForAccountLiking {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registerd. Contact deliverEth admin to link your account to your restaurant</b>\n");
+        response.setText("<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registerd. We will send order detail when it arrives.</b>\n");
         response.setParseMode("HTML");
         try {
             transportTelegramSender.execute(response);

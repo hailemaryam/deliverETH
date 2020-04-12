@@ -25,9 +25,6 @@ public class TransportMainStepProccessor {
             case ChatStepConstants.WAITING_FOR_CONTACT_RESPONSE:
                 transportWaitingForContactResponseProcessor.processContactAndProceedToOrder(update, telegramUser);
                 break;
-            case ChatStepConstants.WAITING_FOR_ACCOUNT_LINKING_RESPONSE:
-                transportRestaurantWaitingForAccountLinkProcessor.requestUserForAccountLinking(update, telegramUser);
-                break;
             case ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE:
                 transportWaitingForOrderListProcessor.processOrder(update, telegramUser);
                 break;

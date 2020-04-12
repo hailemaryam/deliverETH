@@ -17,15 +17,11 @@ public class TransportMenu {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        if (orderDTO.getOrderStatus().equals(OrderStatus.ORDERED)) {
-            rowInline.add(new InlineKeyboardButton().setText(StaticText.acceptOrder).setCallbackData("accept_" + orderDTO.getId()));
-            rowInline.add(new InlineKeyboardButton().setText(StaticText.rejectOrder).setCallbackData("reject_" + orderDTO.getId()));
-        }
-        if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT)) {
-            rowInline.add(new InlineKeyboardButton().setText(StaticText.readyForDeliver).setCallbackData("ready_" + orderDTO.getId()));
-        }
         if (orderDTO.getOrderStatus().equals(OrderStatus.READY_FOR_DELIVERY)) {
-            rowInline.add(new InlineKeyboardButton().setText(StaticText.sent).setCallbackData("send_" + orderDTO.getId()));
+            rowInline.add(new InlineKeyboardButton().setText(StaticText.acceptOrder).setCallbackData("accept_" + orderDTO.getId()));
+        }
+        if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_DRIVER)) {
+            rowInline.add(new InlineKeyboardButton().setText(StaticText.delivered).setCallbackData("delivered_" + orderDTO.getId()));
         }
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);

@@ -24,19 +24,11 @@ public class TransportWaitingForOrderListProcessor {
     public void processOrder(Update update, TelegramDeliveryUserDTO telegramRestaurantUserDTO) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("accept_")) {
             OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
-                OrderStatus.ACCEPTED_BY_RESTAURANT);
-            requestForNewOrder.editNewOrder(update, orderDTO);
-        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("reject_")) {
-            OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
-                OrderStatus.CANCELED_BY_RESTAURANT);
-            requestForNewOrder.editNewOrder(update, orderDTO);
-        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("ready_")) {
-            OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(6)),
-                OrderStatus.READY_FOR_DELIVERY);
-            requestForNewOrder.editNewOrder(update, orderDTO);
-        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("send_")) {
-            OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(5)),
                 OrderStatus.ACCEPTED_BY_DRIVER);
+            requestForNewOrder.editNewOrder(update, orderDTO);
+        } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("delivered_")) {
+            OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(10)),
+                OrderStatus.DELIVERED);
             requestForNewOrder.editNewOrder(update, orderDTO);
         } else {
             transportCommandProcessor.requestForErrorResponder(update, telegramRestaurantUserDTO);

@@ -1,6 +1,6 @@
 package et.com.delivereth.Telegram.DbUtility;
 
-import et.com.delivereth.Telegram.telegramRestorant.ChatStepConstants;
+import et.com.delivereth.Telegram.telegramTransport.ChatStepConstants;
 import et.com.delivereth.service.TelegramDeliveryUserQueryService;
 import et.com.delivereth.service.TelegramDeliveryUserService;
 import et.com.delivereth.service.dto.TelegramDeliveryUserCriteria;
@@ -38,7 +38,7 @@ public class TelegramDeliveryUserDbUtility {
     }
     public void registerUserPhone(Update update, TelegramDeliveryUserDTO telegramUser) {
         telegramUser.setPhone(update.getMessage().getContact().getPhoneNumber());
-        telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_ACCOUNT_LINKING_RESPONSE);
+        telegramUser.setConversationMetaData(ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE);
         telegramDeliveryUserService.save(telegramUser);
     }
     public TelegramDeliveryUserDTO getTelegramUser(Update update) {

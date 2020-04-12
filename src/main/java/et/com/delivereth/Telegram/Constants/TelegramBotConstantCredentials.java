@@ -6,5 +6,6 @@ public class TelegramBotConstantCredentials {
     public static final String BOT_USER_NAME = "Hailemaryam";
 
     public static final String BOT_TOKEN_RESTAURANT = "1165377856:AAEwJSCpRnodoTR-0Qbp7egMhtKs314BvKM";
+    public static final String BOT_TOKEN_TRANSPORT = "1075292594:AAEArNhuvMP-WXnPOpj8ChiXXdiIwAozJH4";
 
 }

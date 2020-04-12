@@ -8,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -36,7 +38,11 @@ public class RequestForMyOrdersList {
         if (orderList.toList().size() >0) {
             sendTitle(update);
         }
-        orderList.toList().forEach(orderDTO -> sendMyOrders(orderDTO, update));
+        if (update.hasMessage()) {
+            orderList.toList().forEach(orderDTO -> sendMyOrders(orderDTO, update.getMessage().getChatId()));
+        } else if (update.hasCallbackQuery()) {
+            orderList.toList().forEach(orderDTO -> sendMyOrders(orderDTO, update.getCallbackQuery().getMessage().getChatId()));
+        }
         if (orderList.toList().size() == 0) {
             sendNoMoreItem(update);
         } else if (orderList.hasNext()) {
@@ -44,14 +50,10 @@ public class RequestForMyOrdersList {
         }
     }
 
-    private void sendMyOrders(OrderDTO orderDTO, Update update) {
+    private void sendMyOrders(OrderDTO orderDTO, Long chatId) {
         SendMessage response = new SendMessage();
         response.setReplyMarkup(Menu.myOrderInlineKeyBoard(orderDTO));
-        if (update.hasMessage()) {
-            response.setChatId(update.getMessage().getChatId());
-        } else if (update.hasCallbackQuery()) {
-            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
-        }
+        response.setChatId(chatId);
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         String invoice = "";
 
@@ -101,6 +103,40 @@ public class RequestForMyOrdersList {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
         response.setText("There are no more orders to load.");
+        try {
+            telegramSender.execute(response);
+        } catch (TelegramApiException e) {
+            logger.error("Error Sending Message {}", response);
+        }
+    }
+    public void sendSuccefulCancel(Update update){
+        sendPoup(update, "\uD83D\uDC68\u200D\uD83C\uDF73 Your order has been successfully canceled.");
+        delete(update);
+    }
+    public void sendSuccessfulRemove(Update update){
+        sendPoup(update, "\uD83D\uDC68\u200D\uD83C\uDF73 Your order has been successfully removed.");
+        delete(update);
+    }
+    public void delete(Update update){
+        DeleteMessage response = new DeleteMessage();
+        if (update.hasMessage()) {
+            response.setChatId(update.getMessage().getChatId());
+            response.setMessageId(update.getMessage().getMessageId());
+        } else if (update.hasCallbackQuery()) {
+            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
+            response.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
+        }
+        try {
+            telegramSender.execute(response);
+        } catch (TelegramApiException e) {
+            logger.error("Error Sending Message {}", response);
+        }
+    }
+    public void sendPoup(Update update, String text) {
+        AnswerCallbackQuery response = new AnswerCallbackQuery();
+        response.setCallbackQueryId(update.getCallbackQuery().getId());
+        response.setShowAlert(true);
+        response.setText(text);
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

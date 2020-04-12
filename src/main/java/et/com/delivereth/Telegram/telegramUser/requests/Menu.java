@@ -32,8 +32,7 @@ public class Menu {
             orderDTO.getOrderStatus().equals(OrderStatus.DELIVERED)) {
             rowInline.add(new InlineKeyboardButton().setText(StaticText.removeOrder).setCallbackData("R_" + orderDTO.getId()));
         }
-        if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT) ||
-            orderDTO.getOrderStatus().equals(OrderStatus.ORDERED)) {
+        if (orderDTO.getOrderStatus().equals(OrderStatus.ORDERED)) {
             rowInline.add(new InlineKeyboardButton().setText(StaticText.cancel).setCallbackData("C_" + orderDTO.getId()));
         }
         rowsInline.add(rowInline);

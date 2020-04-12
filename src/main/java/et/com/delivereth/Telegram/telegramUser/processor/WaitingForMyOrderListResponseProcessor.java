@@ -28,8 +28,12 @@ public class WaitingForMyOrderListResponseProcessor {
     void processMyOrderResponse(Update update, TelegramUserDTO telegramUser) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("C_")) {
             orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(2)), OrderStatus.CANCELED_BY_USER);
+            requestForMyOrdersList.sendSuccefulCancel(update);
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("R_")) {
             orderDbUtility.orderRemove(Long.valueOf(update.getCallbackQuery().getData().substring(2)));
+            requestForMyOrdersList.sendSuccessfulRemove(update);
+        }  else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("loadMore")) {
+            requestForMyOrdersList.requestForMyOrdersList(update, telegramUser);
         }  else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("order") ||
             (update.hasMessage() && update.getMessage().getText().equals("New Order"))) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_LOCATION_RESPONSE);
@@ -37,7 +41,6 @@ public class WaitingForMyOrderListResponseProcessor {
         } else if ((update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("myOrder")) ||
             (update.hasMessage() && update.getMessage().getText().equals("My Orders"))) {
             dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_MY_ORDER_LIST_RESPONSE);
-            requestForMyOrdersList.sendTitle(update);
             requestForMyOrdersList.requestForMyOrdersList(update, telegramUser);
         } else {
             commandProcessor.requestForErrorResponder(update, telegramUser);

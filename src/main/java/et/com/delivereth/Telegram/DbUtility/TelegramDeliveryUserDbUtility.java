@@ -6,6 +6,7 @@ import et.com.delivereth.service.TelegramDeliveryUserService;
 import et.com.delivereth.service.dto.TelegramDeliveryUserCriteria;
 import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
 import io.github.jhipster.service.filter.StringFilter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -58,6 +59,10 @@ public class TelegramDeliveryUserDbUtility {
     }
     public void updateTelegramUser(TelegramDeliveryUserDTO telegramUser){
         telegramDeliveryUserService.save(telegramUser);
+    }
+
+    public List<TelegramDeliveryUserDTO> getDeliveryUser(Float latitude, Float longitude){
+        return telegramDeliveryUserService.findAll(PageRequest.of(0, 7)).toList();
     }
 
 }

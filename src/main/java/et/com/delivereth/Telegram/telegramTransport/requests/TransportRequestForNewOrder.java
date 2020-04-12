@@ -2,6 +2,7 @@ package et.com.delivereth.Telegram.telegramTransport.requests;
 
 import et.com.delivereth.Telegram.DbUtility.*;
 import et.com.delivereth.Telegram.telegramTransport.main.TransportTelegramSender;
+import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,37 +22,38 @@ public class TransportRequestForNewOrder {
     private final RestorantDbUtitlity restorantDbUtitlity;
     private final FoodDbUtitility foodDbUtitility;
     private final OrderedFoodDbUtility orderedFoodDbUtility;
-    private final TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility;
+    private final TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility;
     private final TelegramUserDbUtility telegramUserDbUtility;
 
-    public TransportRequestForNewOrder(TransportTelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility, TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility, TelegramUserDbUtility telegramUserDbUtility) {
+    public TransportRequestForNewOrder(TransportTelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility, TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility, TelegramUserDbUtility telegramUserDbUtility) {
         this.telegramSender = telegramSender;
         this.restorantDbUtitlity = restorantDbUtitlity;
         this.foodDbUtitility = foodDbUtitility;
         this.orderedFoodDbUtility = orderedFoodDbUtility;
-        this.telegramRestaurantUserDbUtility = telegramRestaurantUserDbUtility;
+        this.telegramDeliveryUserDbUtility = telegramDeliveryUserDbUtility;
         this.telegramUserDbUtility = telegramUserDbUtility;
     }
 
     public void sendNewOrder(OrderDTO orderDTO) {
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId());
-        List<TelegramRestaurantUserDTO> restaurantUsers = telegramRestaurantUserDbUtility.getRestaurantUsers(restorant);
-        for (TelegramRestaurantUserDTO telegramRestaurantUserDTO: restaurantUsers){
+        List<TelegramDeliveryUserDTO> restaurantUsers = telegramDeliveryUserDbUtility.getDeliveryUser(null, null);
+        for (TelegramDeliveryUserDTO telegramRestaurantUserDTO: restaurantUsers){
             sendNewOrder(telegramRestaurantUserDTO, restorant, orderedFoodList, orderDTO);
-
         }
     }
-    public void editNewOrder(Update update, OrderDTO orderDTO) {
+    public void editNewOrder(Update update, OrderDTO orderDTO, Boolean alreadyAccepted) {
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId());
-        List<TelegramRestaurantUserDTO> restaurantUsers = telegramRestaurantUserDbUtility.getRestaurantUsers(restorant);
-        for (TelegramRestaurantUserDTO telegramRestaurantUserDTO: restaurantUsers){
-            sendEditOrder(telegramRestaurantUserDTO, restorant, orderedFoodList, orderDTO, update);
+        TelegramDeliveryUserDTO telegramDeliveryUserDTO = telegramDeliveryUserDbUtility.getTelegramUser(update);
+        sendEditOrder(telegramDeliveryUserDTO, restorant, orderedFoodList, orderDTO, update, alreadyAccepted);
+        if (!alreadyAccepted) {
             responsePopUpForEditOrder(update);
+        } else {
+            responsePopUpForAlreadyTakenByOtherDriver(update);
         }
     }
-    public void sendNewOrder(TelegramRestaurantUserDTO telegramRestaurantUserDTO, RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO){
+    public void sendNewOrder(TelegramDeliveryUserDTO telegramRestaurantUserDTO, RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO){
         SendMessage response = new SendMessage();
         response.setText(prepareInvoice(restorant, orderedFoodList,orderDTO));
         response.setParseMode("HTML");
@@ -63,11 +65,14 @@ public class TransportRequestForNewOrder {
             logger.error("Error Sending Message {}", response);
         }
     }
-    public void sendEditOrder(TelegramRestaurantUserDTO telegramRestaurantUserDTO, RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO, Update update){
+    public void sendEditOrder(TelegramDeliveryUserDTO telegramRestaurantUserDTO, RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO, Update update, boolean alreadyAccepted){
         EditMessageText response = new EditMessageText();
         response.setText(prepareInvoice(restorant, orderedFoodList,orderDTO));
         response.setParseMode("HTML");
         response.setChatId(telegramRestaurantUserDTO.getChatId());
+        if (alreadyAccepted){
+            orderDTO.setOrderStatus(OrderStatus.DELIVERED);
+        }
         response.setReplyMarkup(TransportMenu.orderActionMenu(orderDTO));
         if (update.hasCallbackQuery()) {
             response.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
@@ -85,6 +90,17 @@ public class TransportRequestForNewOrder {
         response.setCallbackQueryId(update.getCallbackQuery().getId());
         response.setShowAlert(true);
         response.setText("\uD83D\uDC68\u200D\uD83C\uDF73 Your order status has been successfully changed.");
+        try {
+            telegramSender.execute(response);
+        } catch (TelegramApiException e) {
+            logger.error("Error Sending Message {}", response);
+        }
+    }
+    public void responsePopUpForAlreadyTakenByOtherDriver(Update update){
+        AnswerCallbackQuery response = new AnswerCallbackQuery();
+        response.setCallbackQueryId(update.getCallbackQuery().getId());
+        response.setShowAlert(true);
+        response.setText("❗️ This order has been accepted by other user.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

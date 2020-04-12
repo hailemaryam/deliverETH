@@ -23,13 +23,18 @@ public class TransportWaitingForOrderListProcessor {
 
     public void processOrder(Update update, TelegramDeliveryUserDTO telegramRestaurantUserDTO) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("accept_")) {
-            OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
-                OrderStatus.ACCEPTED_BY_DRIVER);
-            requestForNewOrder.editNewOrder(update, orderDTO);
+            OrderDTO orderById = orderDbUtility.getOrderById(Long.valueOf(update.getCallbackQuery().getData().substring(7)));
+            if (orderById.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_DRIVER) || orderById.getOrderStatus().equals(OrderStatus.DELIVERED)) {
+                requestForNewOrder.editNewOrder(update, orderById,true);
+            } else {
+                OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
+                    OrderStatus.ACCEPTED_BY_DRIVER);
+                requestForNewOrder.editNewOrder(update, orderDTO, false);
+            }
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("delivered_")) {
             OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(10)),
                 OrderStatus.DELIVERED);
-            requestForNewOrder.editNewOrder(update, orderDTO);
+            requestForNewOrder.editNewOrder(update, orderDTO, false);
         } else {
             transportCommandProcessor.requestForErrorResponder(update, telegramRestaurantUserDTO);
         }

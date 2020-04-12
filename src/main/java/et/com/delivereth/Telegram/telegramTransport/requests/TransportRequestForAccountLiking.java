@@ -1,6 +1,7 @@
 package et.com.delivereth.Telegram.telegramTransport.requests;
 
 import et.com.delivereth.Telegram.telegramTransport.main.TransportTelegramSender;
+import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
 import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ public class TransportRequestForAccountLiking {
         this.transportTelegramSender = transportTelegramSender;
     }
 
-    public void requestUserToWait(Update update, TelegramRestaurantUserDTO telegramUser) {
+    public void requestUserToWait(Update update, TelegramDeliveryUserDTO telegramUser) {
         SendMessage response = new SendMessage();
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
@@ -33,7 +34,7 @@ public class TransportRequestForAccountLiking {
             logger.error("Error Sending Message {}", response);
         }
     }
-    public void requestUserToWaitAgain(Update update, TelegramRestaurantUserDTO telegramUser) {
+    public void requestUserToWaitAgain(Update update, TelegramDeliveryUserDTO telegramUser) {
         SendMessage response = new SendMessage();
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());

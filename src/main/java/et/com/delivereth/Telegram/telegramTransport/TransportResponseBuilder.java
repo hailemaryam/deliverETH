@@ -1,9 +1,11 @@
 package et.com.delivereth.Telegram.telegramTransport;
 
+import et.com.delivereth.Telegram.DbUtility.TelegramDeliveryUserDbUtility;
 import et.com.delivereth.Telegram.DbUtility.TelegramRestaurantUserDbUtility;
 import et.com.delivereth.Telegram.telegramTransport.processor.TransportMainCommandProccessor;
 import et.com.delivereth.Telegram.telegramTransport.processor.TransportMainStepProccessor;
 import et.com.delivereth.Telegram.telegramTransport.requests.TransportRequestContact;
+import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
 import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -13,19 +15,19 @@ public class TransportResponseBuilder {
     private final TransportRequestContact requestContact;
     private final TransportMainCommandProccessor mainCommandProccessor;
     private final TransportMainStepProccessor mainStepProcessor;
-    private final TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility;
+    private final TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility;
 
-    public TransportResponseBuilder(TransportRequestContact requestContact, TransportMainCommandProccessor mainCommandProccessor, TransportMainStepProccessor mainStepProcessor, TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility) {
+    public TransportResponseBuilder(TransportRequestContact requestContact, TransportMainCommandProccessor mainCommandProccessor, TransportMainStepProccessor mainStepProcessor, TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility) {
         this.requestContact = requestContact;
         this.mainCommandProccessor = mainCommandProccessor;
         this.mainStepProcessor = mainStepProcessor;
-        this.telegramRestaurantUserDbUtility = telegramRestaurantUserDbUtility;
+        this.telegramDeliveryUserDbUtility = telegramDeliveryUserDbUtility;
     }
 
     public void getResponse(Update update) {
-        TelegramRestaurantUserDTO telegramUser = telegramRestaurantUserDbUtility.getTelegramUser(update);
+        TelegramDeliveryUserDTO telegramUser = telegramDeliveryUserDbUtility.getTelegramUser(update);
         if (telegramUser == null) {
-            telegramRestaurantUserDbUtility.registerTelegramUser(update);
+            telegramDeliveryUserDbUtility.registerTelegramUser(update);
             requestContact.requestContact(update);
         } else if (update.hasMessage()) {
             if (update.getMessage().hasText()) {

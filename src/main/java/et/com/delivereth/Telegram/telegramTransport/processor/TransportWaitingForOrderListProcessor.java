@@ -4,6 +4,7 @@ import et.com.delivereth.Telegram.DbUtility.OrderDbUtility;
 import et.com.delivereth.Telegram.telegramTransport.requests.TransportRequestForNewOrder;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.OrderDTO;
+import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
 import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,7 +21,7 @@ public class TransportWaitingForOrderListProcessor {
         this.transportCommandProcessor = transportCommandProcessor;
     }
 
-    public void processOrder(Update update, TelegramRestaurantUserDTO telegramRestaurantUserDTO) {
+    public void processOrder(Update update, TelegramDeliveryUserDTO telegramRestaurantUserDTO) {
         if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("accept_")) {
             OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
                 OrderStatus.ACCEPTED_BY_RESTAURANT);

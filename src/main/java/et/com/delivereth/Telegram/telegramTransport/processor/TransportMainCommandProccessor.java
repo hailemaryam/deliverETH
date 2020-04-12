@@ -2,6 +2,7 @@ package et.com.delivereth.Telegram.telegramTransport.processor;
 
 import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.telegramUser.BotCommands;
+import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
 import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -16,7 +17,7 @@ public class TransportMainCommandProccessor {
         this.transportMainStepProccessor = transportMainStepProccessor;
     }
 
-    public void commandProccessor(Update update, TelegramRestaurantUserDTO telegramUser){
+    public void commandProccessor(Update update, TelegramDeliveryUserDTO telegramUser){
         switch (update.getMessage().getText()) {
 //            case StaticText.cancelOrder:
 //            case BotCommands.cancel:

@@ -1,6 +1,7 @@
 package et.com.delivereth.Telegram.telegramTransport.processor;
 
 import et.com.delivereth.Telegram.telegramTransport.ChatStepConstants;
+import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
 import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -19,7 +20,7 @@ public class TransportMainStepProccessor {
         this.transportWaitingForOrderListProcessor = transportWaitingForOrderListProcessor;
     }
 
-    public void mainStepProcessor(Update update, TelegramRestaurantUserDTO telegramUser){
+    public void mainStepProcessor(Update update, TelegramDeliveryUserDTO telegramUser){
         switch (telegramUser.getConversationMetaData()) {
             case ChatStepConstants.WAITING_FOR_CONTACT_RESPONSE:
                 transportWaitingForContactResponseProcessor.processContactAndProceedToOrder(update, telegramUser);

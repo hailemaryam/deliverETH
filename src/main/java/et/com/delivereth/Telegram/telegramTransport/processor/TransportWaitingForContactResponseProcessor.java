@@ -1,8 +1,10 @@
 package et.com.delivereth.Telegram.telegramTransport.processor;
 
+import et.com.delivereth.Telegram.DbUtility.TelegramDeliveryUserDbUtility;
 import et.com.delivereth.Telegram.DbUtility.TelegramRestaurantUserDbUtility;
 import et.com.delivereth.Telegram.telegramTransport.requests.TransportRequestContact;
 import et.com.delivereth.Telegram.telegramTransport.requests.TransportRequestForAccountLiking;
+import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
 import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,17 +13,17 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TransportWaitingForContactResponseProcessor {
     private final TransportRequestContact transportRequestContact;
     private final TransportRequestForAccountLiking transportRequestForAccountLiking;
-    private final TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility;
+    private final TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility;
 
-    public TransportWaitingForContactResponseProcessor(TransportRequestContact transportRequestContact, TransportRequestForAccountLiking transportRequestForAccountLiking, TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility) {
+    public TransportWaitingForContactResponseProcessor(TransportRequestContact transportRequestContact, TransportRequestForAccountLiking transportRequestForAccountLiking, TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility) {
         this.transportRequestContact = transportRequestContact;
         this.transportRequestForAccountLiking = transportRequestForAccountLiking;
-        this.telegramRestaurantUserDbUtility = telegramRestaurantUserDbUtility;
+        this.telegramDeliveryUserDbUtility = telegramDeliveryUserDbUtility;
     }
 
-    void processContactAndProceedToOrder(Update update, TelegramRestaurantUserDTO telegramUser) {
+    void processContactAndProceedToOrder(Update update, TelegramDeliveryUserDTO telegramUser) {
         if (update.getMessage().getContact() != null) {
-            telegramRestaurantUserDbUtility.registerUserPhone(update, telegramUser);
+            telegramDeliveryUserDbUtility.registerUserPhone(update, telegramUser);
             transportRequestForAccountLiking.requestUserToWait(update, telegramUser);
         } else {
             transportRequestContact.requestContactAgain(update);

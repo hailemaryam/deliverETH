@@ -100,7 +100,7 @@ public class TransportRequestForNewOrder {
         AnswerCallbackQuery response = new AnswerCallbackQuery();
         response.setCallbackQueryId(update.getCallbackQuery().getId());
         response.setShowAlert(true);
-        response.setText("❗️ This order has been accepted by other user.");
+        response.setText("❗️ This order has been accepted by other delivery person.");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

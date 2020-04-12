@@ -113,18 +113,24 @@ public class TransportRequestForNewOrder {
         invoice = invoice +  "<strong>\uD83C\uDFE1 Restaurant Name: " +
             restorant.getName() +
             "</strong>\n";
-        double total = 0D;
         for (OrderedFoodDTO orderedFood : orderedFoodList) {
             FoodDTO food = foodDbUtitility.getFood(orderedFood.getFoodId());
             invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n");
-            total += orderedFood.getQuantity() * food.getPrice();
         }
-        invoice = invoice + "<b>\uD83D\uDCB5 Total = " + String.format("%.2f", total)  +"</b> \n";
+        invoice = invoice + "\uD83D\uDCB5 Total = " + String.format("%.2f", orderDTO.getTotalPrice())  +" \n";
+        invoice = invoice + "\uD83D\uDCB5 Transport fee = " + String.format("%.2f", orderDTO.getTransportationFee())  +" \n";
+        invoice = invoice + "\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +"</b> \n";
+        invoice = invoice + "Restaurant Location = /Restaurant_Location_" + restorant.getId()  +" \n";
+        invoice = invoice + "Latitude = " + restorant.getLatitude()  +" \n";
+        invoice = invoice + "Longitude = " + restorant.getLongtude()  +" \n";
         invoice = invoice + "\n";
         invoice = invoice +  "<strong>\uD83D\uDC68\u200D\uD83E\uDDB2 User Information</strong>\n";
         invoice = invoice + "User Name: " + telegramUserDTO.getFirstName() + " " + telegramUserDTO.getLastName() + "\n";
         invoice = invoice + "Phone: " + telegramUserDTO.getPhone() + "\n";
         invoice = invoice + "Telegram Chat: @" + telegramUserDTO.getUserName() + "\n";
+        invoice = invoice + "User Location: /User_Location_" + orderDTO.getId() + "\n";
+        invoice = invoice + "Latitude = " + orderDTO.getLatitude()  +" \n";
+        invoice = invoice + "Longitude = " + orderDTO.getLongtude()  +" \n";
         invoice = invoice + "\n";
         invoice = invoice + "<b>Order Status : " + orderDTO.getOrderStatus() + "</b>\n";
         return invoice;

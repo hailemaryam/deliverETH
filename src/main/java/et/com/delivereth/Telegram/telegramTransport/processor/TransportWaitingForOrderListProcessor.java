@@ -2,6 +2,7 @@ package et.com.delivereth.Telegram.telegramTransport.processor;
 
 import et.com.delivereth.Telegram.DbUtility.OrderDbUtility;
 import et.com.delivereth.Telegram.telegramTransport.requests.TransportRequestForNewOrder;
+import et.com.delivereth.Telegram.telegramTransport.requests.TransportSendLocation;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.OrderDTO;
 import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
@@ -14,11 +15,13 @@ public class TransportWaitingForOrderListProcessor {
     private final OrderDbUtility orderDbUtility;
     private final TransportRequestForNewOrder requestForNewOrder;
     private final TransportCommandProcessor transportCommandProcessor;
+    private final TransportSendLocation transportSendLocation;
 
-    public TransportWaitingForOrderListProcessor(OrderDbUtility orderDbUtility, TransportRequestForNewOrder requestForNewOrder, TransportCommandProcessor transportCommandProcessor) {
+    public TransportWaitingForOrderListProcessor(OrderDbUtility orderDbUtility, TransportRequestForNewOrder requestForNewOrder, TransportCommandProcessor transportCommandProcessor, TransportSendLocation transportSendLocation) {
         this.orderDbUtility = orderDbUtility;
         this.requestForNewOrder = requestForNewOrder;
         this.transportCommandProcessor = transportCommandProcessor;
+        this.transportSendLocation = transportSendLocation;
     }
 
     public void processOrder(Update update, TelegramDeliveryUserDTO telegramRestaurantUserDTO) {
@@ -35,6 +38,10 @@ public class TransportWaitingForOrderListProcessor {
             OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(10)),
                 OrderStatus.DELIVERED);
             requestForNewOrder.editNewOrder(update, orderDTO, false);
+        } else if (update.hasMessage() && update.getMessage().getText().startsWith("/Restaurant_Location_")) {
+            transportSendLocation.sendRestaurantLocation(update, Long.valueOf(update.getMessage().getText().substring(21)));
+        } else if (update.hasMessage() && update.getMessage().getText().startsWith("/User_Location_")) {
+            transportSendLocation.sendOrderLocation(update, Long.valueOf(update.getMessage().getText().substring(15)));
         } else {
             transportCommandProcessor.requestForErrorResponder(update, telegramRestaurantUserDTO);
         }

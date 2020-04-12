@@ -56,19 +56,18 @@ public class RequestForMyOrdersList {
         response.setChatId(chatId);
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         String invoice = "";
-
         if (orderedFoodList.size() > 0) {
             invoice = invoice +  "<strong>\uD83C\uDFE1 Restaurant Name: " +
                 restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId()).getName() +
                 "</strong>\n";
         }
-        double total = 0D;
         for (OrderedFoodDTO orderedFood : orderedFoodList) {
             FoodDTO food = foodDbUtitility.getFood(orderedFood.getFoodId());
             invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n");
-            total += orderedFood.getQuantity() * food.getPrice();
         }
-        invoice = invoice + "<b>Total = " + total + "</b> \n";
+        invoice = invoice + "\uD83D\uDCB5 Total = " + String.format("%.2f", orderDTO.getTotalPrice())  +" \n";
+        invoice = invoice + "\uD83D\uDCB5 Transport fee = " + String.format("%.2f", orderDTO.getTransportationFee())  +" \n";
+        invoice = invoice + "\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +" \n";
         invoice = invoice + "<b>Status = " + orderDTO.getOrderStatus() + "</b>";
         response.setText(invoice);
         response.setParseMode("HTML");

@@ -39,9 +39,9 @@ public class RequestForMyOrdersList {
             sendTitle(update);
         }
         if (update.hasMessage()) {
-            orderList.toList().forEach(orderDTO -> sendMyOrders(orderDTO, update.getMessage().getChatId()));
+            orderList.toList().forEach(orderDTO -> sendMyOrders(orderDTO, update.getMessage().getChatId().toString()));
         } else if (update.hasCallbackQuery()) {
-            orderList.toList().forEach(orderDTO -> sendMyOrders(orderDTO, update.getCallbackQuery().getMessage().getChatId()));
+            orderList.toList().forEach(orderDTO -> sendMyOrders(orderDTO, update.getCallbackQuery().getMessage().getChatId().toString()));
         }
         if (orderList.toList().size() == 0) {
             sendNoMoreItem(update);
@@ -50,7 +50,7 @@ public class RequestForMyOrdersList {
         }
     }
 
-    private void sendMyOrders(OrderDTO orderDTO, Long chatId) {
+    public void sendMyOrders(OrderDTO orderDTO, String chatId) {
         SendMessage response = new SendMessage();
         response.setReplyMarkup(Menu.myOrderInlineKeyBoard(orderDTO));
         response.setChatId(chatId);

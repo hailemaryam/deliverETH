@@ -119,7 +119,7 @@ public class TransportRequestForNewOrder {
         }
         invoice = invoice + "\uD83D\uDCB5 Total = " + String.format("%.2f", orderDTO.getTotalPrice())  +" \n";
         invoice = invoice + "\uD83D\uDCB5 Transport fee = " + String.format("%.2f", orderDTO.getTransportationFee())  +" \n";
-        invoice = invoice + "\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +"</b> \n";
+        invoice = invoice + "\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +" \n";
         invoice = invoice + "Restaurant Location = /Restaurant_Location_" + restorant.getId()  +" \n";
         invoice = invoice + "Latitude = " + restorant.getLatitude()  +" \n";
         invoice = invoice + "Longitude = " + restorant.getLongtude()  +" \n";

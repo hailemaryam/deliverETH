@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramTransport.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.telegramTransport.main.TransportTelegramSender;
 import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
 import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
@@ -26,22 +27,7 @@ public class TransportRequestForAccountLiking {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registerd. We will send order detail when it arrives.</b>\n");
-        response.setParseMode("HTML");
-        try {
-            transportTelegramSender.execute(response);
-        } catch (TelegramApiException e) {
-            logger.error("Error Sending Message {}", response);
-        }
-    }
-    public void requestUserToWaitAgain(Update update, TelegramDeliveryUserDTO telegramUser) {
-        SendMessage response = new SendMessage();
-        if (update.hasMessage()){
-            response.setChatId(update.getMessage().getChatId());
-        } else if (update.hasCallbackQuery()) {
-            response.setChatId(update.getCallbackQuery().getMessage().getChatId());
-        }
-        response.setText("<b>❗️ Before you continue the next step please wait deliverEth admin to link your account with your restaurant.</b>\n");
+        response.setText(StaticText.successfullyTransportUserRegistration);
         response.setParseMode("HTML");
         try {
             transportTelegramSender.execute(response);

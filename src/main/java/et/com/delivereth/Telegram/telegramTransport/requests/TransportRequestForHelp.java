@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramTransport.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.telegramTransport.main.TransportTelegramSender;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
 import org.slf4j.Logger;
@@ -28,9 +29,7 @@ public class TransportRequestForHelp {
         }
         SendMessage response = new SendMessage();
         response.setChatId(chatId.toString());
-        response.setText("<b>\uD83D\uDCD6 Help</b>\n" +
-            "DeliverEth is the first Ethiopian telegram bot to bring you fresh foods where ever you are.\n" +
-            "Order your favorite dish from your favorite restaurant and it will be delivered at your door steps.\n");
+        response.setText(StaticText.userHelp);
         response.setParseMode("HTML");
         try {
             telegramSender.execute(response);

@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramRestorant.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.telegramRestorant.main.RestaurantTelegramSender;
 import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class RestaurantRequestForAccountLiking {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registerd. Contact deliverEth admin to link your account to your restaurant</b>\n");
+        response.setText(StaticText.notifyAccountLinkingNeed);
         response.setParseMode("HTML");
         try {
             restaurantTelegramSender.execute(response);
@@ -40,7 +41,7 @@ public class RestaurantRequestForAccountLiking {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("<b>❗️ Before you continue the next step please wait deliverEth admin to link your account with your restaurant.</b>\n");
+        response.setText(StaticText.notifyAccountLinkingNeedAgain);
         response.setParseMode("HTML");
         try {
             restaurantTelegramSender.execute(response);

@@ -41,10 +41,7 @@ public class RequestForMenu {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("<b>We are currently delivering to everywhere in Addis Ababa, Ethiopia \uD83C\uDDEA\uD83C\uDDF9</b>\n");
-//            "<i>* hayat</i>\n" +
-//            "<i>* semit</i>\n" +
-//            "<i>* bole</i>\n");
+        response.setText(StaticText.menuText);
         response.setParseMode("HTML");
         try {
             telegramSender.execute(response);

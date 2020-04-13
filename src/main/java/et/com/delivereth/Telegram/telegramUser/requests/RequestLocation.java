@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramUser.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.DbUtility;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramSender;
@@ -22,11 +23,10 @@ public class RequestLocation {
     }
 
     public void requestLocation(Update update) {
-        requestLocation(update, "We need your location for order delivery. Click share location to share your location.");
+        requestLocation(update, StaticText.weNeedYourLocationText);
     }
     public void requestLocationAgain(Update update) {
-        requestLocation(update, "We can't process your order with out knowing your location. " +
-            "Please click share location to share your location. If your location is not turned on, please turn on your location. ");
+        requestLocation(update, StaticText.weNeedYourLocationAgainText);
     }
     public void requestLocation(Update update, String text){
         SendMessage response = new SendMessage();

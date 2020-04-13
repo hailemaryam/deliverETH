@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramUser.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.DbUtility;
 import et.com.delivereth.Telegram.DbUtility.RestorantDbUtitlity;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
@@ -70,7 +71,7 @@ public class RequestRestorantSelection {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("Want to list more restaurant.");
+        response.setText(StaticText.wantToListMoreRestaurant);
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -84,7 +85,7 @@ public class RequestRestorantSelection {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("There are no restaurant list around you delivering at this time.");
+        response.setText(StaticText.noRestaurantListAround);
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -98,7 +99,7 @@ public class RequestRestorantSelection {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("<b>Choose restaurant from this list</b>");
+        response.setText(StaticText.chooseRestaurantListTitle);
         response.setParseMode("HTML");
         response.setReplyMarkup(Menu.orderKeyBoardMenu(true));
         try {

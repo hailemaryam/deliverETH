@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramUser.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.*;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramSender;
 import et.com.delivereth.service.dto.*;
@@ -69,7 +70,7 @@ public class RequestForFinishOrder {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
         response.setReplyMarkup(Menu.orderKeyBoardMenu(false));
-        response.setText("\uD83D\uDC68\u200D\uD83C\uDF73 Your order has been successfully registered.");
+        response.setText(StaticText.orderSuccessfullyRegistered);
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -80,7 +81,7 @@ public class RequestForFinishOrder {
         AnswerCallbackQuery response = new AnswerCallbackQuery();
         response.setCallbackQueryId(update.getCallbackQuery().getId());
         response.setShowAlert(true);
-        response.setText("\uD83D\uDC68\u200D\uD83C\uDF73 Your order has been successfully registered.");
+        response.setText(StaticText.orderSuccessfullyRegistered);
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -95,7 +96,7 @@ public class RequestForFinishOrder {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("\uD83D\uDC68\u200D\uD83C\uDF73 Your order has been successfully canceled.");
+        response.setText(StaticText.orderSuccessfullyCanceled);
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

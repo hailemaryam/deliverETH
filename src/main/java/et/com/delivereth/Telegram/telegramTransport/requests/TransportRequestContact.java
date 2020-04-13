@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramTransport.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.telegramTransport.main.TransportTelegramHome;
 import et.com.delivereth.Telegram.telegramTransport.main.TransportTelegramSender;
 import org.slf4j.Logger;
@@ -24,10 +25,10 @@ public class TransportRequestContact {
         response.setReplyMarkup(TransportMenu.prepareShareContactReplyButton());
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
-            response.setText("Welcome " + update.getMessage().getFrom().getUserName() + ".we need your contact for registration. click share button to share your contact.");
+            response.setText("Welcome " + update.getMessage().getFrom().getUserName() + "." + StaticText.weNeedContact);
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
-            response.setText("Welcome " + update.getCallbackQuery().getFrom().getUserName() + ".we need your contact for registration. click share button to share your contact.");
+            response.setText("Welcome " + update.getCallbackQuery().getFrom().getUserName() + "." + StaticText.weNeedContact);
         }
         try {
             telegramSender.execute(response);
@@ -43,7 +44,7 @@ public class TransportRequestContact {
         } else if (update.hasCallbackQuery()){
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("we can't deliver our service with out your contact. click share button to share your contact.");
+        response.setText(StaticText.getWeNeedContactAgain);
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramUser.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.DbUtility;
 import et.com.delivereth.Telegram.DbUtility.FoodDbUtitility;
 import et.com.delivereth.Telegram.DbUtility.RestorantDbUtitlity;
@@ -151,7 +152,7 @@ public class RequestFoodList {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("Menu are not added in selected restaurant.");
+        response.setText(StaticText.noFoodMenuText);
         response.setReplyMarkup(Menu.orderKeyBoardMenu(true));
         try {
             telegramSender.execute(response);

@@ -10,13 +10,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TransportMainStepProccessor {
     private final TransportCommandProcessor transportCommandProcessor;
     private final TransportWaitingForContactResponseProcessor transportWaitingForContactResponseProcessor;
-    private final TransportRestaurantWaitingForAccountLinkProcessor transportRestaurantWaitingForAccountLinkProcessor;
     private final TransportWaitingForOrderListProcessor transportWaitingForOrderListProcessor;
 
-    public TransportMainStepProccessor(TransportCommandProcessor transportCommandProcessor, TransportWaitingForContactResponseProcessor transportWaitingForContactResponseProcessor, TransportRestaurantWaitingForAccountLinkProcessor transportRestaurantWaitingForAccountLinkProcessor, TransportWaitingForOrderListProcessor transportWaitingForOrderListProcessor) {
+    public TransportMainStepProccessor(TransportCommandProcessor transportCommandProcessor, TransportWaitingForContactResponseProcessor transportWaitingForContactResponseProcessor, TransportWaitingForOrderListProcessor transportWaitingForOrderListProcessor) {
         this.transportCommandProcessor = transportCommandProcessor;
         this.transportWaitingForContactResponseProcessor = transportWaitingForContactResponseProcessor;
-        this.transportRestaurantWaitingForAccountLinkProcessor = transportRestaurantWaitingForAccountLinkProcessor;
         this.transportWaitingForOrderListProcessor = transportWaitingForOrderListProcessor;
     }
 

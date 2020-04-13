@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramUser.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.*;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramSender;
@@ -84,9 +85,9 @@ public class RequestForMyOrdersList {
         response.setChatId(chatId);
         String invoice = "";
         if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT)) {
-            invoice = invoice + "<b>❗️ Your order is rejected by the restaurant</b>\n";
+            invoice = invoice + StaticText.orderRejectedText;
         } else {
-            invoice = invoice + "<b>✅ Order Status Change</b>\n";
+            invoice = invoice + StaticText.orderStatuChanged;
         }
         invoice = invoice + "Status = " + orderDTO.getOrderStatus() + "\n";
         invoice = invoice + "Order Id : #" + orderDTO.getId() + "\n";
@@ -122,7 +123,7 @@ public class RequestForMyOrdersList {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("There are no more orders to load.");
+        response.setText(StaticText.noMoreOrder);
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -130,11 +131,11 @@ public class RequestForMyOrdersList {
         }
     }
     public void sendSuccefulCancel(Update update){
-        sendPoup(update, "\uD83D\uDC68\u200D\uD83C\uDF73 Your order has been successfully canceled.");
+        sendPoup(update, StaticText.successfullyCanceld );
         delete(update);
     }
     public void sendSuccessfulRemove(Update update){
-        sendPoup(update, "\uD83D\uDC68\u200D\uD83C\uDF73 Your order has been successfully removed.");
+        sendPoup(update, StaticText.succesfullyRemoved);
         delete(update);
     }
     public void delete(Update update){
@@ -171,7 +172,7 @@ public class RequestForMyOrdersList {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("<b>Your Order List</b>");
+        response.setText(StaticText.yourOrderListTitle);
         response.setParseMode("HTML");
         response.setReplyMarkup(Menu.orderKeyBoardMenu(false));
         try {

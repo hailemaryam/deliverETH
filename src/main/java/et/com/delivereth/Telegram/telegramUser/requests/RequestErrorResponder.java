@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramUser.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramSender;
 import org.slf4j.Logger;
@@ -27,8 +28,7 @@ public class RequestErrorResponder {
         }
         SendMessage response = new SendMessage();
         response.setChatId(chatId.toString());
-        response.setText("<b>❗️ Improper Command</b>\n" +
-            "Your request could not be processed. you need to choose or write proper commands.");
+        response.setText(StaticText.userErrorCommand);
         response.setParseMode("HTML");
         try {
             telegramSender.execute(response);

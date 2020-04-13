@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.telegramRestorant.requests;
 
+import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.*;
 import et.com.delivereth.Telegram.telegramRestorant.main.RestaurantTelegramSender;
 import et.com.delivereth.service.dto.*;
@@ -81,10 +82,10 @@ public class RestaurantRequestForNewOrder {
         }
     }
     public void responsePopUpForEditOrder(Update update){
-        popUpMessage(update, "\uD83D\uDC68\u200D\uD83C\uDF73 Your order status has been successfully changed.");
+        popUpMessage(update, StaticText.orderStatusSuccessfullyChanged);
     }
     public void responsePopUpForAlreadyCanceledByUser(Update update){
-        popUpMessage(update, "❗️ This order already canceled by user.");
+        popUpMessage(update, StaticText.alreadyCanceledByUser);
     }
     public void popUpMessage(Update update, String text){
         AnswerCallbackQuery response = new AnswerCallbackQuery();

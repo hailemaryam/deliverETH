@@ -42,14 +42,14 @@ public class TransportWaitingForOrderListProcessor {
                     OrderStatus.ACCEPTED_BY_DRIVER);
                 requestForNewOrder.editNewOrder(update, orderDTO, false);
                 TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-                requestForMyOrdersList.sendMyOrders(orderDTO, telegramUserDTO.getChatId());
+                requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId());
             }
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("delivered_")) {
             OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(10)),
                 OrderStatus.DELIVERED);
             requestForNewOrder.editNewOrder(update, orderDTO, false);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-            requestForMyOrdersList.sendMyOrders(orderDTO, telegramUserDTO.getChatId());
+            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId());
         } else if (update.hasMessage() && update.getMessage().getText().startsWith("/Restaurant_Location_")) {
             transportSendLocation.sendRestaurantLocation(update, Long.valueOf(update.getMessage().getText().substring(21)));
         } else if (update.hasMessage() && update.getMessage().getText().startsWith("/User_Location_")) {

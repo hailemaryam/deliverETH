@@ -47,11 +47,11 @@ public class RequestForFinishOrder {
         Double total = orderedFoodDbUtility.getTotalFee(telegramUser.getOrderIdPaused()).doubleValue();
         for (OrderedFoodDTO orderedFood : orderedFoodList) {
             FoodDTO food = foodDbUtitility.getFood(orderedFood.getFoodId());
-            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n" );
+            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "ETB\n" );
         }
-        invoice = invoice + "<b>\uD83D\uDCB5 Total = " + String.format("%.2f", total)  +"</b> \n";
-        invoice = invoice + "<b>\uD83D\uDCB5 Transportation Fee = " +  String.format("%.2f", transportaionFee) +"</b> \n";
-        invoice = invoice + "<b>\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (transportaionFee + total)) +"</b> \n";
+        invoice = invoice + "<b>\uD83D\uDCB5 Total = " + String.format("%.2f", total)  +"ETB</b> \n";
+        invoice = invoice + "<b>\uD83D\uDCB5 Transportation Fee = " +  String.format("%.2f", transportaionFee) +"ETB</b> \n";
+        invoice = invoice + "<b>\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (transportaionFee + total)) +"ETB</b> \n";
         response.setText(invoice);
         response.setParseMode("HTML");
         try {

@@ -115,11 +115,11 @@ public class TransportRequestForNewOrder {
             "</strong>\n";
         for (OrderedFoodDTO orderedFood : orderedFoodList) {
             FoodDTO food = foodDbUtitility.getFood(orderedFood.getFoodId());
-            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n");
+            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "ETB\n");
         }
-        invoice = invoice + "\uD83D\uDCB5 Total = " + String.format("%.2f", orderDTO.getTotalPrice())  +" \n";
-        invoice = invoice + "\uD83D\uDCB5 Transport fee = " + String.format("%.2f", orderDTO.getTransportationFee())  +" \n";
-        invoice = invoice + "\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +" \n";
+        invoice = invoice + "\uD83D\uDCB5 Total = " + String.format("%.2f", orderDTO.getTotalPrice())  +" ETB\n";
+        invoice = invoice + "\uD83D\uDCB5 Transport fee = " + String.format("%.2f", orderDTO.getTransportationFee())  +"ETB \n";
+        invoice = invoice + "\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +"ETB \n";
         invoice = invoice + "Restaurant Location = /Restaurant_Location_" + restorant.getId()  +" \n";
         invoice = invoice + "Latitude = " + restorant.getLatitude()  +" \n";
         invoice = invoice + "Longitude = " + restorant.getLongtude()  +" \n";
@@ -133,6 +133,7 @@ public class TransportRequestForNewOrder {
         invoice = invoice + "Longitude = " + orderDTO.getLongtude()  +" \n";
         invoice = invoice + "\n";
         invoice = invoice + "<b>Order Status : " + orderDTO.getOrderStatus() + "</b>\n";
+        invoice = invoice + "<b>Order Id : #" + orderDTO.getId() + "</b>\n";
         return invoice;
     }
 }

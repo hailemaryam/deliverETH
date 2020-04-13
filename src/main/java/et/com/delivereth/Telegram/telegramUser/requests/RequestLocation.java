@@ -22,10 +22,11 @@ public class RequestLocation {
     }
 
     public void requestLocation(Update update) {
-        requestLocation(update, "we need your location for order delivery. click share location to share your location.");
+        requestLocation(update, "We need your location for order delivery. Click share location to share your location.");
     }
     public void requestLocationAgain(Update update) {
-        requestLocation(update, "we can't process your order with out knowing your location. please click share location to share your location.");
+        requestLocation(update, "We can't process your order with out knowing your location. " +
+            "Please click share location to share your location. If your location is not turned on, please turn on your location. ");
     }
     public void requestLocation(Update update, String text){
         SendMessage response = new SendMessage();

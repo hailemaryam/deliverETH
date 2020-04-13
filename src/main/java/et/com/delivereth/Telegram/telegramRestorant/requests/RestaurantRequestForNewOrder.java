@@ -106,10 +106,10 @@ public class RestaurantRequestForNewOrder {
         double total = 0D;
         for (OrderedFoodDTO orderedFood : orderedFoodList) {
             FoodDTO food = foodDbUtitility.getFood(orderedFood.getFoodId());
-            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n");
+            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "ETB\n");
             total += orderedFood.getQuantity() * food.getPrice();
         }
-        invoice = invoice + "<b>\uD83D\uDCB5 Total = " + String.format("%.2f", total)  +"</b> \n";
+        invoice = invoice + "<b>\uD83D\uDCB5 Total = " + String.format("%.2f", total)  +"ETB</b> \n";
         invoice = invoice + "\n";
         invoice = invoice +  "<strong>\uD83D\uDC68\u200D\uD83E\uDDB2 User Information</strong>\n";
         invoice = invoice + "User Name: " + telegramUserDTO.getFirstName() + " " + telegramUserDTO.getLastName() + "\n";
@@ -117,6 +117,7 @@ public class RestaurantRequestForNewOrder {
         invoice = invoice + "Telegram Chat: @" + telegramUserDTO.getUserName() + "\n";
         invoice = invoice + "\n";
         invoice = invoice + "<b>Order Status : " + orderDTO.getOrderStatus() + "</b>\n";
+        invoice = invoice + "<b>Order Id : #" + orderDTO.getId() + "</b>\n";
         return invoice;
     }
 }

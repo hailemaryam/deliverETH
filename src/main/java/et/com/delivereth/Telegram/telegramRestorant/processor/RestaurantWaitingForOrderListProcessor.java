@@ -49,7 +49,7 @@ public class RestaurantWaitingForOrderListProcessor {
                 OrderStatus.ACCEPTED_BY_RESTAURANT);
             requestForNewOrder.editNewOrder(update, orderDTO);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-            requestForMyOrdersList.sendMyOrders(orderDTO, telegramUserDTO.getChatId());
+            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId());
         }
     }
     public void reject(Update update) {
@@ -62,7 +62,7 @@ public class RestaurantWaitingForOrderListProcessor {
                 OrderStatus.CANCELED_BY_RESTAURANT);
             requestForNewOrder.editNewOrder(update, orderDTO);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-            requestForMyOrdersList.sendMyOrders(orderDTO, telegramUserDTO.getChatId());
+            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId());
         }
     }
     public void readyForDelivery(Update update){
@@ -70,6 +70,6 @@ public class RestaurantWaitingForOrderListProcessor {
             OrderStatus.READY_FOR_DELIVERY);
         requestForNewOrder.editNewOrder(update, orderDTO);
         TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-        requestForMyOrdersList.sendMyOrders(orderDTO, telegramUserDTO.getChatId());
+        requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId());
     }
 }

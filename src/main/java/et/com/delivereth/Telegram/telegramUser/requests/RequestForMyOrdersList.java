@@ -3,6 +3,7 @@ package et.com.delivereth.Telegram.telegramUser.requests;
 import et.com.delivereth.Telegram.DbUtility.*;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramSender;
+import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,12 +64,32 @@ public class RequestForMyOrdersList {
         }
         for (OrderedFoodDTO orderedFood : orderedFoodList) {
             FoodDTO food = foodDbUtitility.getFood(orderedFood.getFoodId());
-            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "\n");
+            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "ETB\n");
         }
-        invoice = invoice + "\uD83D\uDCB5 Total = " + String.format("%.2f", orderDTO.getTotalPrice())  +" \n";
-        invoice = invoice + "\uD83D\uDCB5 Transport fee = " + String.format("%.2f", orderDTO.getTransportationFee())  +" \n";
-        invoice = invoice + "\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +" \n";
-        invoice = invoice + "<b>Status = " + orderDTO.getOrderStatus() + "</b>";
+        invoice = invoice + "\uD83D\uDCB5 Total = " + String.format("%.2f", orderDTO.getTotalPrice())  +"ETB \n";
+        invoice = invoice + "\uD83D\uDCB5 Transport fee = " + String.format("%.2f", orderDTO.getTransportationFee())  +"ETB \n";
+        invoice = invoice + "\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +"ETB \n";
+        invoice = invoice + "<b>Status = " + orderDTO.getOrderStatus() + "</b>\n";
+        invoice = invoice + "<b>Order Id : #" + orderDTO.getId() + "</b>\n";
+        response.setText(invoice);
+        response.setParseMode("HTML");
+        try {
+            telegramSender.execute(response);
+        } catch (TelegramApiException e) {
+            logger.error("Error Sending Message {}", response);
+        }
+    }
+    public void sendOrderStatus(OrderDTO orderDTO, String chatId) {
+        SendMessage response = new SendMessage();
+        response.setChatId(chatId);
+        String invoice = "";
+        if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT)) {
+            invoice = invoice + "<b>❗️ Your order is rejected by the restaurant</b>\n";
+        } else {
+            invoice = invoice + "<b>✅ Order Status Change</b>\n";
+        }
+        invoice = invoice + "Status = " + orderDTO.getOrderStatus() + "\n";
+        invoice = invoice + "Order Id : #" + orderDTO.getId() + "\n";
         response.setText(invoice);
         response.setParseMode("HTML");
         try {

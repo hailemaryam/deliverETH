@@ -2,8 +2,6 @@ package et.com.delivereth.Telegram.telegramRestorant.requests;
 
 import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.telegramRestorant.main.RestaurantTelegramSender;
-import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
-import et.com.delivereth.Telegram.telegramUser.main.TelegramSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
 public class RestaurantRequestForHelp {
-    private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestaurantRequestForHelp.class);
     private final RestaurantTelegramSender telegramSender;
 
     public RestaurantRequestForHelp(RestaurantTelegramSender telegramSender) {

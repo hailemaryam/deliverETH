@@ -2,7 +2,6 @@ package et.com.delivereth.Telegram.telegramTransport.requests;
 
 import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.telegramTransport.main.TransportTelegramSender;
-import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
 public class TransportRequestForHelp {
-    private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
+    private static final Logger logger = LoggerFactory.getLogger(TransportRequestForHelp.class);
     private final TransportTelegramSender telegramSender;
 
     public TransportRequestForHelp(TransportTelegramSender telegramSender) {

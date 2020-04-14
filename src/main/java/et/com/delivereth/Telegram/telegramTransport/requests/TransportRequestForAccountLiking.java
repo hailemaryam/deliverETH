@@ -3,7 +3,6 @@ package et.com.delivereth.Telegram.telegramTransport.requests;
 import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.telegramTransport.main.TransportTelegramSender;
 import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
-import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

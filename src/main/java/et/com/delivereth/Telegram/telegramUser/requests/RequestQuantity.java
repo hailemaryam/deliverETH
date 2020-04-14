@@ -65,7 +65,7 @@ public class RequestQuantity {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("How Many " + selectedFoodName + ". do you want?");
+        response.setText("How many " + selectedFoodName + ". do you want?");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

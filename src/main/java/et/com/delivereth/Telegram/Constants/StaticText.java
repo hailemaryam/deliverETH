@@ -51,10 +51,10 @@ public class StaticText {
     public static final String weNeedContact = "We need your contact for registration. Click share button to share your contact.";
     public static final String getWeNeedContactAgain = "We can't deliver our service with out your contact. Click share button to share your contact.";
     public static final String noFoodMenuText = "Menu are not added in selected restaurant.";
-    public static final String successfullyTransportUserRegistration = "<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registerd. We will send order detail when it arrives.</b>\n";
+    public static final String successfullyTransportUserRegistration = "<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registered. We will send order detail when it arrives.</b>\n";
 
     public static final String orderStatusSuccessfullyChanged = "\uD83D\uDC68\u200D\uD83C\uDF73 Your order status has been successfully changed.";
     public static final String alreadyCanceledByUser = "❗️ This order already canceled by user.";
-    public static final String notifyAccountLinkingNeed = "<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registerd. Contact deliverEth admin to link your account to your restaurant</b>\n";
+    public static final String notifyAccountLinkingNeed = "<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registered. Contact deliverEth admin to link your account to your restaurant</b>\n";
     public static final String notifyAccountLinkingNeedAgain = "<b>❗️ Before you continue the next step please wait deliverEth admin to link your account with your restaurant.</b>\n";
 }

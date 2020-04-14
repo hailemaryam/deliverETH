@@ -5,6 +5,7 @@ import et.com.delivereth.service.TelegramDeliveryUserQueryService;
 import et.com.delivereth.service.TelegramDeliveryUserService;
 import et.com.delivereth.service.dto.TelegramDeliveryUserCriteria;
 import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class TelegramDeliveryUserDbUtility {
             telegramUserDTO.setFirstName(update.getMessage().getFrom().getFirstName());
             telegramUserDTO.setLastName(update.getMessage().getFrom().getLastName());
             telegramUserDTO.setUserName(update.getMessage().getFrom().getUserName());
+            telegramUserDTO.setUserId(update.getMessage().getFrom().getId());
             if (update.getMessage().getContact() != null) {
                 telegramUserDTO.setPhone(update.getMessage().getContact().getPhoneNumber());
             }
@@ -45,14 +47,14 @@ public class TelegramDeliveryUserDbUtility {
     public TelegramDeliveryUserDTO getTelegramUser(Update update) {
         List<TelegramDeliveryUserDTO> telegramUserDTOList = new ArrayList<>();
         TelegramDeliveryUserCriteria telegramUserCriteria = new TelegramDeliveryUserCriteria();
-        StringFilter stringFilter = new StringFilter();
+        IntegerFilter integerFilter = new IntegerFilter();
         if (update.hasMessage()) {
-            stringFilter.setEquals(update.getMessage().getFrom().getUserName());
-            telegramUserCriteria.setUserName(stringFilter);
+            integerFilter.setEquals(update.getMessage().getFrom().getId());
+            telegramUserCriteria.setUserId(integerFilter);
             telegramUserDTOList = telegramDeliveryUserQueryService.findByCriteria(telegramUserCriteria);
         } else if (update.hasCallbackQuery()){
-            stringFilter.setEquals(update.getCallbackQuery().getFrom().getUserName());
-            telegramUserCriteria.setUserName(stringFilter);
+            integerFilter.setEquals(update.getCallbackQuery().getFrom().getId());
+            telegramUserCriteria.setUserId(integerFilter);
             telegramUserDTOList = telegramDeliveryUserQueryService.findByCriteria(telegramUserCriteria);
         }
         return telegramUserDTOList.size() > 0 ? telegramUserDTOList.get(0): null;

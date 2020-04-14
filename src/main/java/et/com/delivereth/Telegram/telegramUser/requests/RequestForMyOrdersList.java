@@ -86,6 +86,8 @@ public class RequestForMyOrdersList {
         String invoice = "";
         if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT)) {
             invoice = invoice + StaticText.orderRejectedText;
+        } else if(orderDTO.getOrderStatus().equals(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM)){
+            invoice = invoice + StaticText.orderCancelBySystemText;
         } else {
             invoice = invoice + StaticText.orderStatuChanged;
         }

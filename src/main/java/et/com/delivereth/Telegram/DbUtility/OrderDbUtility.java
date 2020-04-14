@@ -2,6 +2,7 @@ package et.com.delivereth.Telegram.DbUtility;
 
 import et.com.delivereth.Telegram.telegramTransport.requests.TransportRequestForNewOrder;
 import et.com.delivereth.Telegram.telegramUser.ChatStepConstants;
+import et.com.delivereth.domain.Order;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.*;
 import et.com.delivereth.service.dto.OrderCriteria;
@@ -59,6 +60,8 @@ public class OrderDbUtility {
                 orderTobeUpdated.setOrderStatus(OrderStatus.DELIVERED_AND_REMOVED);
             } else if (orderTobeUpdated.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT)) {
                 orderTobeUpdated.setOrderStatus(OrderStatus.CANCELED_BY_RESTAURANT_AND_REMOVED);
+            } else if (orderTobeUpdated.getOrderStatus().equals(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM)){
+                orderTobeUpdated.setOrderStatus(OrderStatus.CANCELED_BY_SYSTEM_AND_REMOVED);
             }
             orderTobeUpdated.setDate(Instant.now());
             orderService.save(orderTobeUpdated);
@@ -85,6 +88,7 @@ public class OrderDbUtility {
         orderStatusList.add(OrderStatus.ACCEPTED_BY_DRIVER);
         orderStatusList.add(OrderStatus.DELIVERED);
         orderStatusList.add(OrderStatus.CANCELED_BY_RESTAURANT);
+        orderStatusList.add(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM);
         OrderCriteria.OrderStatusFilter orderStatusFilter = new OrderCriteria.OrderStatusFilter();
         orderStatusFilter.setIn(orderStatusList);
         LongFilter longFilter = new LongFilter();
@@ -103,5 +107,15 @@ public class OrderDbUtility {
     public OrderDTO getOrderById(Long orderId){
         Optional<OrderDTO> order = orderService.findOne(orderId);
         return order.orElse(null);
+    }
+    public List<OrderDTO> getActiveOrder(){
+        OrderCriteria.OrderStatusFilter orderStatusFilter = new OrderCriteria.OrderStatusFilter();
+        orderStatusFilter.setEquals(OrderStatus.ORDERED);
+        OrderCriteria orderCriteria = new OrderCriteria();
+        orderCriteria.setOrderStatus(orderStatusFilter);
+        return orderQueryService.findByCriteria(orderCriteria);
+    }
+    public OrderDTO updateOrder(OrderDTO orderDTO){
+        return orderService.save(orderDTO);
     }
 }

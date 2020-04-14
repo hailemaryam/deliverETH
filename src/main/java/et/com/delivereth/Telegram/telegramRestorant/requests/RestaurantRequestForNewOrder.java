@@ -3,6 +3,7 @@ package et.com.delivereth.Telegram.telegramRestorant.requests;
 import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.*;
 import et.com.delivereth.Telegram.telegramRestorant.main.RestaurantTelegramSender;
+import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,4 +122,26 @@ public class RestaurantRequestForNewOrder {
         invoice = invoice + "<b>Order Id : #" + orderDTO.getId() + "</b>\n";
         return invoice;
     }
+    public void sendOrderStatus(OrderDTO orderDTO, String chatId) {
+        SendMessage response = new SendMessage();
+        response.setChatId(chatId);
+        String invoice = "";
+        if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT)) {
+            invoice = invoice + StaticText.orderRejectedText;
+        } else if(orderDTO.getOrderStatus().equals(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM)){
+            invoice = invoice + StaticText.orderCancelBySystemForRestaurantText;
+        } else {
+            invoice = invoice + StaticText.orderStatuChanged;
+        }
+        invoice = invoice + "Status = " + orderDTO.getOrderStatus() + "\n";
+        invoice = invoice + "Order Id : #" + orderDTO.getId() + "\n";
+        response.setText(invoice);
+        response.setParseMode("HTML");
+        try {
+            telegramSender.execute(response);
+        } catch (TelegramApiException e) {
+            logger.error("Error Sending Message {}", response);
+        }
+    }
+
 }

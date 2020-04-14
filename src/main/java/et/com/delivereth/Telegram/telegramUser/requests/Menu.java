@@ -29,6 +29,7 @@ public class Menu {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT) ||
+            orderDTO.getOrderStatus().equals(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM) ||
             orderDTO.getOrderStatus().equals(OrderStatus.DELIVERED)) {
             rowInline.add(new InlineKeyboardButton().setText(StaticText.removeOrder).setCallbackData("R_" + orderDTO.getId()));
         }

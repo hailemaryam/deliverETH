@@ -52,6 +52,10 @@ public class TelegramRestaurantUserResourceIT {
     private static final String DEFAULT_USER_NAME = "AAAAAAAAAA";
     private static final String UPDATED_USER_NAME = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_USER_ID = 1;
+    private static final Integer UPDATED_USER_ID = 2;
+    private static final Integer SMALLER_USER_ID = 1 - 1;
+
     private static final String DEFAULT_CHAT_ID = "AAAAAAAAAA";
     private static final String UPDATED_CHAT_ID = "BBBBBBBBBB";
 
@@ -102,6 +106,7 @@ public class TelegramRestaurantUserResourceIT {
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
             .userName(DEFAULT_USER_NAME)
+            .userId(DEFAULT_USER_ID)
             .chatId(DEFAULT_CHAT_ID)
             .phone(DEFAULT_PHONE)
             .conversationMetaData(DEFAULT_CONVERSATION_META_DATA)
@@ -119,6 +124,7 @@ public class TelegramRestaurantUserResourceIT {
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .userName(UPDATED_USER_NAME)
+            .userId(UPDATED_USER_ID)
             .chatId(UPDATED_CHAT_ID)
             .phone(UPDATED_PHONE)
             .conversationMetaData(UPDATED_CONVERSATION_META_DATA)
@@ -150,6 +156,7 @@ public class TelegramRestaurantUserResourceIT {
         assertThat(testTelegramRestaurantUser.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testTelegramRestaurantUser.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testTelegramRestaurantUser.getUserName()).isEqualTo(DEFAULT_USER_NAME);
+        assertThat(testTelegramRestaurantUser.getUserId()).isEqualTo(DEFAULT_USER_ID);
         assertThat(testTelegramRestaurantUser.getChatId()).isEqualTo(DEFAULT_CHAT_ID);
         assertThat(testTelegramRestaurantUser.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testTelegramRestaurantUser.getConversationMetaData()).isEqualTo(DEFAULT_CONVERSATION_META_DATA);
@@ -191,6 +198,7 @@ public class TelegramRestaurantUserResourceIT {
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
+            .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID)))
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)))
@@ -231,6 +239,7 @@ public class TelegramRestaurantUserResourceIT {
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
             .andExpect(jsonPath("$.userName").value(DEFAULT_USER_NAME))
+            .andExpect(jsonPath("$.userId").value(DEFAULT_USER_ID))
             .andExpect(jsonPath("$.chatId").value(DEFAULT_CHAT_ID))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
             .andExpect(jsonPath("$.conversationMetaData").value(DEFAULT_CONVERSATION_META_DATA))
@@ -488,6 +497,111 @@ public class TelegramRestaurantUserResourceIT {
 
         // Get all the telegramRestaurantUserList where userName does not contain UPDATED_USER_NAME
         defaultTelegramRestaurantUserShouldBeFound("userName.doesNotContain=" + UPDATED_USER_NAME);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByUserIdIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where userId equals to DEFAULT_USER_ID
+        defaultTelegramRestaurantUserShouldBeFound("userId.equals=" + DEFAULT_USER_ID);
+
+        // Get all the telegramRestaurantUserList where userId equals to UPDATED_USER_ID
+        defaultTelegramRestaurantUserShouldNotBeFound("userId.equals=" + UPDATED_USER_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByUserIdIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where userId not equals to DEFAULT_USER_ID
+        defaultTelegramRestaurantUserShouldNotBeFound("userId.notEquals=" + DEFAULT_USER_ID);
+
+        // Get all the telegramRestaurantUserList where userId not equals to UPDATED_USER_ID
+        defaultTelegramRestaurantUserShouldBeFound("userId.notEquals=" + UPDATED_USER_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByUserIdIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where userId in DEFAULT_USER_ID or UPDATED_USER_ID
+        defaultTelegramRestaurantUserShouldBeFound("userId.in=" + DEFAULT_USER_ID + "," + UPDATED_USER_ID);
+
+        // Get all the telegramRestaurantUserList where userId equals to UPDATED_USER_ID
+        defaultTelegramRestaurantUserShouldNotBeFound("userId.in=" + UPDATED_USER_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByUserIdIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where userId is not null
+        defaultTelegramRestaurantUserShouldBeFound("userId.specified=true");
+
+        // Get all the telegramRestaurantUserList where userId is null
+        defaultTelegramRestaurantUserShouldNotBeFound("userId.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByUserIdIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where userId is greater than or equal to DEFAULT_USER_ID
+        defaultTelegramRestaurantUserShouldBeFound("userId.greaterThanOrEqual=" + DEFAULT_USER_ID);
+
+        // Get all the telegramRestaurantUserList where userId is greater than or equal to UPDATED_USER_ID
+        defaultTelegramRestaurantUserShouldNotBeFound("userId.greaterThanOrEqual=" + UPDATED_USER_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByUserIdIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where userId is less than or equal to DEFAULT_USER_ID
+        defaultTelegramRestaurantUserShouldBeFound("userId.lessThanOrEqual=" + DEFAULT_USER_ID);
+
+        // Get all the telegramRestaurantUserList where userId is less than or equal to SMALLER_USER_ID
+        defaultTelegramRestaurantUserShouldNotBeFound("userId.lessThanOrEqual=" + SMALLER_USER_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByUserIdIsLessThanSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where userId is less than DEFAULT_USER_ID
+        defaultTelegramRestaurantUserShouldNotBeFound("userId.lessThan=" + DEFAULT_USER_ID);
+
+        // Get all the telegramRestaurantUserList where userId is less than UPDATED_USER_ID
+        defaultTelegramRestaurantUserShouldBeFound("userId.lessThan=" + UPDATED_USER_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByUserIdIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where userId is greater than DEFAULT_USER_ID
+        defaultTelegramRestaurantUserShouldNotBeFound("userId.greaterThan=" + DEFAULT_USER_ID);
+
+        // Get all the telegramRestaurantUserList where userId is greater than SMALLER_USER_ID
+        defaultTelegramRestaurantUserShouldBeFound("userId.greaterThan=" + SMALLER_USER_ID);
     }
 
 
@@ -860,6 +974,7 @@ public class TelegramRestaurantUserResourceIT {
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
+            .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID)))
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)))
@@ -914,6 +1029,7 @@ public class TelegramRestaurantUserResourceIT {
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .userName(UPDATED_USER_NAME)
+            .userId(UPDATED_USER_ID)
             .chatId(UPDATED_CHAT_ID)
             .phone(UPDATED_PHONE)
             .conversationMetaData(UPDATED_CONVERSATION_META_DATA)
@@ -932,6 +1048,7 @@ public class TelegramRestaurantUserResourceIT {
         assertThat(testTelegramRestaurantUser.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testTelegramRestaurantUser.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testTelegramRestaurantUser.getUserName()).isEqualTo(UPDATED_USER_NAME);
+        assertThat(testTelegramRestaurantUser.getUserId()).isEqualTo(UPDATED_USER_ID);
         assertThat(testTelegramRestaurantUser.getChatId()).isEqualTo(UPDATED_CHAT_ID);
         assertThat(testTelegramRestaurantUser.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testTelegramRestaurantUser.getConversationMetaData()).isEqualTo(UPDATED_CONVERSATION_META_DATA);

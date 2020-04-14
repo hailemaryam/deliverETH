@@ -100,6 +100,9 @@ public class TelegramDeliveryUserQueryService extends QueryService<TelegramDeliv
             if (criteria.getUserName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getUserName(), TelegramDeliveryUser_.userName));
             }
+            if (criteria.getUserId() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getUserId(), TelegramDeliveryUser_.userId));
+            }
             if (criteria.getChatId() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getChatId(), TelegramDeliveryUser_.chatId));
             }

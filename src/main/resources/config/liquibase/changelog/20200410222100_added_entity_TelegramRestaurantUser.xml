@@ -24,6 +24,9 @@
             <column name="user_name" type="varchar(255)">
                 <constraints nullable="true" unique="true" uniqueConstraintName="ux_telegram_restaurant_user_user_name" />
             </column>
+            <column name="user_id" type="integer">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_telegram_restaurant_user_user_id" />
+            </column>
             <column name="chat_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -73,6 +76,7 @@
             <column name="first_name" type="string"/>
             <column name="last_name" type="string"/>
             <column name="user_name" type="string"/>
+            <column name="user_id" type="numeric"/>
             <column name="chat_id" type="string"/>
             <column name="phone" type="string"/>
             <column name="conversation_meta_data" type="string"/>

@@ -36,6 +36,10 @@ public class TelegramDeliveryUser implements Serializable {
     @Column(name = "user_name", unique = true)
     private String userName;
 
+    
+    @Column(name = "user_id", unique = true)
+    private Integer userId;
+
     @Column(name = "chat_id")
     private String chatId;
 
@@ -98,6 +102,19 @@ public class TelegramDeliveryUser implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public TelegramDeliveryUser userId(Integer userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getChatId() {
@@ -201,6 +218,7 @@ public class TelegramDeliveryUser implements Serializable {
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
             ", userName='" + getUserName() + "'" +
+            ", userId=" + getUserId() +
             ", chatId='" + getChatId() + "'" +
             ", phone='" + getPhone() + "'" +
             ", conversationMetaData='" + getConversationMetaData() + "'" +

@@ -32,6 +32,8 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
 
     private StringFilter userName;
 
+    private IntegerFilter userId;
+
     private StringFilter chatId;
 
     private StringFilter phone;
@@ -50,6 +52,7 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
         this.firstName = other.firstName == null ? null : other.firstName.copy();
         this.lastName = other.lastName == null ? null : other.lastName.copy();
         this.userName = other.userName == null ? null : other.userName.copy();
+        this.userId = other.userId == null ? null : other.userId.copy();
         this.chatId = other.chatId == null ? null : other.chatId.copy();
         this.phone = other.phone == null ? null : other.phone.copy();
         this.conversationMetaData = other.conversationMetaData == null ? null : other.conversationMetaData.copy();
@@ -92,6 +95,14 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
 
     public void setUserName(StringFilter userName) {
         this.userName = userName;
+    }
+
+    public IntegerFilter getUserId() {
+        return userId;
+    }
+
+    public void setUserId(IntegerFilter userId) {
+        this.userId = userId;
     }
 
     public StringFilter getChatId() {
@@ -149,6 +160,7 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
             Objects.equals(firstName, that.firstName) &&
             Objects.equals(lastName, that.lastName) &&
             Objects.equals(userName, that.userName) &&
+            Objects.equals(userId, that.userId) &&
             Objects.equals(chatId, that.chatId) &&
             Objects.equals(phone, that.phone) &&
             Objects.equals(conversationMetaData, that.conversationMetaData) &&
@@ -163,6 +175,7 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
         firstName,
         lastName,
         userName,
+        userId,
         chatId,
         phone,
         conversationMetaData,
@@ -178,6 +191,7 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
                 (firstName != null ? "firstName=" + firstName + ", " : "") +
                 (lastName != null ? "lastName=" + lastName + ", " : "") +
                 (userName != null ? "userName=" + userName + ", " : "") +
+                (userId != null ? "userId=" + userId + ", " : "") +
                 (chatId != null ? "chatId=" + chatId + ", " : "") +
                 (phone != null ? "phone=" + phone + ", " : "") +
                 (conversationMetaData != null ? "conversationMetaData=" + conversationMetaData + ", " : "") +

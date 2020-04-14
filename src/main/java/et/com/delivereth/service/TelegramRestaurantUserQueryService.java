@@ -100,6 +100,9 @@ public class TelegramRestaurantUserQueryService extends QueryService<TelegramRes
             if (criteria.getUserName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getUserName(), TelegramRestaurantUser_.userName));
             }
+            if (criteria.getUserId() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getUserId(), TelegramRestaurantUser_.userId));
+            }
             if (criteria.getChatId() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getChatId(), TelegramRestaurantUser_.chatId));
             }

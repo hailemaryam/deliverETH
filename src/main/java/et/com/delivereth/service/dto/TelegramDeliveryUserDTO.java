@@ -18,6 +18,9 @@ public class TelegramDeliveryUserDTO implements Serializable {
     
     private String userName;
 
+    
+    private Integer userId;
+
     private String chatId;
 
     private String phone;
@@ -57,6 +60,14 @@ public class TelegramDeliveryUserDTO implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getChatId() {
@@ -119,6 +130,7 @@ public class TelegramDeliveryUserDTO implements Serializable {
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
             ", userName='" + getUserName() + "'" +
+            ", userId=" + getUserId() +
             ", chatId='" + getChatId() + "'" +
             ", phone='" + getPhone() + "'" +
             ", conversationMetaData='" + getConversationMetaData() + "'" +

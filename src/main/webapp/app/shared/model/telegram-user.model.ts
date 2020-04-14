@@ -5,6 +5,7 @@ export interface ITelegramUser {
   firstName?: string;
   lastName?: string;
   userName?: string;
+  userId?: number;
   chatId?: string;
   phone?: string;
   conversationMetaData?: string;
@@ -21,6 +22,7 @@ export class TelegramUser implements ITelegramUser {
     public firstName?: string,
     public lastName?: string,
     public userName?: string,
+    public userId?: number,
     public chatId?: string,
     public phone?: string,
     public conversationMetaData?: string,

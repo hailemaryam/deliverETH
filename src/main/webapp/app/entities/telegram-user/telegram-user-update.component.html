@@ -32,6 +32,18 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-control-label" for="field_userId">User Id</label>
+                    <input type="number" class="form-control" name="userId" id="field_userId"
+                           formControlName="userId"/>
+                    <div *ngIf="editForm.get('userId')!.invalid && (editForm.get('userId')!.dirty || editForm.get('userId')!.touched)">
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('userId')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="form-control-label" for="field_chatId">Chat Id</label>
                     <input type="text" class="form-control" name="chatId" id="field_chatId"
                            formControlName="chatId"/>

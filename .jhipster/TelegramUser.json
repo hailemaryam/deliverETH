@@ -17,6 +17,13 @@
             ]
         },
         {
+            "fieldName": "userId",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "unique"
+            ]
+        },
+        {
             "fieldName": "chatId",
             "fieldType": "String"
         },

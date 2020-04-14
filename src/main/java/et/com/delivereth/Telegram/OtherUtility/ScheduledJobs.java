@@ -11,6 +11,7 @@ import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -37,9 +38,10 @@ public class ScheduledJobs {
 
     @Scheduled(cron = "0 0/7 * * * ?")
     public void orderExpire() {
-        System.out.println("cron job for expiring assignment is running");
+        System.out.println("cron job for expiring order is running");
         for (OrderDTO orderDTO: orderDbUtility.getActiveOrder()){
-            if (orderDTO.getOrderStatus().equals(OrderStatus.ORDERED)){
+            if (orderDTO.getOrderStatus().equals(OrderStatus.ORDERED) && orderDTO.getDate().isBefore(Instant.now().minusSeconds(420))){
+                orderDTO.setOrderStatus(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM);
                 orderDTO = orderDbUtility.updateOrder(orderDTO);
                 requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId()).getChatId());
                 for (TelegramRestaurantUserDTO telegramRestaurantUserDTO: getRestaurantUser(orderDTO)){

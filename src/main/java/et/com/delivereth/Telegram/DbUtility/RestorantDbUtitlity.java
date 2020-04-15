@@ -7,6 +7,7 @@ import et.com.delivereth.service.dto.OrderDTO;
 import et.com.delivereth.service.dto.RestorantCriteria;
 import et.com.delivereth.service.dto.RestorantDTO;
 import et.com.delivereth.service.dto.TelegramUserDTO;
+import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,9 @@ public class RestorantDbUtitlity {
     /*Not Finished Request Restorant Based On Location*/
     public Page<RestorantDTO> getRestorantList(TelegramUserDTO telegramUser) {
         RestorantCriteria restorantCriteria = new RestorantCriteria();
+        BooleanFilter booleanFilter = new BooleanFilter();
+        booleanFilter.setEquals(true);
+        restorantCriteria.setStatus(booleanFilter);
         OrderDTO order = orderService.findOne(telegramUser.getOrderIdPaused()).get();
         Float latitude = order.getLatitude();
         Float longtitude = order.getLongtude();

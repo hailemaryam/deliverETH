@@ -28,6 +28,9 @@ public class RequestLocation {
     public void requestLocationAgain(Update update) {
         requestLocation(update, StaticText.weNeedYourLocationAgainText);
     }
+    public void requestForErrorOutofAddiss(Update update){
+        requestLocation(update, StaticText.locationOutOfAddisError);
+    }
     public void requestLocation(Update update, String text){
         SendMessage response = new SendMessage();
         response.setReplyMarkup(Menu.prepareShareLocationReplyButton());

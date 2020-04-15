@@ -32,6 +32,7 @@ public class StaticText {
     public static final String weNeedYourLocationText = "We need your location for order delivery. Click share location to share your location.";
     public static final String weNeedYourLocationAgainText = "We can't process your order with out knowing your location. " +
         "Please click share location to share your location. If your location is not turned on, please turn on your location. ";
+    public static final String locationOutOfAddisError = "❗️ Your selected location is not in Addis Ababa. If your location is not turned on, please turn on your location. ";
 
     public static final String orderRejectedText = "<b>❗️ Your order is rejected by the restaurant</b>\n";
     public static final String orderCancelBySystemText = "<b>❗️ Your order canceled since it didn't get response from service provider within 7 min. Please order again.</b>\n";

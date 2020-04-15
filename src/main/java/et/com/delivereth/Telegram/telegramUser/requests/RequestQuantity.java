@@ -1,8 +1,6 @@
 package et.com.delivereth.Telegram.telegramUser.requests;
 
-import et.com.delivereth.Telegram.DbUtility.DbUtility;
 import et.com.delivereth.Telegram.DbUtility.FoodDbUtitility;
-import et.com.delivereth.Telegram.DbUtility.OrderedFoodDbUtility;
 import et.com.delivereth.Telegram.DbUtility.TelegramUserDbUtility;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramSender;
@@ -24,16 +22,12 @@ import java.util.List;
 public class RequestQuantity {
     private final TelegramSender telegramSender;
     private static final Logger logger = LoggerFactory.getLogger(TelegramHome.class);
-    private final DbUtility dbUtility;
     private final TelegramUserDbUtility telegramUserDbUtility;
-    private final OrderedFoodDbUtility orderedFoodDbUtility;
     private final FoodDbUtitility foodDbUtitility;
 
-    public RequestQuantity(TelegramSender telegramSender, DbUtility dbUtility, TelegramUserDbUtility telegramUserDbUtility, OrderedFoodDbUtility orderedFoodDbUtility, FoodDbUtitility foodDbUtitility) {
+    public RequestQuantity(TelegramSender telegramSender, TelegramUserDbUtility telegramUserDbUtility, FoodDbUtitility foodDbUtitility) {
         this.telegramSender = telegramSender;
-        this.dbUtility = dbUtility;
         this.telegramUserDbUtility = telegramUserDbUtility;
-        this.orderedFoodDbUtility = orderedFoodDbUtility;
         this.foodDbUtitility = foodDbUtitility;
     }
 
@@ -65,7 +59,7 @@ public class RequestQuantity {
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
-        response.setText("How many " + selectedFoodName + ". do you want?");
+        response.setText("How many " + selectedFoodName + " do you want?");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

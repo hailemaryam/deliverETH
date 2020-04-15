@@ -29,7 +29,7 @@ public class StaticText {
     public static final String noRestaurantListAround = "There are no restaurant list around you delivering at this time.";
     public static final String wantToListMoreRestaurant = "Want to list more restaurant.";
 
-    public static final String weNeedYourLocationText = "We need your location for order delivery. Click share location to share your location.";
+    public static final String weNeedYourLocationText = "We need your location for order delivery. If location on your phone is not turned on please turn on and click share location to share your location.";
     public static final String weNeedYourLocationAgainText = "We can't process your order with out knowing your location. " +
         "Please click share location to share your location. If your location is not turned on, please turn on your location. ";
     public static final String locationOutOfAddisError = "❗️ Your selected location is not in Addis Ababa. If your location is not turned on, please turn on your location. ";

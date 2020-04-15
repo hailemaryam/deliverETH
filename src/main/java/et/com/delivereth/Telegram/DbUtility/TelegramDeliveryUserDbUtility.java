@@ -3,11 +3,11 @@ package et.com.delivereth.Telegram.DbUtility;
 import et.com.delivereth.Telegram.telegramTransport.ChatStepConstants;
 import et.com.delivereth.service.TelegramDeliveryUserQueryService;
 import et.com.delivereth.service.TelegramDeliveryUserService;
+import et.com.delivereth.service.dto.RestorantDTO;
 import et.com.delivereth.service.dto.TelegramDeliveryUserCriteria;
 import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
 import io.github.jhipster.service.filter.IntegerFilter;
-import io.github.jhipster.service.filter.StringFilter;
-import org.springframework.data.domain.PageRequest;
+import io.github.jhipster.service.filter.LongFilter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -63,8 +63,12 @@ public class TelegramDeliveryUserDbUtility {
         telegramDeliveryUserService.save(telegramUser);
     }
 
-    public List<TelegramDeliveryUserDTO> getDeliveryUser(Float latitude, Float longitude){
-        return telegramDeliveryUserService.findAll(PageRequest.of(0, 7)).toList();
+    public List<TelegramDeliveryUserDTO> getDeliveryUser(RestorantDTO restorantDTO){
+        TelegramDeliveryUserCriteria telegramDeliveryUserCriteria = new TelegramDeliveryUserCriteria();
+        LongFilter longFilter = new LongFilter();
+        longFilter.setEquals(restorantDTO.getId());
+        telegramDeliveryUserCriteria.setRestorantId(longFilter);
+        return telegramDeliveryUserQueryService.findByCriteria(telegramDeliveryUserCriteria);
     }
 
 }

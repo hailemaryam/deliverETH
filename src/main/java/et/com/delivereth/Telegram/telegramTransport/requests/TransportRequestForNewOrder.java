@@ -37,7 +37,7 @@ public class TransportRequestForNewOrder {
     public void sendNewOrder(OrderDTO orderDTO) {
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId());
-        List<TelegramDeliveryUserDTO> restaurantUsers = telegramDeliveryUserDbUtility.getDeliveryUser(null, null);
+        List<TelegramDeliveryUserDTO> restaurantUsers = telegramDeliveryUserDbUtility.getDeliveryUser(restorant);
         for (TelegramDeliveryUserDTO telegramRestaurantUserDTO: restaurantUsers){
             sendNewOrder(telegramRestaurantUserDTO, restorant, orderedFoodList, orderDTO);
         }

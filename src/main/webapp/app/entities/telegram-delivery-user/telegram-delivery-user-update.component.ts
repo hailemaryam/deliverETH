@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 
 import { ITelegramDeliveryUser, TelegramDeliveryUser } from 'app/shared/model/telegram-delivery-user.model';
 import { TelegramDeliveryUserService } from './telegram-delivery-user.service';
+import { IRestorant } from 'app/shared/model/restorant.model';
+import { RestorantService } from 'app/entities/restorant/restorant.service';
 
 @Component({
   selector: 'jhi-telegram-delivery-user-update',
@@ -14,6 +16,7 @@ import { TelegramDeliveryUserService } from './telegram-delivery-user.service';
 })
 export class TelegramDeliveryUserUpdateComponent implements OnInit {
   isSaving = false;
+  restorants: IRestorant[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -24,11 +27,13 @@ export class TelegramDeliveryUserUpdateComponent implements OnInit {
     chatId: [],
     phone: [],
     conversationMetaData: [],
-    loadedPage: []
+    loadedPage: [],
+    restorants: []
   });
 
   constructor(
     protected telegramDeliveryUserService: TelegramDeliveryUserService,
+    protected restorantService: RestorantService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -36,6 +41,8 @@ export class TelegramDeliveryUserUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ telegramDeliveryUser }) => {
       this.updateForm(telegramDeliveryUser);
+
+      this.restorantService.query().subscribe((res: HttpResponse<IRestorant[]>) => (this.restorants = res.body || []));
     });
   }
 
@@ -49,7 +56,8 @@ export class TelegramDeliveryUserUpdateComponent implements OnInit {
       chatId: telegramDeliveryUser.chatId,
       phone: telegramDeliveryUser.phone,
       conversationMetaData: telegramDeliveryUser.conversationMetaData,
-      loadedPage: telegramDeliveryUser.loadedPage
+      loadedPage: telegramDeliveryUser.loadedPage,
+      restorants: telegramDeliveryUser.restorants
     });
   }
 
@@ -78,7 +86,8 @@ export class TelegramDeliveryUserUpdateComponent implements OnInit {
       chatId: this.editForm.get(['chatId'])!.value,
       phone: this.editForm.get(['phone'])!.value,
       conversationMetaData: this.editForm.get(['conversationMetaData'])!.value,
-      loadedPage: this.editForm.get(['loadedPage'])!.value
+      loadedPage: this.editForm.get(['loadedPage'])!.value,
+      restorants: this.editForm.get(['restorants'])!.value
     };
   }
 
@@ -96,5 +105,20 @@ export class TelegramDeliveryUserUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
+  }
+
+  trackById(index: number, item: IRestorant): any {
+    return item.id;
+  }
+
+  getSelected(selectedVals: IRestorant[], option: IRestorant): IRestorant {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
   }
 }

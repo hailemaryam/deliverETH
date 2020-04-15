@@ -62,6 +62,15 @@ public class TelegramDeliveryUserServiceImpl implements TelegramDeliveryUserServ
     }
 
     /**
+     * Get all the telegramDeliveryUsers with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<TelegramDeliveryUserDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return telegramDeliveryUserRepository.findAllWithEagerRelationships(pageable).map(telegramDeliveryUserMapper::toDto);
+    }
+
+    /**
      * Get one telegramDeliveryUser by id.
      *
      * @param id the id of the entity.
@@ -71,7 +80,7 @@ public class TelegramDeliveryUserServiceImpl implements TelegramDeliveryUserServ
     @Transactional(readOnly = true)
     public Optional<TelegramDeliveryUserDTO> findOne(Long id) {
         log.debug("Request to get TelegramDeliveryUser : {}", id);
-        return telegramDeliveryUserRepository.findById(id)
+        return telegramDeliveryUserRepository.findOneWithEagerRelationships(id)
             .map(telegramDeliveryUserMapper::toDto);
     }
 

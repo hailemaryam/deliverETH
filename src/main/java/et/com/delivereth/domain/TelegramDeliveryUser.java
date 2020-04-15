@@ -56,6 +56,13 @@ public class TelegramDeliveryUser implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Order> orders = new HashSet<>();
 
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "telegram_delivery_user_restorant",
+               joinColumns = @JoinColumn(name = "telegram_delivery_user_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "restorant_id", referencedColumnName = "id"))
+    private Set<Restorant> restorants = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -192,6 +199,31 @@ public class TelegramDeliveryUser implements Serializable {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    public Set<Restorant> getRestorants() {
+        return restorants;
+    }
+
+    public TelegramDeliveryUser restorants(Set<Restorant> restorants) {
+        this.restorants = restorants;
+        return this;
+    }
+
+    public TelegramDeliveryUser addRestorant(Restorant restorant) {
+        this.restorants.add(restorant);
+        restorant.getTelegramDeliveryUsers().add(this);
+        return this;
+    }
+
+    public TelegramDeliveryUser removeRestorant(Restorant restorant) {
+        this.restorants.remove(restorant);
+        restorant.getTelegramDeliveryUsers().remove(this);
+        return this;
+    }
+
+    public void setRestorants(Set<Restorant> restorants) {
+        this.restorants = restorants;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -2,6 +2,8 @@ package et.com.delivereth.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -29,6 +31,7 @@ public class TelegramDeliveryUserDTO implements Serializable {
 
     private Integer loadedPage;
 
+    private Set<RestorantDTO> restorants = new HashSet<>();
     
     public Long getId() {
         return id;
@@ -102,6 +105,14 @@ public class TelegramDeliveryUserDTO implements Serializable {
         this.loadedPage = loadedPage;
     }
 
+    public Set<RestorantDTO> getRestorants() {
+        return restorants;
+    }
+
+    public void setRestorants(Set<RestorantDTO> restorants) {
+        this.restorants = restorants;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -135,6 +146,7 @@ public class TelegramDeliveryUserDTO implements Serializable {
             ", phone='" + getPhone() + "'" +
             ", conversationMetaData='" + getConversationMetaData() + "'" +
             ", loadedPage=" + getLoadedPage() +
+            ", restorants='" + getRestorants() + "'" +
             "}";
     }
 }

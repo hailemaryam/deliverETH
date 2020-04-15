@@ -29,6 +29,13 @@ public interface TelegramDeliveryUserService {
     Page<TelegramDeliveryUserDTO> findAll(Pageable pageable);
 
     /**
+     * Get all the telegramDeliveryUsers with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    Page<TelegramDeliveryUserDTO> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" telegramDeliveryUser.
      *
      * @param id the id of the entity.

@@ -68,6 +68,11 @@ public class Restorant implements Serializable {
     @JsonIgnore
     private Set<TelegramRestaurantUser> telegramRestaurantUsers = new HashSet<>();
 
+    @ManyToMany(mappedBy = "restorants")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private Set<TelegramDeliveryUser> telegramDeliveryUsers = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -242,6 +247,31 @@ public class Restorant implements Serializable {
 
     public void setTelegramRestaurantUsers(Set<TelegramRestaurantUser> telegramRestaurantUsers) {
         this.telegramRestaurantUsers = telegramRestaurantUsers;
+    }
+
+    public Set<TelegramDeliveryUser> getTelegramDeliveryUsers() {
+        return telegramDeliveryUsers;
+    }
+
+    public Restorant telegramDeliveryUsers(Set<TelegramDeliveryUser> telegramDeliveryUsers) {
+        this.telegramDeliveryUsers = telegramDeliveryUsers;
+        return this;
+    }
+
+    public Restorant addTelegramDeliveryUser(TelegramDeliveryUser telegramDeliveryUser) {
+        this.telegramDeliveryUsers.add(telegramDeliveryUser);
+        telegramDeliveryUser.getRestorants().add(this);
+        return this;
+    }
+
+    public Restorant removeTelegramDeliveryUser(TelegramDeliveryUser telegramDeliveryUser) {
+        this.telegramDeliveryUsers.remove(telegramDeliveryUser);
+        telegramDeliveryUser.getRestorants().remove(this);
+        return this;
+    }
+
+    public void setTelegramDeliveryUsers(Set<TelegramDeliveryUser> telegramDeliveryUsers) {
+        this.telegramDeliveryUsers = telegramDeliveryUsers;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

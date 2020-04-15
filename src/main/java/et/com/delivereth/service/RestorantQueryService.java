@@ -117,6 +117,10 @@ public class RestorantQueryService extends QueryService<Restorant> {
                 specification = specification.and(buildSpecification(criteria.getTelegramRestaurantUserId(),
                     root -> root.join(Restorant_.telegramRestaurantUsers, JoinType.LEFT).get(TelegramRestaurantUser_.id)));
             }
+            if (criteria.getTelegramDeliveryUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getTelegramDeliveryUserId(),
+                    root -> root.join(Restorant_.telegramDeliveryUsers, JoinType.LEFT).get(TelegramDeliveryUser_.id)));
+            }
         }
         return specification;
     }

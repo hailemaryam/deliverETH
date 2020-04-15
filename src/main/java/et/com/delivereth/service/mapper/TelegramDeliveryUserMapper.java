@@ -9,12 +9,13 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link TelegramDeliveryUser} and its DTO {@link TelegramDeliveryUserDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {RestorantMapper.class})
 public interface TelegramDeliveryUserMapper extends EntityMapper<TelegramDeliveryUserDTO, TelegramDeliveryUser> {
 
 
     @Mapping(target = "orders", ignore = true)
     @Mapping(target = "removeOrder", ignore = true)
+    @Mapping(target = "removeRestorant", ignore = true)
     TelegramDeliveryUser toEntity(TelegramDeliveryUserDTO telegramDeliveryUserDTO);
 
     default TelegramDeliveryUser fromId(Long id) {

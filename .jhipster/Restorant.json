@@ -53,7 +53,15 @@
             "otherEntityName": "telegramRestaurantUser",
             "otherEntityRelationshipName": "restorant",
             "relationshipName": "telegramRestaurantUser",
-            "otherEntityField": "userName",
+            "otherEntityField": "userId",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "telegramDeliveryUser",
+            "otherEntityRelationshipName": "restorant",
+            "relationshipName": "telegramDeliveryUser",
+            "otherEntityField": "userId",
             "ownerSide": false
         }
     ],

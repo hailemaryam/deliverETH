@@ -46,6 +46,14 @@
             "otherEntityName": "order",
             "otherEntityRelationshipName": "telegramDeliveryUser",
             "relationshipName": "order"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "restorant",
+            "otherEntityRelationshipName": "telegramDeliveryUser",
+            "relationshipName": "restorant",
+            "otherEntityField": "name",
+            "ownerSide": true
         }
     ],
     "changelogDate": "20200412010500",

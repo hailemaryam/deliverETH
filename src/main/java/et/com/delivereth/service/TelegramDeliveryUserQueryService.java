@@ -119,6 +119,10 @@ public class TelegramDeliveryUserQueryService extends QueryService<TelegramDeliv
                 specification = specification.and(buildSpecification(criteria.getOrderId(),
                     root -> root.join(TelegramDeliveryUser_.orders, JoinType.LEFT).get(Order_.id)));
             }
+            if (criteria.getRestorantId() != null) {
+                specification = specification.and(buildSpecification(criteria.getRestorantId(),
+                    root -> root.join(TelegramDeliveryUser_.restorants, JoinType.LEFT).get(Restorant_.id)));
+            }
         }
         return specification;
     }

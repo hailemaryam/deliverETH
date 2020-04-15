@@ -1,5 +1,6 @@
 import { IFood } from 'app/shared/model/food.model';
 import { ITelegramRestaurantUser } from 'app/shared/model/telegram-restaurant-user.model';
+import { ITelegramDeliveryUser } from 'app/shared/model/telegram-delivery-user.model';
 
 export interface IRestorant {
   id?: number;
@@ -14,6 +15,7 @@ export interface IRestorant {
   status?: boolean;
   foods?: IFood[];
   telegramRestaurantUsers?: ITelegramRestaurantUser[];
+  telegramDeliveryUsers?: ITelegramDeliveryUser[];
 }
 
 export class Restorant implements IRestorant {
@@ -29,7 +31,8 @@ export class Restorant implements IRestorant {
     public availableOrderCap?: number,
     public status?: boolean,
     public foods?: IFood[],
-    public telegramRestaurantUsers?: ITelegramRestaurantUser[]
+    public telegramRestaurantUsers?: ITelegramRestaurantUser[],
+    public telegramDeliveryUsers?: ITelegramDeliveryUser[]
   ) {
     this.status = this.status || false;
   }

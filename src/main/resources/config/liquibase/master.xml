@@ -27,5 +27,6 @@
     <include file="config/liquibase/changelog/20200322153100_added_entity_constraints_Order.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200322153200_added_entity_constraints_OrderedFood.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200410222100_added_entity_constraints_TelegramRestaurantUser.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200412010500_added_entity_constraints_TelegramDeliveryUser.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

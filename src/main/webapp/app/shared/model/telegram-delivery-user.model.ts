@@ -1,4 +1,5 @@
 import { IOrder } from 'app/shared/model/order.model';
+import { IRestorant } from 'app/shared/model/restorant.model';
 
 export interface ITelegramDeliveryUser {
   id?: number;
@@ -11,6 +12,7 @@ export interface ITelegramDeliveryUser {
   conversationMetaData?: string;
   loadedPage?: number;
   orders?: IOrder[];
+  restorants?: IRestorant[];
 }
 
 export class TelegramDeliveryUser implements ITelegramDeliveryUser {
@@ -24,6 +26,7 @@ export class TelegramDeliveryUser implements ITelegramDeliveryUser {
     public phone?: string,
     public conversationMetaData?: string,
     public loadedPage?: number,
-    public orders?: IOrder[]
+    public orders?: IOrder[],
+    public restorants?: IRestorant[]
   ) {}
 }

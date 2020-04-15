@@ -66,6 +66,13 @@
                     <input type="number" class="form-control" name="loadedPage" id="field_loadedPage"
                            formControlName="loadedPage"/>
                 </div>
+
+                <div class="form-group">
+                    <label for="field_restorants">Restorant</label>
+                    <select class="form-control" id="field_restorants" multiple name="restorants" formControlName="restorants">
+                        <option [ngValue]="getSelected(editForm.get('restorants')!.value, restorantOption)" *ngFor="let restorantOption of restorants; trackBy: trackById">{{ restorantOption.name }}</option>
+                    </select>
+                </div>
             </div>
 
             <div>

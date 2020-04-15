@@ -17,6 +17,8 @@ public interface RestorantMapper extends EntityMapper<RestorantDTO, Restorant> {
     @Mapping(target = "removeFood", ignore = true)
     @Mapping(target = "telegramRestaurantUsers", ignore = true)
     @Mapping(target = "removeTelegramRestaurantUser", ignore = true)
+    @Mapping(target = "telegramDeliveryUsers", ignore = true)
+    @Mapping(target = "removeTelegramDeliveryUser", ignore = true)
     Restorant toEntity(RestorantDTO restorantDTO);
 
     default Restorant fromId(Long id) {

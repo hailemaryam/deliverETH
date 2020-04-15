@@ -42,6 +42,8 @@ public class RestorantCriteria implements Serializable, Criteria {
 
     private LongFilter telegramRestaurantUserId;
 
+    private LongFilter telegramDeliveryUserId;
+
     public RestorantCriteria() {
     }
 
@@ -55,6 +57,7 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.status = other.status == null ? null : other.status.copy();
         this.foodId = other.foodId == null ? null : other.foodId.copy();
         this.telegramRestaurantUserId = other.telegramRestaurantUserId == null ? null : other.telegramRestaurantUserId.copy();
+        this.telegramDeliveryUserId = other.telegramDeliveryUserId == null ? null : other.telegramDeliveryUserId.copy();
     }
 
     @Override
@@ -134,6 +137,14 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.telegramRestaurantUserId = telegramRestaurantUserId;
     }
 
+    public LongFilter getTelegramDeliveryUserId() {
+        return telegramDeliveryUserId;
+    }
+
+    public void setTelegramDeliveryUserId(LongFilter telegramDeliveryUserId) {
+        this.telegramDeliveryUserId = telegramDeliveryUserId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -153,7 +164,8 @@ public class RestorantCriteria implements Serializable, Criteria {
             Objects.equals(availableOrderCap, that.availableOrderCap) &&
             Objects.equals(status, that.status) &&
             Objects.equals(foodId, that.foodId) &&
-            Objects.equals(telegramRestaurantUserId, that.telegramRestaurantUserId);
+            Objects.equals(telegramRestaurantUserId, that.telegramRestaurantUserId) &&
+            Objects.equals(telegramDeliveryUserId, that.telegramDeliveryUserId);
     }
 
     @Override
@@ -167,7 +179,8 @@ public class RestorantCriteria implements Serializable, Criteria {
         availableOrderCap,
         status,
         foodId,
-        telegramRestaurantUserId
+        telegramRestaurantUserId,
+        telegramDeliveryUserId
         );
     }
 
@@ -183,6 +196,7 @@ public class RestorantCriteria implements Serializable, Criteria {
                 (status != null ? "status=" + status + ", " : "") +
                 (foodId != null ? "foodId=" + foodId + ", " : "") +
                 (telegramRestaurantUserId != null ? "telegramRestaurantUserId=" + telegramRestaurantUserId + ", " : "") +
+                (telegramDeliveryUserId != null ? "telegramDeliveryUserId=" + telegramDeliveryUserId + ", " : "") +
             "}";
     }
 

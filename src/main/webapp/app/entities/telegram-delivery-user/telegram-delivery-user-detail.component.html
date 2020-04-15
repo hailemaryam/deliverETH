@@ -40,6 +40,12 @@
                 <dd>
                     <span>{{ telegramDeliveryUser.loadedPage }}</span>
                 </dd>
+                <dt><span>Restorant</span></dt>
+                <dd>
+                    <span *ngFor="let restorant of telegramDeliveryUser.restorants; let last = last">
+                        <a [routerLink]="['/restorant', restorant?.id, 'view']">{{ restorant.name }}</a>{{ last ? '' : ', ' }}
+                    </span>
+                </dd>
             </dl>
 
             <button type="submit"

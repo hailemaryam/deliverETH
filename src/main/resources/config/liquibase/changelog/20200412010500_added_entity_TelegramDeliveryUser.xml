@@ -45,6 +45,17 @@
 
     <changeSet id="20200412010500-1-relations" author="jhipster">
 
+        <createTable tableName="telegram_delivery_user_restorant">
+            <column name="restorant_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="telegram_delivery_user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="telegram_delivery_user_id, restorant_id" tableName="telegram_delivery_user_restorant"/>
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

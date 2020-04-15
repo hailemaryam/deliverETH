@@ -44,6 +44,8 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
 
     private LongFilter orderId;
 
+    private LongFilter restorantId;
+
     public TelegramDeliveryUserCriteria() {
     }
 
@@ -58,6 +60,7 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
         this.conversationMetaData = other.conversationMetaData == null ? null : other.conversationMetaData.copy();
         this.loadedPage = other.loadedPage == null ? null : other.loadedPage.copy();
         this.orderId = other.orderId == null ? null : other.orderId.copy();
+        this.restorantId = other.restorantId == null ? null : other.restorantId.copy();
     }
 
     @Override
@@ -145,6 +148,14 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
         this.orderId = orderId;
     }
 
+    public LongFilter getRestorantId() {
+        return restorantId;
+    }
+
+    public void setRestorantId(LongFilter restorantId) {
+        this.restorantId = restorantId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -165,7 +176,8 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
             Objects.equals(phone, that.phone) &&
             Objects.equals(conversationMetaData, that.conversationMetaData) &&
             Objects.equals(loadedPage, that.loadedPage) &&
-            Objects.equals(orderId, that.orderId);
+            Objects.equals(orderId, that.orderId) &&
+            Objects.equals(restorantId, that.restorantId);
     }
 
     @Override
@@ -180,7 +192,8 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
         phone,
         conversationMetaData,
         loadedPage,
-        orderId
+        orderId,
+        restorantId
         );
     }
 
@@ -197,6 +210,7 @@ public class TelegramDeliveryUserCriteria implements Serializable, Criteria {
                 (conversationMetaData != null ? "conversationMetaData=" + conversationMetaData + ", " : "") +
                 (loadedPage != null ? "loadedPage=" + loadedPage + ", " : "") +
                 (orderId != null ? "orderId=" + orderId + ", " : "") +
+                (restorantId != null ? "restorantId=" + restorantId + ", " : "") +
             "}";
     }
 

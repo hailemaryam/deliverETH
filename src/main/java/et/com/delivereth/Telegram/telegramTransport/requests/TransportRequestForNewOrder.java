@@ -42,10 +42,9 @@ public class TransportRequestForNewOrder {
             sendNewOrder(telegramRestaurantUserDTO, restorant, orderedFoodList, orderDTO);
         }
     }
-    public void editNewOrder(Update update, OrderDTO orderDTO, Boolean alreadyAccepted) {
+    public void editNewOrder(Update update, OrderDTO orderDTO, Boolean alreadyAccepted, TelegramDeliveryUserDTO telegramDeliveryUserDTO) {
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId());
-        TelegramDeliveryUserDTO telegramDeliveryUserDTO = telegramDeliveryUserDbUtility.getTelegramUser(update);
         sendEditOrder(telegramDeliveryUserDTO, restorant, orderedFoodList, orderDTO, update, alreadyAccepted);
         if (!alreadyAccepted) {
             responsePopUpForEditOrder(update);

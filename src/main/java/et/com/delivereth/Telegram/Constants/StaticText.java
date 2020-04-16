@@ -56,6 +56,8 @@ public class StaticText {
 
     public static final String orderStatusSuccessfullyChanged = "\uD83D\uDC68\u200D\uD83C\uDF73 Your order status has been successfully changed.";
     public static final String alreadyCanceledByUser = "❗️ This order already canceled by user.";
+    public static final String alreadyAccepted = "❗️ This order already accepted by other co-worker.";
+    public static final String alreadyProccedByOtherUser = "❗️ This order already processed by other co-worker.";
     public static final String notifyAccountLinkingNeed = "<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registered. Contact deliverEth admin to link your account to your restaurant</b>\n";
     public static final String notifyAccountLinkingNeedAgain = "<b>❗️ Before you continue the next step please wait deliverEth admin to link your account with your restaurant.</b>\n";
 }

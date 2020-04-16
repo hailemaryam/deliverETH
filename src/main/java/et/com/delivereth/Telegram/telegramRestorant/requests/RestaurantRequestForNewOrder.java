@@ -39,23 +39,21 @@ public class RestaurantRequestForNewOrder {
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId());
         List<TelegramRestaurantUserDTO> restaurantUsers = telegramRestaurantUserDbUtility.getRestaurantUsers(restorant);
-        for (TelegramRestaurantUserDTO telegramRestaurantUserDTO: restaurantUsers){
+        for (TelegramRestaurantUserDTO telegramRestaurantUserDTO : restaurantUsers) {
             sendNewOrder(telegramRestaurantUserDTO, restorant, orderedFoodList, orderDTO);
 
         }
     }
-    public void editNewOrder(Update update, OrderDTO orderDTO) {
+
+    public void editNewOrder(Update update, OrderDTO orderDTO, TelegramRestaurantUserDTO telegramRestaurantUserDTO) {
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId());
-        List<TelegramRestaurantUserDTO> restaurantUsers = telegramRestaurantUserDbUtility.getRestaurantUsers(restorant);
-        for (TelegramRestaurantUserDTO telegramRestaurantUserDTO: restaurantUsers){
-            sendEditOrder(telegramRestaurantUserDTO, restorant, orderedFoodList, orderDTO, update);
-            responsePopUpForEditOrder(update);
-        }
+        sendEditOrder(telegramRestaurantUserDTO, restorant, orderedFoodList, orderDTO, update);
     }
-    public void sendNewOrder(TelegramRestaurantUserDTO telegramRestaurantUserDTO, RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO){
+
+    public void sendNewOrder(TelegramRestaurantUserDTO telegramRestaurantUserDTO, RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO) {
         SendMessage response = new SendMessage();
-        response.setText(prepareInvoice(restorant, orderedFoodList,orderDTO));
+        response.setText(prepareInvoice(restorant, orderedFoodList, orderDTO));
         response.setParseMode("HTML");
         response.setChatId(telegramRestaurantUserDTO.getChatId());
         response.setReplyMarkup(RestaurantMenu.orderActionMenu(orderDTO));
@@ -65,15 +63,16 @@ public class RestaurantRequestForNewOrder {
             logger.error("Error Sending Message {}", response);
         }
     }
-    public void sendEditOrder(TelegramRestaurantUserDTO telegramRestaurantUserDTO, RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO, Update update){
+
+    public void sendEditOrder(TelegramRestaurantUserDTO telegramRestaurantUserDTO, RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO, Update update) {
         EditMessageText response = new EditMessageText();
-        response.setText(prepareInvoice(restorant, orderedFoodList,orderDTO));
+        response.setText(prepareInvoice(restorant, orderedFoodList, orderDTO));
         response.setParseMode("HTML");
         response.setChatId(telegramRestaurantUserDTO.getChatId());
         response.setReplyMarkup(RestaurantMenu.orderActionMenu(orderDTO));
         if (update.hasCallbackQuery()) {
             response.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
-        } else if (update.hasMessage()){
+        } else if (update.hasMessage()) {
             response.setMessageId(update.getMessage().getMessageId());
         }
         try {
@@ -82,13 +81,23 @@ public class RestaurantRequestForNewOrder {
             logger.error("Error Sending Message {}", response);
         }
     }
-    public void responsePopUpForEditOrder(Update update){
+
+    public void responsePopUpForEditOrder(Update update) {
         popUpMessage(update, StaticText.orderStatusSuccessfullyChanged);
     }
-    public void responsePopUpForAlreadyCanceledByUser(Update update){
+
+    public void responsePopUpForAlreadyCanceledByUser(Update update) {
         popUpMessage(update, StaticText.alreadyCanceledByUser);
     }
-    public void popUpMessage(Update update, String text){
+
+    public void responsePopUpForAlreadyAccepted(Update update) {
+        popUpMessage(update, StaticText.alreadyAccepted);
+    }
+    public void responsePopUpForAlreadyProccesedByOtherUser(Update update) {
+        popUpMessage(update, StaticText.alreadyProccedByOtherUser);
+    }
+
+    public void popUpMessage(Update update, String text) {
         AnswerCallbackQuery response = new AnswerCallbackQuery();
         response.setCallbackQueryId(update.getCallbackQuery().getId());
         response.setShowAlert(true);
@@ -99,10 +108,11 @@ public class RestaurantRequestForNewOrder {
             logger.error("Error Sending Message {}", response);
         }
     }
-    public String prepareInvoice(RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO){
+
+    public String prepareInvoice(RestorantDTO restorant, List<OrderedFoodDTO> orderedFoodList, OrderDTO orderDTO) {
         TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
         String invoice = "";
-        invoice = invoice +  "<strong>\uD83C\uDFE1 Restaurant Name: " +
+        invoice = invoice + "<strong>\uD83C\uDFE1 Restaurant Name: " +
             restorant.getName() +
             "</strong>\n";
         double total = 0D;
@@ -111,9 +121,9 @@ public class RestaurantRequestForNewOrder {
             invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "ETB\n");
             total += orderedFood.getQuantity() * food.getPrice();
         }
-        invoice = invoice + "<b>\uD83D\uDCB5 Total = " + String.format("%.2f", total)  +"ETB</b> \n";
+        invoice = invoice + "<b>\uD83D\uDCB5 Total = " + String.format("%.2f", total) + "ETB</b> \n";
         invoice = invoice + "\n";
-        invoice = invoice +  "<strong>\uD83D\uDC68\u200D\uD83E\uDDB2 User Information</strong>\n";
+        invoice = invoice + "<strong>\uD83D\uDC68\u200D\uD83E\uDDB2 User Information</strong>\n";
         invoice = invoice + "User Name: " + telegramUserDTO.getFirstName() + " " + telegramUserDTO.getLastName() + "\n";
         invoice = invoice + "Phone: " + telegramUserDTO.getPhone() + "\n";
         invoice = invoice + "Telegram Chat: @" + telegramUserDTO.getUserName() + "\n";
@@ -122,13 +132,14 @@ public class RestaurantRequestForNewOrder {
         invoice = invoice + "<b>Order Id : #" + orderDTO.getId() + "</b>\n";
         return invoice;
     }
+
     public void sendOrderStatus(OrderDTO orderDTO, String chatId) {
         SendMessage response = new SendMessage();
         response.setChatId(chatId);
         String invoice = "";
         if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT)) {
             invoice = invoice + StaticText.orderRejectedText;
-        } else if(orderDTO.getOrderStatus().equals(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM)){
+        } else if (orderDTO.getOrderStatus().equals(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM)) {
             invoice = invoice + StaticText.orderCancelBySystemForRestaurantText;
         } else {
             invoice = invoice + StaticText.orderStatuChanged;

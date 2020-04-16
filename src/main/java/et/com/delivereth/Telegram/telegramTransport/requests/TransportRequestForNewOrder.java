@@ -57,7 +57,7 @@ public class TransportRequestForNewOrder {
         response.setText(prepareInvoice(restorant, orderedFoodList,orderDTO));
         response.setParseMode("HTML");
         response.setChatId(telegramRestaurantUserDTO.getChatId());
-        response.setReplyMarkup(TransportMenu.orderActionMenu(orderDTO));
+        response.setReplyMarkup(TransportMenu.orderActionMenu(orderDTO, false));
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {
@@ -69,10 +69,7 @@ public class TransportRequestForNewOrder {
         response.setText(prepareInvoice(restorant, orderedFoodList,orderDTO));
         response.setParseMode("HTML");
         response.setChatId(telegramRestaurantUserDTO.getChatId());
-        if (alreadyAccepted){
-            orderDTO.setOrderStatus(OrderStatus.DELIVERED);
-        }
-        response.setReplyMarkup(TransportMenu.orderActionMenu(orderDTO));
+        response.setReplyMarkup(TransportMenu.orderActionMenu(orderDTO,alreadyAccepted));
         if (update.hasCallbackQuery()) {
             response.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
         } else if (update.hasMessage()){

@@ -13,15 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransportMenu {
-    public static InlineKeyboardMarkup orderActionMenu(OrderDTO orderDTO){
+    public static InlineKeyboardMarkup orderActionMenu(OrderDTO orderDTO,Boolean alreadyAccepted){
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        if (orderDTO.getOrderStatus().equals(OrderStatus.READY_FOR_DELIVERY)) {
-            rowInline.add(new InlineKeyboardButton().setText(StaticText.acceptOrder).setCallbackData("accept_" + orderDTO.getId()));
-        }
-        if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_DRIVER)) {
-            rowInline.add(new InlineKeyboardButton().setText(StaticText.delivered).setCallbackData("delivered_" + orderDTO.getId()));
+        if (!alreadyAccepted) {
+            if (orderDTO.getOrderStatus().equals(OrderStatus.READY_FOR_DELIVERY)) {
+                rowInline.add(new InlineKeyboardButton().setText(StaticText.acceptOrder).setCallbackData("accept_" + orderDTO.getId()));
+            }
+            if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_DRIVER)) {
+                rowInline.add(new InlineKeyboardButton().setText(StaticText.delivered).setCallbackData("delivered_" + orderDTO.getId()));
+            }
         }
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);

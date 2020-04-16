@@ -47,7 +47,7 @@ public class RestaurantWaitingForOrderListProcessor {
             requestForNewOrder.editNewOrder(update, orderDTO, telegramRestaurantUserDTO);
             requestForNewOrder.responsePopUpForEditOrder(update);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId());
+            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId(), telegramRestaurantUserDTO, null);
         } else if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_USER)) {
             requestForNewOrder.responsePopUpForAlreadyCanceledByUser(update);
             requestForNewOrder.editNewOrder(update, orderDTO, telegramRestaurantUserDTO);
@@ -64,7 +64,7 @@ public class RestaurantWaitingForOrderListProcessor {
             requestForNewOrder.editNewOrder(update, orderDTO, telegramRestaurantUserDTO);
             requestForNewOrder.responsePopUpForEditOrder(update);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId());
+            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId(), telegramRestaurantUserDTO, null);
         } else if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_USER)) {
             requestForNewOrder.responsePopUpForAlreadyCanceledByUser(update);
             requestForNewOrder.editNewOrder(update, orderDTO, telegramRestaurantUserDTO);
@@ -84,7 +84,7 @@ public class RestaurantWaitingForOrderListProcessor {
             requestForNewOrder.editNewOrder(update, orderDTO, telegramRestaurantUserDTO);
             requestForNewOrder.responsePopUpForEditOrder(update);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId());
+            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId(), telegramRestaurantUserDTO, null);
         }  else {
             requestForNewOrder.responsePopUpForAlreadyProccesedByOtherUser(update);
             requestForNewOrder.editNewOrder(update, orderDTO, telegramRestaurantUserDTO);

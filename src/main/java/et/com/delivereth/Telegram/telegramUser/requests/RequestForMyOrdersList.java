@@ -4,6 +4,8 @@ import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.*;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramHome;
 import et.com.delivereth.Telegram.telegramUser.main.TelegramSender;
+import et.com.delivereth.domain.TelegramDeliveryUser;
+import et.com.delivereth.domain.TelegramRestaurantUser;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.*;
 import org.slf4j.Logger;
@@ -80,7 +82,7 @@ public class RequestForMyOrdersList {
             logger.error("Error Sending Message {}", response);
         }
     }
-    public void sendOrderStatus(OrderDTO orderDTO, String chatId) {
+    public void sendOrderStatus(OrderDTO orderDTO, String chatId, TelegramRestaurantUserDTO telegramRestaurantUserDTO, TelegramDeliveryUserDTO telegramDeliveryUserDTO) {
         SendMessage response = new SendMessage();
         response.setChatId(chatId);
         String invoice = "";
@@ -93,6 +95,13 @@ public class RequestForMyOrdersList {
         }
         invoice = invoice + "Status = " + orderDTO.getOrderStatus() + "\n";
         invoice = invoice + "Order Id : #" + orderDTO.getId() + "\n";
+        if (telegramDeliveryUserDTO != null) {
+            invoice = invoice + "Delivery user  : @" + telegramRestaurantUserDTO.getUserName();
+            invoice = invoice + "Delivery user phone : @" + telegramRestaurantUserDTO.getPhone();
+        } else if (telegramRestaurantUserDTO != null) {
+            invoice = invoice + "Service provider : @" + telegramRestaurantUserDTO.getUserName();
+            invoice = invoice + "Service provider phone : " + telegramRestaurantUserDTO.getPhone();
+        }
         response.setText(invoice);
         response.setParseMode("HTML");
         try {

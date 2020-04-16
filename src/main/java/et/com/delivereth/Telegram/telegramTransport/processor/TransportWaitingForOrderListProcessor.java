@@ -53,7 +53,7 @@ public class TransportWaitingForOrderListProcessor {
                 OrderStatus.ACCEPTED_BY_DRIVER);
             requestForNewOrder.editNewOrder(update, orderDTO, false, telegramDeliveryUserDTO);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId());
+            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId(), null, telegramDeliveryUserDTO);
         } else {
             requestForNewOrder.editNewOrder(update, orderById,true, telegramDeliveryUserDTO);
         }
@@ -65,7 +65,7 @@ public class TransportWaitingForOrderListProcessor {
                 OrderStatus.DELIVERED);
             requestForNewOrder.editNewOrder(update, orderDTO, false, telegramDeliveryUserDTO);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
-            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId());
+            requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId(), null, telegramDeliveryUserDTO);
         } else{
             requestForNewOrder.editNewOrder(update, orderDTO,true, telegramDeliveryUserDTO);
         }

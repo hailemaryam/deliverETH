@@ -43,7 +43,7 @@ public class ScheduledJobs {
             if (orderDTO.getOrderStatus().equals(OrderStatus.ORDERED) && orderDTO.getDate().isBefore(Instant.now().minusSeconds(420))){
                 orderDTO.setOrderStatus(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM);
                 orderDTO = orderDbUtility.updateOrder(orderDTO);
-                requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId()).getChatId());
+                requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId()).getChatId(), null, null);
                 for (TelegramRestaurantUserDTO telegramRestaurantUserDTO: getRestaurantUser(orderDTO)){
                     restaurantRequestForNewOrder.sendOrderStatus(orderDTO, telegramRestaurantUserDTO.getChatId());
                 }

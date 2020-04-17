@@ -22,7 +22,7 @@ public interface CustomRestaurantRepository extends JpaRepository<Restorant, Lon
     @Query(
         "SELECT r FROM Restorant r " +
             "WHERE " +
-            HAVERSINE_PART + " < :distance " +
+            HAVERSINE_PART + " < :distance AND r.status = true " +
             "ORDER BY " + HAVERSINE_PART + " ASC")
     public Page<Restorant> findEntitiesByLocation(
         @Param("latitude") final double latitude,

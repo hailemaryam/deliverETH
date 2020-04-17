@@ -1,5 +1,6 @@
 package et.com.delivereth.Telegram.DbUtility;
 
+import et.com.delivereth.service.CustomRestorantService;
 import et.com.delivereth.service.OrderService;
 import et.com.delivereth.service.RestorantQueryService;
 import et.com.delivereth.service.RestorantService;
@@ -23,13 +24,15 @@ public class RestorantDbUtitlity {
     private static final Logger logger = LoggerFactory.getLogger(DbUtility.class);
     private final RestorantService restorantService;
     private final RestorantQueryService restorantQueryService;
+    private final CustomRestorantService customRestorantService;
     private final OrderService orderService;
     private final TelegramUserDbUtility telegramUserDbUtility;
 
 
-    public RestorantDbUtitlity(RestorantService restorantService, RestorantQueryService restorantQueryService, OrderService orderService, TelegramUserDbUtility telegramUserDbUtility) {
+    public RestorantDbUtitlity(RestorantService restorantService, RestorantQueryService restorantQueryService, CustomRestorantService customRestorantService, OrderService orderService, TelegramUserDbUtility telegramUserDbUtility) {
         this.restorantService = restorantService;
         this.restorantQueryService = restorantQueryService;
+        this.customRestorantService = customRestorantService;
         this.orderService = orderService;
         this.telegramUserDbUtility = telegramUserDbUtility;
     }
@@ -42,16 +45,12 @@ public class RestorantDbUtitlity {
         List<RestorantDTO> restorantDTOList = restorantQueryService.findByCriteria(restorantCriteria);
         return restorantDTOList.isEmpty() ? null : restorantDTOList.get(0);
     }
-    public RestorantDTO getRestorant(Long id){
+
+    public RestorantDTO getRestorant(Long id) {
         Optional<RestorantDTO> restaurant = restorantService.findOne(id);
-        return restaurant.isPresent()? restaurant.get(): null;
+        return restaurant.isPresent() ? restaurant.get() : null;
     }
-    /*Not Finished Request Restorant Based On Location*/
     public Page<RestorantDTO> getRestorantList(TelegramUserDTO telegramUser) {
-        RestorantCriteria restorantCriteria = new RestorantCriteria();
-        BooleanFilter booleanFilter = new BooleanFilter();
-        booleanFilter.setEquals(true);
-        restorantCriteria.setStatus(booleanFilter);
         OrderDTO order = orderService.findOne(telegramUser.getOrderIdPaused()).get();
         Float latitude = order.getLatitude();
         Float longtitude = order.getLongtude();
@@ -60,8 +59,8 @@ public class RestorantDbUtitlity {
         } else {
             telegramUser.setLoadedPage(telegramUser.getLoadedPage() + 1);
         }
-       telegramUserDbUtility.updateTelegramUser(telegramUser);
-        return restorantQueryService.findByCriteria(restorantCriteria, PageRequest.of(telegramUser.getLoadedPage(), 2));
+        telegramUserDbUtility.updateTelegramUser(telegramUser);
+        return customRestorantService.findAllSorByProximity(latitude, longtitude, 40000F, PageRequest.of(telegramUser.getLoadedPage(), 2));
     }
 
 }

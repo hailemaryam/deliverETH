@@ -51,7 +51,7 @@ public class RequestForFinishOrder {
             invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "ETB\n" );
         }
         invoice = invoice + "<b>\uD83D\uDCB5 Food subtotal = " + String.format("%.2f", total)  +"ETB</b> \n";
-        invoice = invoice + "<b>\uD83D\uDCB5 Delivery fee = " +  String.format("%.2f", transportaionFee) +"ETB</b> \n";
+        invoice = invoice + "<b>\uD83D\uDCB5 Delivery service fee = " +  String.format("%.2f", transportaionFee) +"ETB</b> \n";
         invoice = invoice + "<b>\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (transportaionFee + total)) +"ETB</b> \n";
         response.setText(invoice);
         response.setParseMode("HTML");

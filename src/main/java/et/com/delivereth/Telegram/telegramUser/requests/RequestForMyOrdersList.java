@@ -70,7 +70,7 @@ public class RequestForMyOrdersList {
             invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "ETB\n");
         }
         invoice = invoice + "\uD83D\uDCB5 Food subtotal = " + String.format("%.2f", orderDTO.getTotalPrice())  +"ETB \n";
-        invoice = invoice + "\uD83D\uDCB5 Delivery fee = " + String.format("%.2f", orderDTO.getTransportationFee())  +"ETB \n";
+        invoice = invoice + "\uD83D\uDCB5 Delivery service fee = " + String.format("%.2f", orderDTO.getTransportationFee())  +"ETB \n";
         invoice = invoice + "\uD83D\uDCB5 Grand Total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +"ETB \n";
         invoice = invoice + "<b>Status = " + orderDTO.getOrderStatus() + "</b>\n";
         invoice = invoice + "<b>Order Id : #" + orderDTO.getId() + "</b>\n";

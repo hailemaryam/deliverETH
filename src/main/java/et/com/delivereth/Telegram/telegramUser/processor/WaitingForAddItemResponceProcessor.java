@@ -37,9 +37,9 @@ public class WaitingForAddItemResponceProcessor {
             requestFoodList.requestFoodListNext(update, telegramUser);
         } else if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("prev")) {
             requestFoodList.requestFoodListPrev(update, telegramUser);
-        } else if (update.hasMessage() && update.getMessage().getText().startsWith("/ADD_TO_CART_")) {
+        } else if (update.hasMessage() && update.getMessage().getText().startsWith("/ADD_ITEM_")) {
             try {
-                foodDbUtitility.addFoodToOrder(telegramUser, Long.valueOf(update.getMessage().getText().substring(13)));
+                foodDbUtitility.addFoodToOrder(telegramUser, Long.valueOf(update.getMessage().getText().substring(10)));
                 dbUtility.updateStep(telegramUser, ChatStepConstants.WAITING_FOR_ORDER_LOOP_SET_QUANTITY);
                 requestQuantity.requestQuantity(update, telegramUser);
             } catch (NumberFormatException e) {

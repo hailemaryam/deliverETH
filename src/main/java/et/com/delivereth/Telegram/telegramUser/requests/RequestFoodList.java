@@ -78,14 +78,18 @@ public class RequestFoodList {
         for (FoodDTO foodDTO: foodDTOList){
             text += "<code>" + foodDTO.getId() + ". " + foodDTO.getName()+" " + prepareTick(foodDTO) + foodDTO.getPrice() + "ETB: </code><a>/ADD_ITEM_" + foodDTO.getId() + "</a>\n";
         }
-        text += "<b>Click the add to cart link to select the food.</b>";
+        text += "<b>Click the \"ADD_ITEM\" link to select the food.</b>";
         return text;
     }
     public String prepareTick(FoodDTO foodDTO){
         int size = 18 - foodDTO.getName().length();
         String tickes = "";
         for (int i = 0;i  < size; i++ ){
-            tickes += "-";
+            if (i%2 == 0) {
+                tickes += "-";
+            } else {
+                tickes += " ";
+            }
         }
         return tickes;
     }

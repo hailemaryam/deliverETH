@@ -35,7 +35,7 @@ public class StaticText {
     public static final String locationOutOfAddisError = "❗️ Your selected location is not in Addis Ababa. If your location is not turned on, please turn on your location. ";
 
     public static final String orderRejectedText = "<b>❗️ Your order is rejected by the restaurant</b>\n";
-    public static final String orderCancelBySystemText = "<b>❗️ Your order canceled since it didn't get response from service provider within 7 min. Please order again.</b>\n";
+    public static final String orderCancelBySystemText = "<b>❗️ Your order canceled since it didn't get response from service provider within 7 min. Please order again or order from other restaurant.</b>\n";
     public static final String orderCancelBySystemForRestaurantText = "<b>❗️ Order canceled since it didn't get response within 7 min. Please respond faster to avoid clients complain.</b>\n";
     public static final String orderStatuChanged = "<b>✅ Order Status Change</b>\n";
     public static final String noMoreOrder = "There are no more orders to load.";

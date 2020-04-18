@@ -109,10 +109,6 @@ public class TransportRequestForNewOrder {
         invoice = invoice +  "<strong>\uD83C\uDFE1 Restaurant Name: " +
             restorant.getName() +
             "</strong>\n";
-//        for (OrderedFoodDTO orderedFood : orderedFoodList) {
-//            FoodDTO food = foodDbUtitility.getFood(orderedFood.getFoodId());
-//            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "ETB\n");
-//        }
         invoice = invoice + "Restaurant location on map : /Restaurant_Location_" + restorant.getId()  +" \n";
         invoice = invoice + "Latitude : " + restorant.getLatitude()  +" \n";
         invoice = invoice + "Longitude : " + restorant.getLongtude()  +" \n";
@@ -127,10 +123,10 @@ public class TransportRequestForNewOrder {
         invoice = invoice + "Longitude = " + orderDTO.getLongtude()  +" \n";
         invoice = invoice + "\n";
         invoice = invoice +  "<strong>\uD83D\uDCB5 Invoice</strong>\n";
-        invoice = invoice + "\uD83D\uDCB5 Food subtotal = " + String.format("%.2f", orderDTO.getTotalPrice())  +" ETB\n";
-        invoice = invoice + "\uD83D\uDCB5 Transportation fee = " + String.format("%.2f", orderDTO.getTransportationFee() * 0.91)  +"ETB \n";
-        invoice = invoice + "\uD83D\uDCB5 Service charge = " + String.format("%.2f", orderDTO.getTransportationFee() * 0.09)  +"ETB \n";
-        invoice = invoice + "\uD83D\uDCB5 Grand total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +"ETB \n";
+        invoice = invoice + "Food subtotal = " + String.format("%.2f", orderDTO.getTotalPrice())  +" ETB\n";
+        invoice = invoice + "Transportation fee = " + String.format("%.2f", orderDTO.getTransportationFee() * 0.91)  +"ETB \n";
+        invoice = invoice + "Service charge = " + String.format("%.2f", orderDTO.getTransportationFee() * 0.09)  +"ETB \n";
+        invoice = invoice + "Grand total = " + String.format("%.2f", (orderDTO.getTotalPrice() + orderDTO.getTransportationFee()))  +"ETB \n";
         invoice = invoice + "\n";
         invoice = invoice + "<b>Order status : " + orderDTO.getOrderStatus() + "</b>\n";
         invoice = invoice + "<b>Order id : #" + orderDTO.getId() + "</b>\n";

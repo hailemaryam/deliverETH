@@ -2,6 +2,7 @@ package et.com.delivereth.Telegram.telegramRestorant.requests;
 
 import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.*;
+import et.com.delivereth.Telegram.OtherUtility.SendSMS;
 import et.com.delivereth.Telegram.telegramRestorant.main.RestaurantTelegramSender;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.*;
@@ -25,14 +26,16 @@ public class RestaurantRequestForNewOrder {
     private final OrderedFoodDbUtility orderedFoodDbUtility;
     private final TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility;
     private final TelegramUserDbUtility telegramUserDbUtility;
+    private final SendSMS sendSMS;
 
-    public RestaurantRequestForNewOrder(RestaurantTelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility, TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility, TelegramUserDbUtility telegramUserDbUtility) {
+    public RestaurantRequestForNewOrder(RestaurantTelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility, TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility, TelegramUserDbUtility telegramUserDbUtility, SendSMS sendSMS) {
         this.telegramSender = telegramSender;
         this.restorantDbUtitlity = restorantDbUtitlity;
         this.foodDbUtitility = foodDbUtitility;
         this.orderedFoodDbUtility = orderedFoodDbUtility;
         this.telegramRestaurantUserDbUtility = telegramRestaurantUserDbUtility;
         this.telegramUserDbUtility = telegramUserDbUtility;
+        this.sendSMS = sendSMS;
     }
 
     public void sendNewOrder(OrderDTO orderDTO) {
@@ -41,7 +44,10 @@ public class RestaurantRequestForNewOrder {
         List<TelegramRestaurantUserDTO> restaurantUsers = telegramRestaurantUserDbUtility.getRestaurantUsers(restorant);
         for (TelegramRestaurantUserDTO telegramRestaurantUserDTO : restaurantUsers) {
             sendNewOrder(telegramRestaurantUserDTO, restorant, orderedFoodList, orderDTO);
-
+            sendSMS.sendSMS(
+                telegramRestaurantUserDTO.getPhone().startsWith("+") ?
+                    telegramRestaurantUserDTO.getPhone().substring(1): telegramRestaurantUserDTO.getPhone() ,
+                StaticText.newOrderForRestauratnSms);
         }
     }
 

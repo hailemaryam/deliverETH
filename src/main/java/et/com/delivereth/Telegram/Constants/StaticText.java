@@ -1,6 +1,10 @@
 package et.com.delivereth.Telegram.Constants;
 
 public class StaticText {
+    public static final String newOrderForRestauratnSms = "You have a new order!\n" +
+        "Please check deliverEthRestaurant bot on telegram";
+    public static final String newOrderForTransportSms = "You have a new order!\n" +
+        "Please check deliverEthTransport bot on telegram";
     public static final String addMore = "➕ Add More";
     public static final String finishOrder = "✅ Finish";
     public static final String cancel = "\uD83D\uDEAB Cancel";

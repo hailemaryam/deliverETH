@@ -19,11 +19,9 @@ public class TelegramHome extends TelegramLongPollingBot {
     private String token = TelegramBotConstantCredentials.BOT_TOKEN;
     private String username = TelegramBotConstantCredentials.BOT_USER_NAME;
     private final ResponseBuilder responseBuilder;
-    private final RequestErrorResponder requestErrorResponder;
 
-    public TelegramHome(ResponseBuilder responseBuilder, RequestErrorResponder requestErrorResponder) {
+    public TelegramHome(ResponseBuilder responseBuilder) {
         this.responseBuilder = responseBuilder;
-        this.requestErrorResponder = requestErrorResponder;
     }
 
     @Override
@@ -41,8 +39,6 @@ public class TelegramHome extends TelegramLongPollingBot {
         logger.info("Received message {}", update);
         if (update.hasMessage() || update.hasCallbackQuery()) {
             responseBuilder.getResponse(update);
-        } else {
-            requestErrorResponder.userErrorResponseResponder(update);
         }
     }
     @PostConstruct

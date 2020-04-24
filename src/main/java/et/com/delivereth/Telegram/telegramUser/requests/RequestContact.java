@@ -25,10 +25,10 @@ public class RequestContact {
         response.setReplyMarkup(Menu.prepareShareContactReplyButton());
         if (update.hasMessage()){
             response.setChatId(update.getMessage().getChatId());
-            response.setText("Welcome " + update.getMessage().getFrom().getUserName() + "." + StaticText.weNeedContact);
+            response.setText("Welcome " + update.getMessage().getFrom().getFirstName() + "." + StaticText.weNeedContact);
         } else if (update.hasCallbackQuery()) {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
-            response.setText("Welcome " + update.getCallbackQuery().getFrom().getUserName() + "." + StaticText.weNeedContact);
+            response.setText("Welcome " + update.getCallbackQuery().getFrom().getFirstName() + "." + StaticText.weNeedContact);
         }
         try {
             telegramSender.execute(response);

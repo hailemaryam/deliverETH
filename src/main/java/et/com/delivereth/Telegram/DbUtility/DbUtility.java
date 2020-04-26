@@ -1,6 +1,6 @@
 package et.com.delivereth.Telegram.DbUtility;
 
-import et.com.delivereth.Telegram.telegramRestorant.requests.RestaurantRequestForNewOrder;
+import et.com.delivereth.Telegram.telegramTransport.requests.TransportRequestForNewOrder;
 import et.com.delivereth.Telegram.telegramUser.ChatStepConstants;
 import et.com.delivereth.Telegram.OtherUtility.DistanceCalculator;
 import et.com.delivereth.domain.enumeration.OrderStatus;
@@ -19,9 +19,9 @@ public class DbUtility {
     private final OrderedFoodService orderedFoodService;
     private final RestorantService restorantService;
     private final OrderedFoodDbUtility orderedFoodDbUtility;
-    private final RestaurantRequestForNewOrder requestForNewOrder;
+    private final TransportRequestForNewOrder requestForNewOrder;
 
-    public DbUtility(TelegramUserService telegramUserService, OrderService orderService, OrderedFoodService orderedFoodService, RestorantService restorantService, OrderedFoodDbUtility orderedFoodDbUtility, RestaurantRequestForNewOrder requestForNewOrder) {
+    public DbUtility(TelegramUserService telegramUserService, OrderService orderService, OrderedFoodService orderedFoodService, RestorantService restorantService, OrderedFoodDbUtility orderedFoodDbUtility, TransportRequestForNewOrder requestForNewOrder) {
         this.telegramUserService = telegramUserService;
         this.orderService = orderService;
         this.orderedFoodService = orderedFoodService;

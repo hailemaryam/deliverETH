@@ -2,12 +2,10 @@ package et.com.delivereth.Telegram.OtherUtility;
 
 import et.com.delivereth.Telegram.DbUtility.*;
 import et.com.delivereth.Telegram.telegramRestorant.requests.RestaurantRequestForNewOrder;
+import et.com.delivereth.Telegram.telegramTransport.requests.TransportRequestForNewOrder;
 import et.com.delivereth.Telegram.telegramUser.requests.RequestForMyOrdersList;
 import et.com.delivereth.domain.enumeration.OrderStatus;
-import et.com.delivereth.service.dto.OrderDTO;
-import et.com.delivereth.service.dto.OrderedFoodDTO;
-import et.com.delivereth.service.dto.RestorantDTO;
-import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
+import et.com.delivereth.service.dto.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +21,11 @@ public class ScheduledJobs {
     private final OrderedFoodDbUtility orderedFoodDbUtility;
     private final FoodDbUtitility foodDbUtitility;
     private final TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility;
+    private final TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility;
     private final RestaurantRequestForNewOrder restaurantRequestForNewOrder;
+    private final TransportRequestForNewOrder transportRequestForNewOrder;
 
-    public ScheduledJobs(OrderDbUtility orderDbUtility, TelegramUserDbUtility telegramUserDbUtility, RequestForMyOrdersList requestForMyOrdersList, RestorantDbUtitlity restorantDbUtitlity, OrderedFoodDbUtility orderedFoodDbUtility, FoodDbUtitility foodDbUtitility, TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility, RestaurantRequestForNewOrder restaurantRequestForNewOrder) {
+    public ScheduledJobs(OrderDbUtility orderDbUtility, TelegramUserDbUtility telegramUserDbUtility, RequestForMyOrdersList requestForMyOrdersList, RestorantDbUtitlity restorantDbUtitlity, OrderedFoodDbUtility orderedFoodDbUtility, FoodDbUtitility foodDbUtitility, TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility, TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility, RestaurantRequestForNewOrder restaurantRequestForNewOrder, TransportRequestForNewOrder transportRequestForNewOrder) {
         this.orderDbUtility = orderDbUtility;
         this.telegramUserDbUtility = telegramUserDbUtility;
         this.requestForMyOrdersList = requestForMyOrdersList;
@@ -33,7 +33,9 @@ public class ScheduledJobs {
         this.orderedFoodDbUtility = orderedFoodDbUtility;
         this.foodDbUtitility = foodDbUtitility;
         this.telegramRestaurantUserDbUtility = telegramRestaurantUserDbUtility;
+        this.telegramDeliveryUserDbUtility = telegramDeliveryUserDbUtility;
         this.restaurantRequestForNewOrder = restaurantRequestForNewOrder;
+        this.transportRequestForNewOrder = transportRequestForNewOrder;
     }
 
     @Scheduled(cron = "0 0/7 * * * ?")
@@ -44,8 +46,11 @@ public class ScheduledJobs {
                 orderDTO.setOrderStatus(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM);
                 orderDTO = orderDbUtility.updateOrder(orderDTO);
                 requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId()).getChatId(), null, null);
-                for (TelegramRestaurantUserDTO telegramRestaurantUserDTO: getRestaurantUser(orderDTO)){
-                    restaurantRequestForNewOrder.sendOrderStatus(orderDTO, telegramRestaurantUserDTO.getChatId());
+//                for (TelegramRestaurantUserDTO telegramRestaurantUserDTO: getRestaurantUser(orderDTO)){
+//                    restaurantRequestForNewOrder.sendOrderStatus(orderDTO, telegramRestaurantUserDTO.getChatId());
+//                }
+                for (TelegramDeliveryUserDTO telegramDeliveryUserDTO: getRestaurantDeliveryUser(orderDTO)){
+                    transportRequestForNewOrder.sendOrderStatus(orderDTO, telegramDeliveryUserDTO.getChatId());
                 }
             }
         }
@@ -55,5 +60,11 @@ public class ScheduledJobs {
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId());
         List<TelegramRestaurantUserDTO> restaurantUsers = telegramRestaurantUserDbUtility.getRestaurantUsers(restorant);
         return restaurantUsers;
+    }
+    List<TelegramDeliveryUserDTO> getRestaurantDeliveryUser(OrderDTO orderDTO){
+        List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
+        RestorantDTO restorant = restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId());
+        List<TelegramDeliveryUserDTO> restaurantUsers = telegramDeliveryUserDbUtility.getDeliveryUser(restorant);
+        return  restaurantUsers;
     }
 }

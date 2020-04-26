@@ -97,7 +97,7 @@ public class RequestForMyOrdersList {
         invoice = invoice + "Order Id : #" + orderDTO.getId() + "\n";
         if (telegramDeliveryUserDTO != null) {
             invoice = invoice + "Delivery user  : @" + telegramDeliveryUserDTO.getUserName()+ "\n";
-            invoice = invoice + "Delivery user phone : @" + telegramDeliveryUserDTO.getPhone()+ "\n";
+            invoice = invoice + "Delivery user phone : " + telegramDeliveryUserDTO.getPhone()+ "\n";
         } else if (telegramRestaurantUserDTO != null) {
             invoice = invoice + "Service provider : @" + telegramRestaurantUserDTO.getUserName()+ "\n";
             invoice = invoice + "Service provider phone : " + telegramRestaurantUserDTO.getPhone()+ "\n";

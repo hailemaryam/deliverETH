@@ -4,6 +4,7 @@ import et.com.delivereth.Telegram.Constants.StaticText;
 import et.com.delivereth.Telegram.DbUtility.*;
 import et.com.delivereth.Telegram.OtherUtility.SendSMS;
 import et.com.delivereth.Telegram.telegramTransport.main.TransportTelegramSender;
+import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,7 +120,7 @@ public class TransportRequestForNewOrder {
         invoice = invoice + "Restaurant location on map : /Restaurant_Location_" + restorant.getId()  +" \n";
         invoice = invoice + "Latitude : " + restorant.getLatitude()  +" \n";
         invoice = invoice + "Longitude : " + restorant.getLongtude()  +" \n";
-        invoice = invoice + "Location description : " + restorant.getDescription()  +" \n";
+        invoice = invoice + "Description : " + restorant.getDescription()  +" \n";
         invoice = invoice + "\n";
         invoice = invoice +  "<strong>\uD83D\uDC68\u200D\uD83E\uDDB2 User Information</strong>\n";
         invoice = invoice + "User name: " + telegramUserDTO.getFirstName() + " " + telegramUserDTO.getLastName() + "\n";
@@ -139,4 +140,26 @@ public class TransportRequestForNewOrder {
         invoice = invoice + "<b>Order id : #" + orderDTO.getId() + "</b>\n";
         return invoice;
     }
+    public void sendOrderStatus(OrderDTO orderDTO, String chatId) {
+        SendMessage response = new SendMessage();
+        response.setChatId(chatId);
+        String invoice = "";
+        if (orderDTO.getOrderStatus().equals(OrderStatus.CANCELED_BY_RESTAURANT)) {
+            invoice = invoice + StaticText.orderRejectedText;
+        } else if (orderDTO.getOrderStatus().equals(OrderStatus.EXPIRED_AND_CANCELED_BY_SYSTEM)) {
+            invoice = invoice + StaticText.orderCancelBySystemForRestaurantText;
+        } else {
+            invoice = invoice + StaticText.orderStatuChanged;
+        }
+        invoice = invoice + "Status = " + orderDTO.getOrderStatus() + "\n";
+        invoice = invoice + "Order Id : #" + orderDTO.getId() + "\n";
+        response.setText(invoice);
+        response.setParseMode("HTML");
+        try {
+            telegramSender.execute(response);
+        } catch (TelegramApiException e) {
+            logger.error("Error Sending Message {}", response);
+        }
+    }
+
 }

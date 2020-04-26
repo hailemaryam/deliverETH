@@ -18,11 +18,17 @@ public class TransportMenu {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         if (!alreadyAccepted) {
-            if (orderDTO.getOrderStatus().equals(OrderStatus.READY_FOR_DELIVERY)) {
+            if (orderDTO.getOrderStatus().equals(OrderStatus.ORDERED)) {
                 rowInline.add(new InlineKeyboardButton().setText(StaticText.acceptOrder).setCallbackData("accept_" + orderDTO.getId()));
+            }
+            if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT)) {
+                rowInline.add(new InlineKeyboardButton().setText(StaticText.readyForDeliver).setCallbackData("ready_" + orderDTO.getId()));
             }
             if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_DRIVER)) {
                 rowInline.add(new InlineKeyboardButton().setText(StaticText.delivered).setCallbackData("delivered_" + orderDTO.getId()));
+            }
+            if (orderDTO.getOrderStatus().equals(OrderStatus.ORDERED) || orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT)) {
+                rowInline.add(new InlineKeyboardButton().setText(StaticText.rejectOrder).setCallbackData("reject_" + orderDTO.getId()));
             }
         }
         rowsInline.add(rowInline);

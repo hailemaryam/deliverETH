@@ -5,12 +5,9 @@ import et.com.delivereth.Telegram.DbUtility.TelegramUserDbUtility;
 import et.com.delivereth.Telegram.telegramTransport.requests.TransportRequestForNewOrder;
 import et.com.delivereth.Telegram.telegramTransport.requests.TransportSendLocation;
 import et.com.delivereth.Telegram.telegramUser.requests.RequestForMyOrdersList;
-import et.com.delivereth.domain.Order;
-import et.com.delivereth.domain.TelegramUser;
 import et.com.delivereth.domain.enumeration.OrderStatus;
 import et.com.delivereth.service.dto.OrderDTO;
 import et.com.delivereth.service.dto.TelegramDeliveryUserDTO;
-import et.com.delivereth.service.dto.TelegramRestaurantUserDTO;
 import et.com.delivereth.service.dto.TelegramUserDTO;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -55,6 +52,9 @@ public class TransportWaitingForOrderListProcessor {
         if (orderById.getOrderStatus().equals(OrderStatus.ORDERED)){
             OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
                 OrderStatus.ACCEPTED_BY_RESTAURANT);
+            orderDTO.setTelegramDeliveryUserId(telegramDeliveryUserDTO.getId());
+            orderDTO.setTelegramUserUserName(telegramDeliveryUserDTO.getUserName());
+            orderDbUtility.updateOrder(orderDTO);
             requestForNewOrder.editNewOrder(update, orderDTO, false, telegramDeliveryUserDTO);
             TelegramUserDTO telegramUserDTO = telegramUserDbUtility.getTelegramUser(orderDTO.getTelegramUserId());
             requestForMyOrdersList.sendOrderStatus(orderDTO, telegramUserDTO.getChatId(), null, telegramDeliveryUserDTO);
@@ -88,10 +88,7 @@ public class TransportWaitingForOrderListProcessor {
     }
     void reject(Update update, TelegramDeliveryUserDTO telegramDeliveryUserDTO) {
         OrderDTO orderById = orderDbUtility.getOrderById(Long.valueOf(update.getCallbackQuery().getData().substring(7)));
-        if (
-            orderById.getOrderStatus().equals(OrderStatus.ORDERED) ||
-            orderById.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT)
-        ){
+        if (orderById.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT)){
             OrderDTO orderDTO = orderDbUtility.changeOrderStatusById(Long.valueOf(update.getCallbackQuery().getData().substring(7)),
                 OrderStatus.CANCELED_BY_RESTAURANT);
             requestForNewOrder.editNewOrder(update, orderDTO, false, telegramDeliveryUserDTO);

@@ -27,7 +27,7 @@ public class TransportMenu {
             if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_DRIVER)) {
                 rowInline.add(new InlineKeyboardButton().setText(StaticText.delivered).setCallbackData("delivered_" + orderDTO.getId()));
             }
-            if (orderDTO.getOrderStatus().equals(OrderStatus.ORDERED) || orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT)) {
+            if (orderDTO.getOrderStatus().equals(OrderStatus.ACCEPTED_BY_RESTAURANT)) {
                 rowInline.add(new InlineKeyboardButton().setText(StaticText.rejectOrder).setCallbackData("reject_" + orderDTO.getId()));
             }
         }

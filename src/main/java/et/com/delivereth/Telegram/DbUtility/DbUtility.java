@@ -92,7 +92,8 @@ public class DbUtility {
                 orderDTO.getLongtude().doubleValue(),
                 restorantDTO.getLongtude().doubleValue()
                 ,0,0);
-            return distance < 5000 ? (75 * 0.94) * 1.09 : ((75 + (distance - 5000) * 0.01) * 0.94)*1.09;
+            double distanceInKillometer = distance / 1000;
+            return (distanceInKillometer * 8) + 35;
         }
         return null;
     }

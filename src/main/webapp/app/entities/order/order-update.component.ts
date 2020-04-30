@@ -15,8 +15,10 @@ import { ITelegramUser } from 'app/shared/model/telegram-user.model';
 import { TelegramUserService } from 'app/entities/telegram-user/telegram-user.service';
 import { ITelegramDeliveryUser } from 'app/shared/model/telegram-delivery-user.model';
 import { TelegramDeliveryUserService } from 'app/entities/telegram-delivery-user/telegram-delivery-user.service';
+import { ITelegramRestaurantUser } from 'app/shared/model/telegram-restaurant-user.model';
+import { TelegramRestaurantUserService } from 'app/entities/telegram-restaurant-user/telegram-restaurant-user.service';
 
-type SelectableEntity = ITelegramUser | ITelegramDeliveryUser;
+type SelectableEntity = ITelegramUser | ITelegramDeliveryUser | ITelegramRestaurantUser;
 
 @Component({
   selector: 'jhi-order-update',
@@ -26,6 +28,7 @@ export class OrderUpdateComponent implements OnInit {
   isSaving = false;
   telegramusers: ITelegramUser[] = [];
   telegramdeliveryusers: ITelegramDeliveryUser[] = [];
+  telegramrestaurantusers: ITelegramRestaurantUser[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -37,8 +40,12 @@ export class OrderUpdateComponent implements OnInit {
     date: [],
     additionalNote: [],
     orderStatus: [],
+    restaurantPaymentStaus: [],
+    transportPaymentStatus: [],
+    telegramUserPaymentStatus: [],
     telegramUserId: [],
-    telegramDeliveryUserId: []
+    telegramDeliveryUserId: [],
+    telegramRestaurantUserId: []
   });
 
   constructor(
@@ -47,6 +54,7 @@ export class OrderUpdateComponent implements OnInit {
     protected orderService: OrderService,
     protected telegramUserService: TelegramUserService,
     protected telegramDeliveryUserService: TelegramDeliveryUserService,
+    protected telegramRestaurantUserService: TelegramRestaurantUserService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -65,6 +73,10 @@ export class OrderUpdateComponent implements OnInit {
       this.telegramDeliveryUserService
         .query()
         .subscribe((res: HttpResponse<ITelegramDeliveryUser[]>) => (this.telegramdeliveryusers = res.body || []));
+
+      this.telegramRestaurantUserService
+        .query()
+        .subscribe((res: HttpResponse<ITelegramRestaurantUser[]>) => (this.telegramrestaurantusers = res.body || []));
     });
   }
 
@@ -79,8 +91,12 @@ export class OrderUpdateComponent implements OnInit {
       date: order.date ? order.date.format(DATE_TIME_FORMAT) : null,
       additionalNote: order.additionalNote,
       orderStatus: order.orderStatus,
+      restaurantPaymentStaus: order.restaurantPaymentStaus,
+      transportPaymentStatus: order.transportPaymentStatus,
+      telegramUserPaymentStatus: order.telegramUserPaymentStatus,
       telegramUserId: order.telegramUserId,
-      telegramDeliveryUserId: order.telegramDeliveryUserId
+      telegramDeliveryUserId: order.telegramDeliveryUserId,
+      telegramRestaurantUserId: order.telegramRestaurantUserId
     });
   }
 
@@ -126,8 +142,12 @@ export class OrderUpdateComponent implements OnInit {
       date: this.editForm.get(['date'])!.value ? moment(this.editForm.get(['date'])!.value, DATE_TIME_FORMAT) : undefined,
       additionalNote: this.editForm.get(['additionalNote'])!.value,
       orderStatus: this.editForm.get(['orderStatus'])!.value,
+      restaurantPaymentStaus: this.editForm.get(['restaurantPaymentStaus'])!.value,
+      transportPaymentStatus: this.editForm.get(['transportPaymentStatus'])!.value,
+      telegramUserPaymentStatus: this.editForm.get(['telegramUserPaymentStatus'])!.value,
       telegramUserId: this.editForm.get(['telegramUserId'])!.value,
-      telegramDeliveryUserId: this.editForm.get(['telegramDeliveryUserId'])!.value
+      telegramDeliveryUserId: this.editForm.get(['telegramDeliveryUserId'])!.value,
+      telegramRestaurantUserId: this.editForm.get(['telegramRestaurantUserId'])!.value
     };
   }
 

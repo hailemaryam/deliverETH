@@ -31,6 +31,10 @@
                     <th scope="col"  jhiSortBy="phone"><span>Phone</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="conversationMetaData"><span>Conversation Meta Data</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="loadedPage"><span>Loaded Page</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="status"><span>Status</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="currentBalance"><span>Current Balance</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="currentLatitude"><span>Current Latitude</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="currentLongitude"><span>Current Longitude</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -45,6 +49,10 @@
                     <td>{{ telegramDeliveryUser.phone }}</td>
                     <td>{{ telegramDeliveryUser.conversationMetaData }}</td>
                     <td>{{ telegramDeliveryUser.loadedPage }}</td>
+                    <td>{{ telegramDeliveryUser.status }}</td>
+                    <td>{{ telegramDeliveryUser.currentBalance }}</td>
+                    <td>{{ telegramDeliveryUser.currentLatitude }}</td>
+                    <td>{{ telegramDeliveryUser.currentLongitude }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"

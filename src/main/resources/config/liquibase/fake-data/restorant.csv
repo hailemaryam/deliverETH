@@ -1,11 +1,11 @@
-id;name;user_name;description;icon_image;icon_image_content_type;latitude;longtude;available_order_cap;status
-1;Summit optical pink;"CmTA7t";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;78176;27850;78363;true
-2;Down-sized dedicated;"bG0";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;36404;7417;86245;true
-3;gold;"F";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;87567;37819;14330;true
-4;Squares Salad deliver;"JG@";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;20133;37647;78162;true
-5;Fresh Bacon;"aOyYdG";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;50805;68846;32157;false
-6;calculating;"EkkG8l";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;23083;82630;30651;false
-7;Global;"VmeY@A";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;51231;22840;31646;true
-8;Intelligent Mills;"R_lQmi";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;2161;85927;10004;false
-9;Georgia Wooden collaborative;"Ts";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;30551;20296;45337;true
-10;Florida North Carolina invoice;"fo";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;80221;56253;50323;true
+id;name;user_name;description;icon_image;icon_image_content_type;latitude;longtude;available_order_cap;status;tin_number;vat_number
+1;Summit optical pink;"CmTA7t";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;78176;27850;78363;true;Down-sized dedicated;Utah
+2;Sleek Fresh Pants Refined;"G";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;48658;25934;14808;true;enable transmitter Squares;Regional
+3;Buckinghamshire software;"@lxX";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;63743;36250;13025;true;connecting;discrete
+4;Lead withdrawal primary;"ZS";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;95590;84892;55865;false;Granite connecting;sky blue
+5;white compressing directional;"eY";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;41943;43603;51231;false;interface;turquoise
+6;Principal enable;"R_lQmi";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;2161;85927;10004;false;Georgia Wooden collaborative;Borders Fantastic Metal Towels
+7;card;"VKjJP";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;65084;75743;54208;false;navigate;Concrete
+8;Montana Credit Card Account Human;".oa";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;78958;40881;9074;true;XSS;Unbranded Concrete Keyboard Cliff incubate
+9;deposit mission-critical;"u-u9";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;16959;45849;51682;true;Generic Concrete Towels background;indigo supply-chains
+10;hack Soap Sausages;"jp";../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;95916;3644;75976;true;user-centric Mauritius Rupee;Administrator panel

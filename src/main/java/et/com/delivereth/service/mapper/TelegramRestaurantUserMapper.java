@@ -13,7 +13,10 @@ import org.mapstruct.*;
 public interface TelegramRestaurantUserMapper extends EntityMapper<TelegramRestaurantUserDTO, TelegramRestaurantUser> {
 
 
+    @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "removeOrder", ignore = true)
     @Mapping(target = "removeRestorant", ignore = true)
+    TelegramRestaurantUser toEntity(TelegramRestaurantUserDTO telegramRestaurantUserDTO);
 
     default TelegramRestaurantUser fromId(Long id) {
         if (id == null) {

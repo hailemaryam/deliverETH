@@ -27,7 +27,9 @@ export class RestorantUpdateComponent implements OnInit {
     latitude: [],
     longtude: [],
     availableOrderCap: [],
-    status: []
+    status: [],
+    tinNumber: [],
+    vatNumber: []
   });
 
   constructor(
@@ -56,7 +58,9 @@ export class RestorantUpdateComponent implements OnInit {
       latitude: restorant.latitude,
       longtude: restorant.longtude,
       availableOrderCap: restorant.availableOrderCap,
-      status: restorant.status
+      status: restorant.status,
+      tinNumber: restorant.tinNumber,
+      vatNumber: restorant.vatNumber
     });
   }
 
@@ -112,7 +116,9 @@ export class RestorantUpdateComponent implements OnInit {
       latitude: this.editForm.get(['latitude'])!.value,
       longtude: this.editForm.get(['longtude'])!.value,
       availableOrderCap: this.editForm.get(['availableOrderCap'])!.value,
-      status: this.editForm.get(['status'])!.value
+      status: this.editForm.get(['status'])!.value,
+      tinNumber: this.editForm.get(['tinNumber'])!.value,
+      vatNumber: this.editForm.get(['vatNumber'])!.value
     };
   }
 

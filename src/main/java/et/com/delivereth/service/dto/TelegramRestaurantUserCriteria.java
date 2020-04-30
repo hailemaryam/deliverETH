@@ -42,6 +42,12 @@ public class TelegramRestaurantUserCriteria implements Serializable, Criteria {
 
     private IntegerFilter loadedPage;
 
+    private BooleanFilter status;
+
+    private DoubleFilter currentBalance;
+
+    private LongFilter orderId;
+
     private LongFilter restorantId;
 
     public TelegramRestaurantUserCriteria() {
@@ -57,6 +63,9 @@ public class TelegramRestaurantUserCriteria implements Serializable, Criteria {
         this.phone = other.phone == null ? null : other.phone.copy();
         this.conversationMetaData = other.conversationMetaData == null ? null : other.conversationMetaData.copy();
         this.loadedPage = other.loadedPage == null ? null : other.loadedPage.copy();
+        this.status = other.status == null ? null : other.status.copy();
+        this.currentBalance = other.currentBalance == null ? null : other.currentBalance.copy();
+        this.orderId = other.orderId == null ? null : other.orderId.copy();
         this.restorantId = other.restorantId == null ? null : other.restorantId.copy();
     }
 
@@ -137,6 +146,30 @@ public class TelegramRestaurantUserCriteria implements Serializable, Criteria {
         this.loadedPage = loadedPage;
     }
 
+    public BooleanFilter getStatus() {
+        return status;
+    }
+
+    public void setStatus(BooleanFilter status) {
+        this.status = status;
+    }
+
+    public DoubleFilter getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(DoubleFilter currentBalance) {
+        this.currentBalance = currentBalance;
+    }
+
+    public LongFilter getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(LongFilter orderId) {
+        this.orderId = orderId;
+    }
+
     public LongFilter getRestorantId() {
         return restorantId;
     }
@@ -165,6 +198,9 @@ public class TelegramRestaurantUserCriteria implements Serializable, Criteria {
             Objects.equals(phone, that.phone) &&
             Objects.equals(conversationMetaData, that.conversationMetaData) &&
             Objects.equals(loadedPage, that.loadedPage) &&
+            Objects.equals(status, that.status) &&
+            Objects.equals(currentBalance, that.currentBalance) &&
+            Objects.equals(orderId, that.orderId) &&
             Objects.equals(restorantId, that.restorantId);
     }
 
@@ -180,6 +216,9 @@ public class TelegramRestaurantUserCriteria implements Serializable, Criteria {
         phone,
         conversationMetaData,
         loadedPage,
+        status,
+        currentBalance,
+        orderId,
         restorantId
         );
     }
@@ -196,6 +235,9 @@ public class TelegramRestaurantUserCriteria implements Serializable, Criteria {
                 (phone != null ? "phone=" + phone + ", " : "") +
                 (conversationMetaData != null ? "conversationMetaData=" + conversationMetaData + ", " : "") +
                 (loadedPage != null ? "loadedPage=" + loadedPage + ", " : "") +
+                (status != null ? "status=" + status + ", " : "") +
+                (currentBalance != null ? "currentBalance=" + currentBalance + ", " : "") +
+                (orderId != null ? "orderId=" + orderId + ", " : "") +
                 (restorantId != null ? "restorantId=" + restorantId + ", " : "") +
             "}";
     }

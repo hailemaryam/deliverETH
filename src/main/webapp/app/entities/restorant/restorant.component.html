@@ -31,6 +31,8 @@
                     <th scope="col"  jhiSortBy="longtude"><span>Longtude</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="availableOrderCap"><span>Available Order Cap</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="status"><span>Status</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="tinNumber"><span>Tin Number</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="vatNumber"><span>Vat Number</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -50,6 +52,8 @@
                     <td>{{ restorant.longtude }}</td>
                     <td>{{ restorant.availableOrderCap }}</td>
                     <td>{{ restorant.status }}</td>
+                    <td>{{ restorant.tinNumber }}</td>
+                    <td>{{ restorant.vatNumber }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"

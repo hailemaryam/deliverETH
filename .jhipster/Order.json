@@ -35,6 +35,18 @@
             "fieldName": "orderStatus",
             "fieldType": "OrderStatus",
             "fieldValues": "STARTED,ORDERED,ACCEPTED_BY_RESTAURANT,READY_FOR_DELIVERY,ACCEPTED_BY_DRIVER,DELIVERED,CANCELED_BY_RESTAURANT,CANCELED_BY_USER,EXPIRED_AND_CANCELED_BY_SYSTEM,CANCELED_BY_SYSTEM_AND_REMOVED,DELIVERED_AND_REMOVED,CANCELED_BY_RESTAURANT_AND_REMOVED"
+        },
+        {
+            "fieldName": "restaurantPaymentStaus",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "transportPaymentStatus",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "telegramUserPaymentStatus",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [
@@ -56,6 +68,13 @@
             "otherEntityName": "telegramDeliveryUser",
             "otherEntityRelationshipName": "order",
             "relationshipName": "telegramDeliveryUser",
+            "otherEntityField": "userName"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "telegramRestaurantUser",
+            "otherEntityRelationshipName": "order",
+            "relationshipName": "telegramRestaurantUser",
             "otherEntityField": "userName"
         }
     ],

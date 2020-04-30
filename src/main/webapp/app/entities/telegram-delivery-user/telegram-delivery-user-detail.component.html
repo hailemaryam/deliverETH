@@ -40,6 +40,22 @@
                 <dd>
                     <span>{{ telegramDeliveryUser.loadedPage }}</span>
                 </dd>
+                <dt><span>Status</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.status }}</span>
+                </dd>
+                <dt><span>Current Balance</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.currentBalance }}</span>
+                </dd>
+                <dt><span>Current Latitude</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.currentLatitude }}</span>
+                </dd>
+                <dt><span>Current Longitude</span></dt>
+                <dd>
+                    <span>{{ telegramDeliveryUser.currentLongitude }}</span>
+                </dd>
                 <dt><span>Restorant</span></dt>
                 <dd>
                     <span *ngFor="let restorant of telegramDeliveryUser.restorants; let last = last">

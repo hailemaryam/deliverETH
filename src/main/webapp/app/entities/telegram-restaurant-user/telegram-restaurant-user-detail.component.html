@@ -40,6 +40,14 @@
                 <dd>
                     <span>{{ telegramRestaurantUser.loadedPage }}</span>
                 </dd>
+                <dt><span>Status</span></dt>
+                <dd>
+                    <span>{{ telegramRestaurantUser.status }}</span>
+                </dd>
+                <dt><span>Current Balance</span></dt>
+                <dd>
+                    <span>{{ telegramRestaurantUser.currentBalance }}</span>
+                </dd>
                 <dt><span>Restorant</span></dt>
                 <dd>
                     <span *ngFor="let restorant of telegramRestaurantUser.restorants; let last = last">

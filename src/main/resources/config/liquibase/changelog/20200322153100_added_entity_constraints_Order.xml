@@ -20,5 +20,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="telegram_delivery_user"/>
 
+        <addForeignKeyConstraint baseColumnNames="telegram_restaurant_user_id"
+                                 baseTableName="jhi_order"
+                                 constraintName="fk_jhi_order_telegram_restaurant_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="telegram_restaurant_user"/>
+
     </changeSet>
 </databaseChangeLog>

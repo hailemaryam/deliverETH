@@ -38,6 +38,22 @@
         {
             "fieldName": "loadedPage",
             "fieldType": "Integer"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "currentBalance",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "currentLatitude",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "currentLongitude",
+            "fieldType": "Float"
         }
     ],
     "relationships": [

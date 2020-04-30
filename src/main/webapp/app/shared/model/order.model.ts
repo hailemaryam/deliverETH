@@ -12,11 +12,16 @@ export interface IOrder {
   date?: Moment;
   additionalNote?: any;
   orderStatus?: OrderStatus;
+  restaurantPaymentStaus?: boolean;
+  transportPaymentStatus?: boolean;
+  telegramUserPaymentStatus?: boolean;
   orderedFoods?: IOrderedFood[];
   telegramUserUserName?: string;
   telegramUserId?: number;
   telegramDeliveryUserUserName?: string;
   telegramDeliveryUserId?: number;
+  telegramRestaurantUserUserName?: string;
+  telegramRestaurantUserId?: number;
 }
 
 export class Order implements IOrder {
@@ -30,10 +35,19 @@ export class Order implements IOrder {
     public date?: Moment,
     public additionalNote?: any,
     public orderStatus?: OrderStatus,
+    public restaurantPaymentStaus?: boolean,
+    public transportPaymentStatus?: boolean,
+    public telegramUserPaymentStatus?: boolean,
     public orderedFoods?: IOrderedFood[],
     public telegramUserUserName?: string,
     public telegramUserId?: number,
     public telegramDeliveryUserUserName?: string,
-    public telegramDeliveryUserId?: number
-  ) {}
+    public telegramDeliveryUserId?: number,
+    public telegramRestaurantUserUserName?: string,
+    public telegramRestaurantUserId?: number
+  ) {
+    this.restaurantPaymentStaus = this.restaurantPaymentStaus || false;
+    this.transportPaymentStatus = this.transportPaymentStatus || false;
+    this.telegramUserPaymentStatus = this.telegramUserPaymentStatus || false;
+  }
 }

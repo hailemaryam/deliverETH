@@ -31,8 +31,12 @@
                     <th scope="col"  jhiSortBy="date"><span>Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="additionalNote"><span>Additional Note</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="orderStatus"><span>Order Status</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="restaurantPaymentStaus"><span>Restaurant Payment Staus</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="transportPaymentStatus"><span>Transport Payment Status</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="telegramUserPaymentStatus"><span>Telegram User Payment Status</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="telegramUserUserName"><span>Telegram User</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="telegramDeliveryUserUserName"><span>Telegram Delivery User</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="telegramRestaurantUserUserName"><span>Telegram Restaurant User</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -47,6 +51,9 @@
                     <td>{{ order.date | date:'medium' }}</td>
                     <td>{{ order.additionalNote }}</td>
                     <td>{{ order.orderStatus }}</td>
+                    <td>{{ order.restaurantPaymentStaus }}</td>
+                    <td>{{ order.transportPaymentStatus }}</td>
+                    <td>{{ order.telegramUserPaymentStatus }}</td>
                     <td>
                         <div *ngIf="order.telegramUserId">
                             <a [routerLink]="['/telegram-user', order.telegramUserId , 'view']" >{{ order.telegramUserUserName }}</a>
@@ -55,6 +62,11 @@
                     <td>
                         <div *ngIf="order.telegramDeliveryUserId">
                             <a [routerLink]="['/telegram-delivery-user', order.telegramDeliveryUserId , 'view']" >{{ order.telegramDeliveryUserUserName }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="order.telegramRestaurantUserId">
+                            <a [routerLink]="['/telegram-restaurant-user', order.telegramRestaurantUserId , 'view']" >{{ order.telegramRestaurantUserUserName }}</a>
                         </div>
                     </td>
                     <td class="text-right">

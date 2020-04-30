@@ -11,6 +11,10 @@ export interface ITelegramDeliveryUser {
   phone?: string;
   conversationMetaData?: string;
   loadedPage?: number;
+  status?: boolean;
+  currentBalance?: number;
+  currentLatitude?: number;
+  currentLongitude?: number;
   orders?: IOrder[];
   restorants?: IRestorant[];
 }
@@ -26,7 +30,13 @@ export class TelegramDeliveryUser implements ITelegramDeliveryUser {
     public phone?: string,
     public conversationMetaData?: string,
     public loadedPage?: number,
+    public status?: boolean,
+    public currentBalance?: number,
+    public currentLatitude?: number,
+    public currentLongitude?: number,
     public orders?: IOrder[],
     public restorants?: IRestorant[]
-  ) {}
+  ) {
+    this.status = this.status || false;
+  }
 }

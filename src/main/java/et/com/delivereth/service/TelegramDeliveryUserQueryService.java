@@ -115,6 +115,18 @@ public class TelegramDeliveryUserQueryService extends QueryService<TelegramDeliv
             if (criteria.getLoadedPage() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getLoadedPage(), TelegramDeliveryUser_.loadedPage));
             }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getStatus(), TelegramDeliveryUser_.status));
+            }
+            if (criteria.getCurrentBalance() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getCurrentBalance(), TelegramDeliveryUser_.currentBalance));
+            }
+            if (criteria.getCurrentLatitude() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getCurrentLatitude(), TelegramDeliveryUser_.currentLatitude));
+            }
+            if (criteria.getCurrentLongitude() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getCurrentLongitude(), TelegramDeliveryUser_.currentLongitude));
+            }
             if (criteria.getOrderId() != null) {
                 specification = specification.and(buildSpecification(criteria.getOrderId(),
                     root -> root.join(TelegramDeliveryUser_.orders, JoinType.LEFT).get(Order_.id)));

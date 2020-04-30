@@ -28,6 +28,8 @@ export class TelegramRestaurantUserUpdateComponent implements OnInit {
     phone: [],
     conversationMetaData: [],
     loadedPage: [],
+    status: [],
+    currentBalance: [],
     restorants: []
   });
 
@@ -57,6 +59,8 @@ export class TelegramRestaurantUserUpdateComponent implements OnInit {
       phone: telegramRestaurantUser.phone,
       conversationMetaData: telegramRestaurantUser.conversationMetaData,
       loadedPage: telegramRestaurantUser.loadedPage,
+      status: telegramRestaurantUser.status,
+      currentBalance: telegramRestaurantUser.currentBalance,
       restorants: telegramRestaurantUser.restorants
     });
   }
@@ -87,6 +91,8 @@ export class TelegramRestaurantUserUpdateComponent implements OnInit {
       phone: this.editForm.get(['phone'])!.value,
       conversationMetaData: this.editForm.get(['conversationMetaData'])!.value,
       loadedPage: this.editForm.get(['loadedPage'])!.value,
+      status: this.editForm.get(['status'])!.value,
+      currentBalance: this.editForm.get(['currentBalance'])!.value,
       restorants: this.editForm.get(['restorants'])!.value
     };
   }

@@ -1,11 +1,11 @@
-id;first_name;last_name;user_name;user_id;chat_id;phone;conversation_meta_data;loaded_page
-1;Carolina;Nolan;Direct enhance Pizza;23776;USB;612.030.9471 x821;Granite;86698
-2;Golda;Muller;Fantastic;58889;Chips;122.056.2789 x21813;Mall rich tertiary;10717
-3;Joshua;Abbott;Plastic Buckinghamshire;58376;Electronics Frozen Bedfordshire;009.980.1355 x9848;dot-com fuchsia;54027
-4;Enoch;Dare;Somoni Metal Well;82163;optical client-driven;423.023.9225 x6791;seamless PCI;19648
-5;Lula;Moore;New Israeli Sheqel Morocco;23534;Fantastic Plastic Ball;783-250-6336;Sharable distributed parse;76213
-6;Salvador;Swift;Guyana Dollar;54400;Orchestrator Sudan;319.657.8787;Dobra back up heuristic;31774
-7;Merl;Weber;parsing Computers;74334;Designer Som;(059) 260-6461;Implementation AI;51236
-8;Arvid;Ziemann;ivory paradigms AI;76166;Incredible Fresh Sausages multi-byte;(288) 274-8893;Keys;1859
-9;Glen;Turcotte;Horizontal European Unit of Account 9(E.U.A.-9);87072;Gloves;355-575-8182 x26999;adapter Idaho Tuna;82151
-10;Owen;Gusikowski;Planner Upgradable;13932;e-tailers Factors;(391) 458-5960 x6501;Chips drive disintermediate;4084
+id;first_name;last_name;user_name;user_id;chat_id;phone;conversation_meta_data;loaded_page;status;current_balance
+1;Carolina;Nolan;Direct enhance Pizza;23776;USB;612.030.9471 x821;Granite;86698;false;62598
+2;Antonietta;Block;Kansas Chips;99782;Face to face;562-789-2181;RSS Inlet;99924;false;90000
+3;Benton;Larson;Avon;27580;multi-byte Program;195-270-0998;Gloves;55445;true;98354
+4;Stanley;Kris;Guadeloupe Bedfordshire connecting;32269;Branding;174.986.8821 x7423;Grass-roots;91700;false;25910
+5;Jorge;Okuneva;Corporate withdrawal Personal Loan Account;36582;payment;635.523.0432;transmitter;37618;false;57473
+6;Angelina;Price;extensible overriding;81503;Credit Card Account Consultant;(816) 355-9658 x33196;optical circuit;72461;true;68040
+7;Ned;Romaguera;heuristic;31774;Operations parsing Computers;1-395-642-0592 x6064;Plastic Implementation AI;51236;false;99574
+8;Meta;Effertz;paradigms AI calculate;6861;Chief multi-byte;(288) 274-8893;Keys;1859;false;90173
+9;Laron;Friesen;European Unit of Account 9(E.U.A.-9) SSL;14970;copying;557.581.8226 x999;adapter Idaho Tuna;82151;true;30031
+10;Giovani;Wisoky;Upgradable Granite;42366;Factors;(391) 458-5960 x6501;Chips drive disintermediate;4084;true;96925

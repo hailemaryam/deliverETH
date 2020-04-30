@@ -52,6 +52,18 @@ public class TelegramDeliveryUser implements Serializable {
     @Column(name = "loaded_page")
     private Integer loadedPage;
 
+    @Column(name = "status")
+    private Boolean status;
+
+    @Column(name = "current_balance")
+    private Double currentBalance;
+
+    @Column(name = "current_latitude")
+    private Float currentLatitude;
+
+    @Column(name = "current_longitude")
+    private Float currentLongitude;
+
     @OneToMany(mappedBy = "telegramDeliveryUser")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Order> orders = new HashSet<>();
@@ -176,6 +188,58 @@ public class TelegramDeliveryUser implements Serializable {
         this.loadedPage = loadedPage;
     }
 
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public TelegramDeliveryUser status(Boolean status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public Double getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public TelegramDeliveryUser currentBalance(Double currentBalance) {
+        this.currentBalance = currentBalance;
+        return this;
+    }
+
+    public void setCurrentBalance(Double currentBalance) {
+        this.currentBalance = currentBalance;
+    }
+
+    public Float getCurrentLatitude() {
+        return currentLatitude;
+    }
+
+    public TelegramDeliveryUser currentLatitude(Float currentLatitude) {
+        this.currentLatitude = currentLatitude;
+        return this;
+    }
+
+    public void setCurrentLatitude(Float currentLatitude) {
+        this.currentLatitude = currentLatitude;
+    }
+
+    public Float getCurrentLongitude() {
+        return currentLongitude;
+    }
+
+    public TelegramDeliveryUser currentLongitude(Float currentLongitude) {
+        this.currentLongitude = currentLongitude;
+        return this;
+    }
+
+    public void setCurrentLongitude(Float currentLongitude) {
+        this.currentLongitude = currentLongitude;
+    }
+
     public Set<Order> getOrders() {
         return orders;
     }
@@ -255,6 +319,10 @@ public class TelegramDeliveryUser implements Serializable {
             ", phone='" + getPhone() + "'" +
             ", conversationMetaData='" + getConversationMetaData() + "'" +
             ", loadedPage=" + getLoadedPage() +
+            ", status='" + isStatus() + "'" +
+            ", currentBalance=" + getCurrentBalance() +
+            ", currentLatitude=" + getCurrentLatitude() +
+            ", currentLongitude=" + getCurrentLongitude() +
             "}";
     }
 }

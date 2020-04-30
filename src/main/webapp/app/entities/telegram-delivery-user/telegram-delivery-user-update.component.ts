@@ -28,6 +28,10 @@ export class TelegramDeliveryUserUpdateComponent implements OnInit {
     phone: [],
     conversationMetaData: [],
     loadedPage: [],
+    status: [],
+    currentBalance: [],
+    currentLatitude: [],
+    currentLongitude: [],
     restorants: []
   });
 
@@ -57,6 +61,10 @@ export class TelegramDeliveryUserUpdateComponent implements OnInit {
       phone: telegramDeliveryUser.phone,
       conversationMetaData: telegramDeliveryUser.conversationMetaData,
       loadedPage: telegramDeliveryUser.loadedPage,
+      status: telegramDeliveryUser.status,
+      currentBalance: telegramDeliveryUser.currentBalance,
+      currentLatitude: telegramDeliveryUser.currentLatitude,
+      currentLongitude: telegramDeliveryUser.currentLongitude,
       restorants: telegramDeliveryUser.restorants
     });
   }
@@ -87,6 +95,10 @@ export class TelegramDeliveryUserUpdateComponent implements OnInit {
       phone: this.editForm.get(['phone'])!.value,
       conversationMetaData: this.editForm.get(['conversationMetaData'])!.value,
       loadedPage: this.editForm.get(['loadedPage'])!.value,
+      status: this.editForm.get(['status'])!.value,
+      currentBalance: this.editForm.get(['currentBalance'])!.value,
+      currentLatitude: this.editForm.get(['currentLatitude'])!.value,
+      currentLongitude: this.editForm.get(['currentLongitude'])!.value,
       restorants: this.editForm.get(['restorants'])!.value
     };
   }

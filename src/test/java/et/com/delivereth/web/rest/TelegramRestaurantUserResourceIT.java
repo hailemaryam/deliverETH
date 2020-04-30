@@ -2,6 +2,7 @@ package et.com.delivereth.web.rest;
 
 import et.com.delivereth.DeliverEthApp;
 import et.com.delivereth.domain.TelegramRestaurantUser;
+import et.com.delivereth.domain.Order;
 import et.com.delivereth.domain.Restorant;
 import et.com.delivereth.repository.TelegramRestaurantUserRepository;
 import et.com.delivereth.service.TelegramRestaurantUserService;
@@ -69,6 +70,13 @@ public class TelegramRestaurantUserResourceIT {
     private static final Integer UPDATED_LOADED_PAGE = 2;
     private static final Integer SMALLER_LOADED_PAGE = 1 - 1;
 
+    private static final Boolean DEFAULT_STATUS = false;
+    private static final Boolean UPDATED_STATUS = true;
+
+    private static final Double DEFAULT_CURRENT_BALANCE = 1D;
+    private static final Double UPDATED_CURRENT_BALANCE = 2D;
+    private static final Double SMALLER_CURRENT_BALANCE = 1D - 1D;
+
     @Autowired
     private TelegramRestaurantUserRepository telegramRestaurantUserRepository;
 
@@ -110,7 +118,9 @@ public class TelegramRestaurantUserResourceIT {
             .chatId(DEFAULT_CHAT_ID)
             .phone(DEFAULT_PHONE)
             .conversationMetaData(DEFAULT_CONVERSATION_META_DATA)
-            .loadedPage(DEFAULT_LOADED_PAGE);
+            .loadedPage(DEFAULT_LOADED_PAGE)
+            .status(DEFAULT_STATUS)
+            .currentBalance(DEFAULT_CURRENT_BALANCE);
         return telegramRestaurantUser;
     }
     /**
@@ -128,7 +138,9 @@ public class TelegramRestaurantUserResourceIT {
             .chatId(UPDATED_CHAT_ID)
             .phone(UPDATED_PHONE)
             .conversationMetaData(UPDATED_CONVERSATION_META_DATA)
-            .loadedPage(UPDATED_LOADED_PAGE);
+            .loadedPage(UPDATED_LOADED_PAGE)
+            .status(UPDATED_STATUS)
+            .currentBalance(UPDATED_CURRENT_BALANCE);
         return telegramRestaurantUser;
     }
 
@@ -161,6 +173,8 @@ public class TelegramRestaurantUserResourceIT {
         assertThat(testTelegramRestaurantUser.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testTelegramRestaurantUser.getConversationMetaData()).isEqualTo(DEFAULT_CONVERSATION_META_DATA);
         assertThat(testTelegramRestaurantUser.getLoadedPage()).isEqualTo(DEFAULT_LOADED_PAGE);
+        assertThat(testTelegramRestaurantUser.isStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testTelegramRestaurantUser.getCurrentBalance()).isEqualTo(DEFAULT_CURRENT_BALANCE);
     }
 
     @Test
@@ -202,7 +216,9 @@ public class TelegramRestaurantUserResourceIT {
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)))
-            .andExpect(jsonPath("$.[*].loadedPage").value(hasItem(DEFAULT_LOADED_PAGE)));
+            .andExpect(jsonPath("$.[*].loadedPage").value(hasItem(DEFAULT_LOADED_PAGE)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].currentBalance").value(hasItem(DEFAULT_CURRENT_BALANCE.doubleValue())));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -243,7 +259,9 @@ public class TelegramRestaurantUserResourceIT {
             .andExpect(jsonPath("$.chatId").value(DEFAULT_CHAT_ID))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
             .andExpect(jsonPath("$.conversationMetaData").value(DEFAULT_CONVERSATION_META_DATA))
-            .andExpect(jsonPath("$.loadedPage").value(DEFAULT_LOADED_PAGE));
+            .andExpect(jsonPath("$.loadedPage").value(DEFAULT_LOADED_PAGE))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()))
+            .andExpect(jsonPath("$.currentBalance").value(DEFAULT_CURRENT_BALANCE.doubleValue()));
     }
 
 
@@ -946,6 +964,183 @@ public class TelegramRestaurantUserResourceIT {
 
     @Test
     @Transactional
+    public void getAllTelegramRestaurantUsersByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where status equals to DEFAULT_STATUS
+        defaultTelegramRestaurantUserShouldBeFound("status.equals=" + DEFAULT_STATUS);
+
+        // Get all the telegramRestaurantUserList where status equals to UPDATED_STATUS
+        defaultTelegramRestaurantUserShouldNotBeFound("status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where status not equals to DEFAULT_STATUS
+        defaultTelegramRestaurantUserShouldNotBeFound("status.notEquals=" + DEFAULT_STATUS);
+
+        // Get all the telegramRestaurantUserList where status not equals to UPDATED_STATUS
+        defaultTelegramRestaurantUserShouldBeFound("status.notEquals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where status in DEFAULT_STATUS or UPDATED_STATUS
+        defaultTelegramRestaurantUserShouldBeFound("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS);
+
+        // Get all the telegramRestaurantUserList where status equals to UPDATED_STATUS
+        defaultTelegramRestaurantUserShouldNotBeFound("status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where status is not null
+        defaultTelegramRestaurantUserShouldBeFound("status.specified=true");
+
+        // Get all the telegramRestaurantUserList where status is null
+        defaultTelegramRestaurantUserShouldNotBeFound("status.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByCurrentBalanceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where currentBalance equals to DEFAULT_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldBeFound("currentBalance.equals=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramRestaurantUserList where currentBalance equals to UPDATED_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldNotBeFound("currentBalance.equals=" + UPDATED_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByCurrentBalanceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where currentBalance not equals to DEFAULT_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldNotBeFound("currentBalance.notEquals=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramRestaurantUserList where currentBalance not equals to UPDATED_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldBeFound("currentBalance.notEquals=" + UPDATED_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByCurrentBalanceIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where currentBalance in DEFAULT_CURRENT_BALANCE or UPDATED_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldBeFound("currentBalance.in=" + DEFAULT_CURRENT_BALANCE + "," + UPDATED_CURRENT_BALANCE);
+
+        // Get all the telegramRestaurantUserList where currentBalance equals to UPDATED_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldNotBeFound("currentBalance.in=" + UPDATED_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByCurrentBalanceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where currentBalance is not null
+        defaultTelegramRestaurantUserShouldBeFound("currentBalance.specified=true");
+
+        // Get all the telegramRestaurantUserList where currentBalance is null
+        defaultTelegramRestaurantUserShouldNotBeFound("currentBalance.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByCurrentBalanceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where currentBalance is greater than or equal to DEFAULT_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldBeFound("currentBalance.greaterThanOrEqual=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramRestaurantUserList where currentBalance is greater than or equal to UPDATED_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldNotBeFound("currentBalance.greaterThanOrEqual=" + UPDATED_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByCurrentBalanceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where currentBalance is less than or equal to DEFAULT_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldBeFound("currentBalance.lessThanOrEqual=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramRestaurantUserList where currentBalance is less than or equal to SMALLER_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldNotBeFound("currentBalance.lessThanOrEqual=" + SMALLER_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByCurrentBalanceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where currentBalance is less than DEFAULT_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldNotBeFound("currentBalance.lessThan=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramRestaurantUserList where currentBalance is less than UPDATED_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldBeFound("currentBalance.lessThan=" + UPDATED_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByCurrentBalanceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+
+        // Get all the telegramRestaurantUserList where currentBalance is greater than DEFAULT_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldNotBeFound("currentBalance.greaterThan=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramRestaurantUserList where currentBalance is greater than SMALLER_CURRENT_BALANCE
+        defaultTelegramRestaurantUserShouldBeFound("currentBalance.greaterThan=" + SMALLER_CURRENT_BALANCE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTelegramRestaurantUsersByOrderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+        Order order = OrderResourceIT.createEntity(em);
+        em.persist(order);
+        em.flush();
+        telegramRestaurantUser.addOrder(order);
+        telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
+        Long orderId = order.getId();
+
+        // Get all the telegramRestaurantUserList where order equals to orderId
+        defaultTelegramRestaurantUserShouldBeFound("orderId.equals=" + orderId);
+
+        // Get all the telegramRestaurantUserList where order equals to orderId + 1
+        defaultTelegramRestaurantUserShouldNotBeFound("orderId.equals=" + (orderId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllTelegramRestaurantUsersByRestorantIsEqualToSomething() throws Exception {
         // Initialize the database
         telegramRestaurantUserRepository.saveAndFlush(telegramRestaurantUser);
@@ -978,7 +1173,9 @@ public class TelegramRestaurantUserResourceIT {
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)))
-            .andExpect(jsonPath("$.[*].loadedPage").value(hasItem(DEFAULT_LOADED_PAGE)));
+            .andExpect(jsonPath("$.[*].loadedPage").value(hasItem(DEFAULT_LOADED_PAGE)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].currentBalance").value(hasItem(DEFAULT_CURRENT_BALANCE.doubleValue())));
 
         // Check, that the count call also returns 1
         restTelegramRestaurantUserMockMvc.perform(get("/api/telegram-restaurant-users/count?sort=id,desc&" + filter))
@@ -1033,7 +1230,9 @@ public class TelegramRestaurantUserResourceIT {
             .chatId(UPDATED_CHAT_ID)
             .phone(UPDATED_PHONE)
             .conversationMetaData(UPDATED_CONVERSATION_META_DATA)
-            .loadedPage(UPDATED_LOADED_PAGE);
+            .loadedPage(UPDATED_LOADED_PAGE)
+            .status(UPDATED_STATUS)
+            .currentBalance(UPDATED_CURRENT_BALANCE);
         TelegramRestaurantUserDTO telegramRestaurantUserDTO = telegramRestaurantUserMapper.toDto(updatedTelegramRestaurantUser);
 
         restTelegramRestaurantUserMockMvc.perform(put("/api/telegram-restaurant-users")
@@ -1053,6 +1252,8 @@ public class TelegramRestaurantUserResourceIT {
         assertThat(testTelegramRestaurantUser.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testTelegramRestaurantUser.getConversationMetaData()).isEqualTo(UPDATED_CONVERSATION_META_DATA);
         assertThat(testTelegramRestaurantUser.getLoadedPage()).isEqualTo(UPDATED_LOADED_PAGE);
+        assertThat(testTelegramRestaurantUser.isStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testTelegramRestaurantUser.getCurrentBalance()).isEqualTo(UPDATED_CURRENT_BALANCE);
     }
 
     @Test

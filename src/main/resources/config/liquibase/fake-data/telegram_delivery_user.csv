@@ -1,11 +1,11 @@
-id;first_name;last_name;user_name;user_id;chat_id;phone;conversation_meta_data;loaded_page
-1;Maureen;Heaney;turn-key Awesome;13657;navigating;1-246-242-6736 x4401;Re-engineered deposit Producer;11098
-2;Dolly;Donnelly;interactive;427;Bedfordshire Forward Cotton;(556) 034-1370;Unbranded Plastic Fish;12974
-3;Vincenza;Zboncak;Svalbard & Jan Mayen Islands digital 5th generation;31874;Latvia;(962) 462-5335;JSON payment override;42624
-4;Monserrat;Parisian;Canyon Money Market Account;38395;supply-chains Home Loan Account calculating;533.038.5985 x46207;collaborative;27380
-5;Reina;Stoltenberg;Greens connecting portal;76585;Health;1-779-131-9752 x021;indexing;64507
-6;Layla;O'Reilly;teal;47561;back-end Functionality;1-567-702-4149 x59385;Tasty Rubber Computer Maine;30892
-7;Jessy;Davis;overriding;83510;Gloves;941-541-9157 x41491;Handmade Customer mission-critical;9285
-8;Tierra;Legros;Algerian Dinar Producer;58897;exuding deliver Berkshire;233-349-6332 x9872;Martinique;86935
-9;Rudolph;Keeling;bypass;7387;navigating Chair Village;333-349-6230 x1965;didactic;30833
-10;Briana;Upton;Handmade AGP;80019;web-readiness;569-873-3901 x479;Awesome invoice;43715
+id;first_name;last_name;user_name;user_id;chat_id;phone;conversation_meta_data;loaded_page;status;current_balance;current_latitude;current_longitude
+1;Maureen;Heaney;turn-key Awesome;13657;navigating;1-246-242-6736 x4401;Re-engineered deposit Producer;11098;false;19730;7191;34365
+2;Jaydon;Abshire;Bedfordshire Forward Cotton;8696;Nauru Garden;(137) 010-9271 x999;synthesizing black;4151;false;5822;53374;48470
+3;Ayden;Veum;Mandatory Savings Account Holy See (Vatican City State);31902;bus Dynamic;(714) 764-4063 x3744;Buckinghamshire matrix;51709;false;36317;7036;32396
+4;Rigoberto;McClure;EXE e-commerce Advanced;73819;collaborative;(887) 428-5277;Health;51553;true;79692;95143;17623
+5;Godfrey;Davis;generate Advanced teal;27166;Port Credit Card Account Intelligent;443-592-9567;Intelligent Cotton Mouse experiences Yemen;33417;true;56405;48917;5001
+6;Vidal;Maggio;Maine;30892;Bike overriding;212-894-1541 x91574;Cambridgeshire;12070;true;7835;74290;91834
+7;Kelly;Hilll;Unbranded;52900;Algerian Dinar Producer;723.355.4623 x334;Investment Account sticky Forward;78113;false;12122;52468;55519
+8;Santino;Steuber;Handmade Wooden Car bus;39396;Health;1-633-334-9623 x01965;didactic;30833;false;90917;45049;9266
+9;Nella;Thompson;auxiliary;43100;interfaces;(987) 339-0147 x9315;Administrator visionary;66245;false;20275;53476;69206
+10;Makenzie;Dach;optical Kids;16520;HDD;805-649-0823;Court 1080p;64415;true;38346;44356;20455

@@ -68,6 +68,12 @@ public class RestorantResourceIT {
     private static final Boolean DEFAULT_STATUS = false;
     private static final Boolean UPDATED_STATUS = true;
 
+    private static final String DEFAULT_TIN_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_TIN_NUMBER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_VAT_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_VAT_NUMBER = "BBBBBBBBBB";
+
     @Autowired
     private RestorantRepository restorantRepository;
 
@@ -104,7 +110,9 @@ public class RestorantResourceIT {
             .latitude(DEFAULT_LATITUDE)
             .longtude(DEFAULT_LONGTUDE)
             .availableOrderCap(DEFAULT_AVAILABLE_ORDER_CAP)
-            .status(DEFAULT_STATUS);
+            .status(DEFAULT_STATUS)
+            .tinNumber(DEFAULT_TIN_NUMBER)
+            .vatNumber(DEFAULT_VAT_NUMBER);
         return restorant;
     }
     /**
@@ -123,7 +131,9 @@ public class RestorantResourceIT {
             .latitude(UPDATED_LATITUDE)
             .longtude(UPDATED_LONGTUDE)
             .availableOrderCap(UPDATED_AVAILABLE_ORDER_CAP)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .tinNumber(UPDATED_TIN_NUMBER)
+            .vatNumber(UPDATED_VAT_NUMBER);
         return restorant;
     }
 
@@ -157,6 +167,8 @@ public class RestorantResourceIT {
         assertThat(testRestorant.getLongtude()).isEqualTo(DEFAULT_LONGTUDE);
         assertThat(testRestorant.getAvailableOrderCap()).isEqualTo(DEFAULT_AVAILABLE_ORDER_CAP);
         assertThat(testRestorant.isStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testRestorant.getTinNumber()).isEqualTo(DEFAULT_TIN_NUMBER);
+        assertThat(testRestorant.getVatNumber()).isEqualTo(DEFAULT_VAT_NUMBER);
     }
 
     @Test
@@ -199,7 +211,9 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].availableOrderCap").value(hasItem(DEFAULT_AVAILABLE_ORDER_CAP)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].tinNumber").value(hasItem(DEFAULT_TIN_NUMBER)))
+            .andExpect(jsonPath("$.[*].vatNumber").value(hasItem(DEFAULT_VAT_NUMBER)));
     }
     
     @Test
@@ -221,7 +235,9 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE.doubleValue()))
             .andExpect(jsonPath("$.longtude").value(DEFAULT_LONGTUDE.doubleValue()))
             .andExpect(jsonPath("$.availableOrderCap").value(DEFAULT_AVAILABLE_ORDER_CAP))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()))
+            .andExpect(jsonPath("$.tinNumber").value(DEFAULT_TIN_NUMBER))
+            .andExpect(jsonPath("$.vatNumber").value(DEFAULT_VAT_NUMBER));
     }
 
 
@@ -769,6 +785,162 @@ public class RestorantResourceIT {
 
     @Test
     @Transactional
+    public void getAllRestorantsByTinNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where tinNumber equals to DEFAULT_TIN_NUMBER
+        defaultRestorantShouldBeFound("tinNumber.equals=" + DEFAULT_TIN_NUMBER);
+
+        // Get all the restorantList where tinNumber equals to UPDATED_TIN_NUMBER
+        defaultRestorantShouldNotBeFound("tinNumber.equals=" + UPDATED_TIN_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByTinNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where tinNumber not equals to DEFAULT_TIN_NUMBER
+        defaultRestorantShouldNotBeFound("tinNumber.notEquals=" + DEFAULT_TIN_NUMBER);
+
+        // Get all the restorantList where tinNumber not equals to UPDATED_TIN_NUMBER
+        defaultRestorantShouldBeFound("tinNumber.notEquals=" + UPDATED_TIN_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByTinNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where tinNumber in DEFAULT_TIN_NUMBER or UPDATED_TIN_NUMBER
+        defaultRestorantShouldBeFound("tinNumber.in=" + DEFAULT_TIN_NUMBER + "," + UPDATED_TIN_NUMBER);
+
+        // Get all the restorantList where tinNumber equals to UPDATED_TIN_NUMBER
+        defaultRestorantShouldNotBeFound("tinNumber.in=" + UPDATED_TIN_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByTinNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where tinNumber is not null
+        defaultRestorantShouldBeFound("tinNumber.specified=true");
+
+        // Get all the restorantList where tinNumber is null
+        defaultRestorantShouldNotBeFound("tinNumber.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllRestorantsByTinNumberContainsSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where tinNumber contains DEFAULT_TIN_NUMBER
+        defaultRestorantShouldBeFound("tinNumber.contains=" + DEFAULT_TIN_NUMBER);
+
+        // Get all the restorantList where tinNumber contains UPDATED_TIN_NUMBER
+        defaultRestorantShouldNotBeFound("tinNumber.contains=" + UPDATED_TIN_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByTinNumberNotContainsSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where tinNumber does not contain DEFAULT_TIN_NUMBER
+        defaultRestorantShouldNotBeFound("tinNumber.doesNotContain=" + DEFAULT_TIN_NUMBER);
+
+        // Get all the restorantList where tinNumber does not contain UPDATED_TIN_NUMBER
+        defaultRestorantShouldBeFound("tinNumber.doesNotContain=" + UPDATED_TIN_NUMBER);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByVatNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where vatNumber equals to DEFAULT_VAT_NUMBER
+        defaultRestorantShouldBeFound("vatNumber.equals=" + DEFAULT_VAT_NUMBER);
+
+        // Get all the restorantList where vatNumber equals to UPDATED_VAT_NUMBER
+        defaultRestorantShouldNotBeFound("vatNumber.equals=" + UPDATED_VAT_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByVatNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where vatNumber not equals to DEFAULT_VAT_NUMBER
+        defaultRestorantShouldNotBeFound("vatNumber.notEquals=" + DEFAULT_VAT_NUMBER);
+
+        // Get all the restorantList where vatNumber not equals to UPDATED_VAT_NUMBER
+        defaultRestorantShouldBeFound("vatNumber.notEquals=" + UPDATED_VAT_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByVatNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where vatNumber in DEFAULT_VAT_NUMBER or UPDATED_VAT_NUMBER
+        defaultRestorantShouldBeFound("vatNumber.in=" + DEFAULT_VAT_NUMBER + "," + UPDATED_VAT_NUMBER);
+
+        // Get all the restorantList where vatNumber equals to UPDATED_VAT_NUMBER
+        defaultRestorantShouldNotBeFound("vatNumber.in=" + UPDATED_VAT_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByVatNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where vatNumber is not null
+        defaultRestorantShouldBeFound("vatNumber.specified=true");
+
+        // Get all the restorantList where vatNumber is null
+        defaultRestorantShouldNotBeFound("vatNumber.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllRestorantsByVatNumberContainsSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where vatNumber contains DEFAULT_VAT_NUMBER
+        defaultRestorantShouldBeFound("vatNumber.contains=" + DEFAULT_VAT_NUMBER);
+
+        // Get all the restorantList where vatNumber contains UPDATED_VAT_NUMBER
+        defaultRestorantShouldNotBeFound("vatNumber.contains=" + UPDATED_VAT_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRestorantsByVatNumberNotContainsSomething() throws Exception {
+        // Initialize the database
+        restorantRepository.saveAndFlush(restorant);
+
+        // Get all the restorantList where vatNumber does not contain DEFAULT_VAT_NUMBER
+        defaultRestorantShouldNotBeFound("vatNumber.doesNotContain=" + DEFAULT_VAT_NUMBER);
+
+        // Get all the restorantList where vatNumber does not contain UPDATED_VAT_NUMBER
+        defaultRestorantShouldBeFound("vatNumber.doesNotContain=" + UPDATED_VAT_NUMBER);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllRestorantsByFoodIsEqualToSomething() throws Exception {
         // Initialize the database
         restorantRepository.saveAndFlush(restorant);
@@ -842,7 +1014,9 @@ public class RestorantResourceIT {
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].longtude").value(hasItem(DEFAULT_LONGTUDE.doubleValue())))
             .andExpect(jsonPath("$.[*].availableOrderCap").value(hasItem(DEFAULT_AVAILABLE_ORDER_CAP)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].tinNumber").value(hasItem(DEFAULT_TIN_NUMBER)))
+            .andExpect(jsonPath("$.[*].vatNumber").value(hasItem(DEFAULT_VAT_NUMBER)));
 
         // Check, that the count call also returns 1
         restRestorantMockMvc.perform(get("/api/restorants/count?sort=id,desc&" + filter))
@@ -898,7 +1072,9 @@ public class RestorantResourceIT {
             .latitude(UPDATED_LATITUDE)
             .longtude(UPDATED_LONGTUDE)
             .availableOrderCap(UPDATED_AVAILABLE_ORDER_CAP)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .tinNumber(UPDATED_TIN_NUMBER)
+            .vatNumber(UPDATED_VAT_NUMBER);
         RestorantDTO restorantDTO = restorantMapper.toDto(updatedRestorant);
 
         restRestorantMockMvc.perform(put("/api/restorants")
@@ -919,6 +1095,8 @@ public class RestorantResourceIT {
         assertThat(testRestorant.getLongtude()).isEqualTo(UPDATED_LONGTUDE);
         assertThat(testRestorant.getAvailableOrderCap()).isEqualTo(UPDATED_AVAILABLE_ORDER_CAP);
         assertThat(testRestorant.isStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testRestorant.getTinNumber()).isEqualTo(UPDATED_TIN_NUMBER);
+        assertThat(testRestorant.getVatNumber()).isEqualTo(UPDATED_VAT_NUMBER);
     }
 
     @Test

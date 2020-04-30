@@ -39,10 +39,22 @@
             <column name="order_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="restaurant_payment_staus" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="transport_payment_status" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="telegram_user_payment_status" type="boolean">
+                <constraints nullable="true" />
+            </column>
             <column name="telegram_user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="telegram_delivery_user_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="telegram_restaurant_user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
@@ -77,6 +89,9 @@
             <column name="date" type="datetime"/>
             <column name="additional_note" type="clob"/>
             <column name="order_status" type="string"/>
+            <column name="restaurant_payment_staus" type="boolean"/>
+            <column name="transport_payment_status" type="boolean"/>
+            <column name="telegram_user_payment_status" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

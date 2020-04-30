@@ -31,6 +31,10 @@ public class TelegramRestaurantUserDTO implements Serializable {
 
     private Integer loadedPage;
 
+    private Boolean status;
+
+    private Double currentBalance;
+
     private Set<RestorantDTO> restorants = new HashSet<>();
     
     public Long getId() {
@@ -105,6 +109,22 @@ public class TelegramRestaurantUserDTO implements Serializable {
         this.loadedPage = loadedPage;
     }
 
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public Double getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(Double currentBalance) {
+        this.currentBalance = currentBalance;
+    }
+
     public Set<RestorantDTO> getRestorants() {
         return restorants;
     }
@@ -146,6 +166,8 @@ public class TelegramRestaurantUserDTO implements Serializable {
             ", phone='" + getPhone() + "'" +
             ", conversationMetaData='" + getConversationMetaData() + "'" +
             ", loadedPage=" + getLoadedPage() +
+            ", status='" + isStatus() + "'" +
+            ", currentBalance=" + getCurrentBalance() +
             ", restorants='" + getRestorants() + "'" +
             "}";
     }

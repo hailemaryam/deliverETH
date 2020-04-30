@@ -58,11 +58,19 @@ public class OrderCriteria implements Serializable, Criteria {
 
     private OrderStatusFilter orderStatus;
 
+    private BooleanFilter restaurantPaymentStaus;
+
+    private BooleanFilter transportPaymentStatus;
+
+    private BooleanFilter telegramUserPaymentStatus;
+
     private LongFilter orderedFoodId;
 
     private LongFilter telegramUserId;
 
     private LongFilter telegramDeliveryUserId;
+
+    private LongFilter telegramRestaurantUserId;
 
     public OrderCriteria() {
     }
@@ -75,9 +83,13 @@ public class OrderCriteria implements Serializable, Criteria {
         this.transportationFee = other.transportationFee == null ? null : other.transportationFee.copy();
         this.date = other.date == null ? null : other.date.copy();
         this.orderStatus = other.orderStatus == null ? null : other.orderStatus.copy();
+        this.restaurantPaymentStaus = other.restaurantPaymentStaus == null ? null : other.restaurantPaymentStaus.copy();
+        this.transportPaymentStatus = other.transportPaymentStatus == null ? null : other.transportPaymentStatus.copy();
+        this.telegramUserPaymentStatus = other.telegramUserPaymentStatus == null ? null : other.telegramUserPaymentStatus.copy();
         this.orderedFoodId = other.orderedFoodId == null ? null : other.orderedFoodId.copy();
         this.telegramUserId = other.telegramUserId == null ? null : other.telegramUserId.copy();
         this.telegramDeliveryUserId = other.telegramDeliveryUserId == null ? null : other.telegramDeliveryUserId.copy();
+        this.telegramRestaurantUserId = other.telegramRestaurantUserId == null ? null : other.telegramRestaurantUserId.copy();
     }
 
     @Override
@@ -141,6 +153,30 @@ public class OrderCriteria implements Serializable, Criteria {
         this.orderStatus = orderStatus;
     }
 
+    public BooleanFilter getRestaurantPaymentStaus() {
+        return restaurantPaymentStaus;
+    }
+
+    public void setRestaurantPaymentStaus(BooleanFilter restaurantPaymentStaus) {
+        this.restaurantPaymentStaus = restaurantPaymentStaus;
+    }
+
+    public BooleanFilter getTransportPaymentStatus() {
+        return transportPaymentStatus;
+    }
+
+    public void setTransportPaymentStatus(BooleanFilter transportPaymentStatus) {
+        this.transportPaymentStatus = transportPaymentStatus;
+    }
+
+    public BooleanFilter getTelegramUserPaymentStatus() {
+        return telegramUserPaymentStatus;
+    }
+
+    public void setTelegramUserPaymentStatus(BooleanFilter telegramUserPaymentStatus) {
+        this.telegramUserPaymentStatus = telegramUserPaymentStatus;
+    }
+
     public LongFilter getOrderedFoodId() {
         return orderedFoodId;
     }
@@ -165,6 +201,14 @@ public class OrderCriteria implements Serializable, Criteria {
         this.telegramDeliveryUserId = telegramDeliveryUserId;
     }
 
+    public LongFilter getTelegramRestaurantUserId() {
+        return telegramRestaurantUserId;
+    }
+
+    public void setTelegramRestaurantUserId(LongFilter telegramRestaurantUserId) {
+        this.telegramRestaurantUserId = telegramRestaurantUserId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -183,9 +227,13 @@ public class OrderCriteria implements Serializable, Criteria {
             Objects.equals(transportationFee, that.transportationFee) &&
             Objects.equals(date, that.date) &&
             Objects.equals(orderStatus, that.orderStatus) &&
+            Objects.equals(restaurantPaymentStaus, that.restaurantPaymentStaus) &&
+            Objects.equals(transportPaymentStatus, that.transportPaymentStatus) &&
+            Objects.equals(telegramUserPaymentStatus, that.telegramUserPaymentStatus) &&
             Objects.equals(orderedFoodId, that.orderedFoodId) &&
             Objects.equals(telegramUserId, that.telegramUserId) &&
-            Objects.equals(telegramDeliveryUserId, that.telegramDeliveryUserId);
+            Objects.equals(telegramDeliveryUserId, that.telegramDeliveryUserId) &&
+            Objects.equals(telegramRestaurantUserId, that.telegramRestaurantUserId);
     }
 
     @Override
@@ -198,9 +246,13 @@ public class OrderCriteria implements Serializable, Criteria {
         transportationFee,
         date,
         orderStatus,
+        restaurantPaymentStaus,
+        transportPaymentStatus,
+        telegramUserPaymentStatus,
         orderedFoodId,
         telegramUserId,
-        telegramDeliveryUserId
+        telegramDeliveryUserId,
+        telegramRestaurantUserId
         );
     }
 
@@ -214,9 +266,13 @@ public class OrderCriteria implements Serializable, Criteria {
                 (transportationFee != null ? "transportationFee=" + transportationFee + ", " : "") +
                 (date != null ? "date=" + date + ", " : "") +
                 (orderStatus != null ? "orderStatus=" + orderStatus + ", " : "") +
+                (restaurantPaymentStaus != null ? "restaurantPaymentStaus=" + restaurantPaymentStaus + ", " : "") +
+                (transportPaymentStatus != null ? "transportPaymentStatus=" + transportPaymentStatus + ", " : "") +
+                (telegramUserPaymentStatus != null ? "telegramUserPaymentStatus=" + telegramUserPaymentStatus + ", " : "") +
                 (orderedFoodId != null ? "orderedFoodId=" + orderedFoodId + ", " : "") +
                 (telegramUserId != null ? "telegramUserId=" + telegramUserId + ", " : "") +
                 (telegramDeliveryUserId != null ? "telegramDeliveryUserId=" + telegramDeliveryUserId + ", " : "") +
+                (telegramRestaurantUserId != null ? "telegramRestaurantUserId=" + telegramRestaurantUserId + ", " : "") +
             "}";
     }
 

@@ -39,6 +39,14 @@
         {
             "fieldName": "status",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "tinNumber",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "vatNumber",
+            "fieldType": "String"
         }
     ],
     "relationships": [

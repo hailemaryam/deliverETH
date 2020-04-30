@@ -52,6 +52,16 @@ public class TelegramRestaurantUser implements Serializable {
     @Column(name = "loaded_page")
     private Integer loadedPage;
 
+    @Column(name = "status")
+    private Boolean status;
+
+    @Column(name = "current_balance")
+    private Double currentBalance;
+
+    @OneToMany(mappedBy = "telegramRestaurantUser")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Order> orders = new HashSet<>();
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "telegram_restaurant_user_restorant",
@@ -172,6 +182,57 @@ public class TelegramRestaurantUser implements Serializable {
         this.loadedPage = loadedPage;
     }
 
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public TelegramRestaurantUser status(Boolean status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public Double getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public TelegramRestaurantUser currentBalance(Double currentBalance) {
+        this.currentBalance = currentBalance;
+        return this;
+    }
+
+    public void setCurrentBalance(Double currentBalance) {
+        this.currentBalance = currentBalance;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public TelegramRestaurantUser orders(Set<Order> orders) {
+        this.orders = orders;
+        return this;
+    }
+
+    public TelegramRestaurantUser addOrder(Order order) {
+        this.orders.add(order);
+        order.setTelegramRestaurantUser(this);
+        return this;
+    }
+
+    public TelegramRestaurantUser removeOrder(Order order) {
+        this.orders.remove(order);
+        order.setTelegramRestaurantUser(null);
+        return this;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
     public Set<Restorant> getRestorants() {
         return restorants;
     }
@@ -226,6 +287,8 @@ public class TelegramRestaurantUser implements Serializable {
             ", phone='" + getPhone() + "'" +
             ", conversationMetaData='" + getConversationMetaData() + "'" +
             ", loadedPage=" + getLoadedPage() +
+            ", status='" + isStatus() + "'" +
+            ", currentBalance=" + getCurrentBalance() +
             "}";
     }
 }

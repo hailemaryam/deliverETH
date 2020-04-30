@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(TelegramRestaurantUserService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new TelegramRestaurantUser(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 0);
+      elemDefault = new TelegramRestaurantUser(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 0, false, 0);
     });
 
     describe('Service methods', () => {
@@ -61,7 +61,9 @@ describe('Service Tests', () => {
             chatId: 'BBBBBB',
             phone: 'BBBBBB',
             conversationMetaData: 'BBBBBB',
-            loadedPage: 1
+            loadedPage: 1,
+            status: true,
+            currentBalance: 1
           },
           elemDefault
         );
@@ -85,7 +87,9 @@ describe('Service Tests', () => {
             chatId: 'BBBBBB',
             phone: 'BBBBBB',
             conversationMetaData: 'BBBBBB',
-            loadedPage: 1
+            loadedPage: 1,
+            status: true,
+            currentBalance: 1
           },
           elemDefault
         );

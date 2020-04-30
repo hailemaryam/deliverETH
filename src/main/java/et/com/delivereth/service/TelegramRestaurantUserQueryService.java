@@ -115,6 +115,16 @@ public class TelegramRestaurantUserQueryService extends QueryService<TelegramRes
             if (criteria.getLoadedPage() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getLoadedPage(), TelegramRestaurantUser_.loadedPage));
             }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getStatus(), TelegramRestaurantUser_.status));
+            }
+            if (criteria.getCurrentBalance() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getCurrentBalance(), TelegramRestaurantUser_.currentBalance));
+            }
+            if (criteria.getOrderId() != null) {
+                specification = specification.and(buildSpecification(criteria.getOrderId(),
+                    root -> root.join(TelegramRestaurantUser_.orders, JoinType.LEFT).get(Order_.id)));
+            }
             if (criteria.getRestorantId() != null) {
                 specification = specification.and(buildSpecification(criteria.getRestorantId(),
                     root -> root.join(TelegramRestaurantUser_.restorants, JoinType.LEFT).get(Restorant_.id)));

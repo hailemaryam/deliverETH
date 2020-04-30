@@ -109,6 +109,15 @@ public class OrderQueryService extends QueryService<Order> {
             if (criteria.getOrderStatus() != null) {
                 specification = specification.and(buildSpecification(criteria.getOrderStatus(), Order_.orderStatus));
             }
+            if (criteria.getRestaurantPaymentStaus() != null) {
+                specification = specification.and(buildSpecification(criteria.getRestaurantPaymentStaus(), Order_.restaurantPaymentStaus));
+            }
+            if (criteria.getTransportPaymentStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getTransportPaymentStatus(), Order_.transportPaymentStatus));
+            }
+            if (criteria.getTelegramUserPaymentStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getTelegramUserPaymentStatus(), Order_.telegramUserPaymentStatus));
+            }
             if (criteria.getOrderedFoodId() != null) {
                 specification = specification.and(buildSpecification(criteria.getOrderedFoodId(),
                     root -> root.join(Order_.orderedFoods, JoinType.LEFT).get(OrderedFood_.id)));
@@ -120,6 +129,10 @@ public class OrderQueryService extends QueryService<Order> {
             if (criteria.getTelegramDeliveryUserId() != null) {
                 specification = specification.and(buildSpecification(criteria.getTelegramDeliveryUserId(),
                     root -> root.join(Order_.telegramDeliveryUser, JoinType.LEFT).get(TelegramDeliveryUser_.id)));
+            }
+            if (criteria.getTelegramRestaurantUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getTelegramRestaurantUserId(),
+                    root -> root.join(Order_.telegramRestaurantUser, JoinType.LEFT).get(TelegramRestaurantUser_.id)));
             }
         }
         return specification;

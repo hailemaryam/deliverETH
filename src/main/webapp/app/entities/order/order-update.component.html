@@ -73,6 +73,24 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-control-label" for="field_restaurantPaymentStaus">Restaurant Payment Staus</label>
+                    <input type="checkbox" class="form-control" name="restaurantPaymentStaus" id="field_restaurantPaymentStaus"
+                           formControlName="restaurantPaymentStaus"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_transportPaymentStatus">Transport Payment Status</label>
+                    <input type="checkbox" class="form-control" name="transportPaymentStatus" id="field_transportPaymentStatus"
+                           formControlName="transportPaymentStatus"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_telegramUserPaymentStatus">Telegram User Payment Status</label>
+                    <input type="checkbox" class="form-control" name="telegramUserPaymentStatus" id="field_telegramUserPaymentStatus"
+                           formControlName="telegramUserPaymentStatus"/>
+                </div>
+
+                <div class="form-group">
                     <label class="form-control-label" for="field_telegramUser">Telegram User</label>
                     <select class="form-control" id="field_telegramUser" name="telegramUser" formControlName="telegramUserId">
                         <option [ngValue]="null"></option>
@@ -85,6 +103,14 @@
                     <select class="form-control" id="field_telegramDeliveryUser" name="telegramDeliveryUser" formControlName="telegramDeliveryUserId">
                         <option [ngValue]="null"></option>
                         <option [ngValue]="telegramDeliveryUserOption.id" *ngFor="let telegramDeliveryUserOption of telegramdeliveryusers; trackBy: trackById">{{ telegramDeliveryUserOption.userName }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_telegramRestaurantUser">Telegram Restaurant User</label>
+                    <select class="form-control" id="field_telegramRestaurantUser" name="telegramRestaurantUser" formControlName="telegramRestaurantUserId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="telegramRestaurantUserOption.id" *ngFor="let telegramRestaurantUserOption of telegramrestaurantusers; trackBy: trackById">{{ telegramRestaurantUserOption.userName }}</option>
                     </select>
                 </div>
             </div>

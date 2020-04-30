@@ -59,6 +59,12 @@ public class Restorant implements Serializable {
     @Column(name = "status")
     private Boolean status;
 
+    @Column(name = "tin_number")
+    private String tinNumber;
+
+    @Column(name = "vat_number")
+    private String vatNumber;
+
     @OneToMany(mappedBy = "restorant")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Food> foods = new HashSet<>();
@@ -199,6 +205,32 @@ public class Restorant implements Serializable {
         this.status = status;
     }
 
+    public String getTinNumber() {
+        return tinNumber;
+    }
+
+    public Restorant tinNumber(String tinNumber) {
+        this.tinNumber = tinNumber;
+        return this;
+    }
+
+    public void setTinNumber(String tinNumber) {
+        this.tinNumber = tinNumber;
+    }
+
+    public String getVatNumber() {
+        return vatNumber;
+    }
+
+    public Restorant vatNumber(String vatNumber) {
+        this.vatNumber = vatNumber;
+        return this;
+    }
+
+    public void setVatNumber(String vatNumber) {
+        this.vatNumber = vatNumber;
+    }
+
     public Set<Food> getFoods() {
         return foods;
     }
@@ -304,6 +336,8 @@ public class Restorant implements Serializable {
             ", longtude=" + getLongtude() +
             ", availableOrderCap=" + getAvailableOrderCap() +
             ", status='" + isStatus() + "'" +
+            ", tinNumber='" + getTinNumber() + "'" +
+            ", vatNumber='" + getVatNumber() + "'" +
             "}";
     }
 }

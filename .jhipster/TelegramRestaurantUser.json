@@ -38,9 +38,23 @@
         {
             "fieldName": "loadedPage",
             "fieldType": "Integer"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "currentBalance",
+            "fieldType": "Double"
         }
     ],
     "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "order",
+            "otherEntityRelationshipName": "telegramRestaurantUser",
+            "relationshipName": "order"
+        },
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "restorant",

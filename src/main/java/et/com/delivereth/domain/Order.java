@@ -59,6 +59,15 @@ public class Order implements Serializable {
     @Column(name = "order_status")
     private OrderStatus orderStatus;
 
+    @Column(name = "restaurant_payment_staus")
+    private Boolean restaurantPaymentStaus;
+
+    @Column(name = "transport_payment_status")
+    private Boolean transportPaymentStatus;
+
+    @Column(name = "telegram_user_payment_status")
+    private Boolean telegramUserPaymentStatus;
+
     @OneToMany(mappedBy = "order")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<OrderedFood> orderedFoods = new HashSet<>();
@@ -70,6 +79,10 @@ public class Order implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("orders")
     private TelegramDeliveryUser telegramDeliveryUser;
+
+    @ManyToOne
+    @JsonIgnoreProperties("orders")
+    private TelegramRestaurantUser telegramRestaurantUser;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -184,6 +197,45 @@ public class Order implements Serializable {
         this.orderStatus = orderStatus;
     }
 
+    public Boolean isRestaurantPaymentStaus() {
+        return restaurantPaymentStaus;
+    }
+
+    public Order restaurantPaymentStaus(Boolean restaurantPaymentStaus) {
+        this.restaurantPaymentStaus = restaurantPaymentStaus;
+        return this;
+    }
+
+    public void setRestaurantPaymentStaus(Boolean restaurantPaymentStaus) {
+        this.restaurantPaymentStaus = restaurantPaymentStaus;
+    }
+
+    public Boolean isTransportPaymentStatus() {
+        return transportPaymentStatus;
+    }
+
+    public Order transportPaymentStatus(Boolean transportPaymentStatus) {
+        this.transportPaymentStatus = transportPaymentStatus;
+        return this;
+    }
+
+    public void setTransportPaymentStatus(Boolean transportPaymentStatus) {
+        this.transportPaymentStatus = transportPaymentStatus;
+    }
+
+    public Boolean isTelegramUserPaymentStatus() {
+        return telegramUserPaymentStatus;
+    }
+
+    public Order telegramUserPaymentStatus(Boolean telegramUserPaymentStatus) {
+        this.telegramUserPaymentStatus = telegramUserPaymentStatus;
+        return this;
+    }
+
+    public void setTelegramUserPaymentStatus(Boolean telegramUserPaymentStatus) {
+        this.telegramUserPaymentStatus = telegramUserPaymentStatus;
+    }
+
     public Set<OrderedFood> getOrderedFoods() {
         return orderedFoods;
     }
@@ -234,6 +286,19 @@ public class Order implements Serializable {
     public void setTelegramDeliveryUser(TelegramDeliveryUser telegramDeliveryUser) {
         this.telegramDeliveryUser = telegramDeliveryUser;
     }
+
+    public TelegramRestaurantUser getTelegramRestaurantUser() {
+        return telegramRestaurantUser;
+    }
+
+    public Order telegramRestaurantUser(TelegramRestaurantUser telegramRestaurantUser) {
+        this.telegramRestaurantUser = telegramRestaurantUser;
+        return this;
+    }
+
+    public void setTelegramRestaurantUser(TelegramRestaurantUser telegramRestaurantUser) {
+        this.telegramRestaurantUser = telegramRestaurantUser;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -264,6 +329,9 @@ public class Order implements Serializable {
             ", date='" + getDate() + "'" +
             ", additionalNote='" + getAdditionalNote() + "'" +
             ", orderStatus='" + getOrderStatus() + "'" +
+            ", restaurantPaymentStaus='" + isRestaurantPaymentStaus() + "'" +
+            ", transportPaymentStatus='" + isTransportPaymentStatus() + "'" +
+            ", telegramUserPaymentStatus='" + isTelegramUserPaymentStatus() + "'" +
             "}";
     }
 }

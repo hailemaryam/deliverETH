@@ -32,6 +32,10 @@ public class RestorantDTO implements Serializable {
 
     private Boolean status;
 
+    private String tinNumber;
+
+    private String vatNumber;
+
     
     public Long getId() {
         return id;
@@ -113,6 +117,22 @@ public class RestorantDTO implements Serializable {
         this.status = status;
     }
 
+    public String getTinNumber() {
+        return tinNumber;
+    }
+
+    public void setTinNumber(String tinNumber) {
+        this.tinNumber = tinNumber;
+    }
+
+    public String getVatNumber() {
+        return vatNumber;
+    }
+
+    public void setVatNumber(String vatNumber) {
+        this.vatNumber = vatNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -146,6 +166,8 @@ public class RestorantDTO implements Serializable {
             ", longtude=" + getLongtude() +
             ", availableOrderCap=" + getAvailableOrderCap() +
             ", status='" + isStatus() + "'" +
+            ", tinNumber='" + getTinNumber() + "'" +
+            ", vatNumber='" + getVatNumber() + "'" +
             "}";
     }
 }

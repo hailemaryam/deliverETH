@@ -25,7 +25,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Order(0, 0, 0, 'AAAAAAA', 0, 0, currentDate, 'AAAAAAA', OrderStatus.STARTED);
+      elemDefault = new Order(0, 0, 0, 'AAAAAAA', 0, 0, currentDate, 'AAAAAAA', OrderStatus.STARTED, false, false, false);
     });
 
     describe('Service methods', () => {
@@ -77,7 +77,10 @@ describe('Service Tests', () => {
             transportationFee: 1,
             date: currentDate.format(DATE_TIME_FORMAT),
             additionalNote: 'BBBBBB',
-            orderStatus: 'BBBBBB'
+            orderStatus: 'BBBBBB',
+            restaurantPaymentStaus: true,
+            transportPaymentStatus: true,
+            telegramUserPaymentStatus: true
           },
           elemDefault
         );
@@ -106,7 +109,10 @@ describe('Service Tests', () => {
             transportationFee: 1,
             date: currentDate.format(DATE_TIME_FORMAT),
             additionalNote: 'BBBBBB',
-            orderStatus: 'BBBBBB'
+            orderStatus: 'BBBBBB',
+            restaurantPaymentStaus: true,
+            transportPaymentStatus: true,
+            telegramUserPaymentStatus: true
           },
           elemDefault
         );

@@ -70,6 +70,21 @@ public class TelegramDeliveryUserResourceIT {
     private static final Integer UPDATED_LOADED_PAGE = 2;
     private static final Integer SMALLER_LOADED_PAGE = 1 - 1;
 
+    private static final Boolean DEFAULT_STATUS = false;
+    private static final Boolean UPDATED_STATUS = true;
+
+    private static final Double DEFAULT_CURRENT_BALANCE = 1D;
+    private static final Double UPDATED_CURRENT_BALANCE = 2D;
+    private static final Double SMALLER_CURRENT_BALANCE = 1D - 1D;
+
+    private static final Float DEFAULT_CURRENT_LATITUDE = 1F;
+    private static final Float UPDATED_CURRENT_LATITUDE = 2F;
+    private static final Float SMALLER_CURRENT_LATITUDE = 1F - 1F;
+
+    private static final Float DEFAULT_CURRENT_LONGITUDE = 1F;
+    private static final Float UPDATED_CURRENT_LONGITUDE = 2F;
+    private static final Float SMALLER_CURRENT_LONGITUDE = 1F - 1F;
+
     @Autowired
     private TelegramDeliveryUserRepository telegramDeliveryUserRepository;
 
@@ -111,7 +126,11 @@ public class TelegramDeliveryUserResourceIT {
             .chatId(DEFAULT_CHAT_ID)
             .phone(DEFAULT_PHONE)
             .conversationMetaData(DEFAULT_CONVERSATION_META_DATA)
-            .loadedPage(DEFAULT_LOADED_PAGE);
+            .loadedPage(DEFAULT_LOADED_PAGE)
+            .status(DEFAULT_STATUS)
+            .currentBalance(DEFAULT_CURRENT_BALANCE)
+            .currentLatitude(DEFAULT_CURRENT_LATITUDE)
+            .currentLongitude(DEFAULT_CURRENT_LONGITUDE);
         return telegramDeliveryUser;
     }
     /**
@@ -129,7 +148,11 @@ public class TelegramDeliveryUserResourceIT {
             .chatId(UPDATED_CHAT_ID)
             .phone(UPDATED_PHONE)
             .conversationMetaData(UPDATED_CONVERSATION_META_DATA)
-            .loadedPage(UPDATED_LOADED_PAGE);
+            .loadedPage(UPDATED_LOADED_PAGE)
+            .status(UPDATED_STATUS)
+            .currentBalance(UPDATED_CURRENT_BALANCE)
+            .currentLatitude(UPDATED_CURRENT_LATITUDE)
+            .currentLongitude(UPDATED_CURRENT_LONGITUDE);
         return telegramDeliveryUser;
     }
 
@@ -162,6 +185,10 @@ public class TelegramDeliveryUserResourceIT {
         assertThat(testTelegramDeliveryUser.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testTelegramDeliveryUser.getConversationMetaData()).isEqualTo(DEFAULT_CONVERSATION_META_DATA);
         assertThat(testTelegramDeliveryUser.getLoadedPage()).isEqualTo(DEFAULT_LOADED_PAGE);
+        assertThat(testTelegramDeliveryUser.isStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testTelegramDeliveryUser.getCurrentBalance()).isEqualTo(DEFAULT_CURRENT_BALANCE);
+        assertThat(testTelegramDeliveryUser.getCurrentLatitude()).isEqualTo(DEFAULT_CURRENT_LATITUDE);
+        assertThat(testTelegramDeliveryUser.getCurrentLongitude()).isEqualTo(DEFAULT_CURRENT_LONGITUDE);
     }
 
     @Test
@@ -203,7 +230,11 @@ public class TelegramDeliveryUserResourceIT {
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)))
-            .andExpect(jsonPath("$.[*].loadedPage").value(hasItem(DEFAULT_LOADED_PAGE)));
+            .andExpect(jsonPath("$.[*].loadedPage").value(hasItem(DEFAULT_LOADED_PAGE)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].currentBalance").value(hasItem(DEFAULT_CURRENT_BALANCE.doubleValue())))
+            .andExpect(jsonPath("$.[*].currentLatitude").value(hasItem(DEFAULT_CURRENT_LATITUDE.doubleValue())))
+            .andExpect(jsonPath("$.[*].currentLongitude").value(hasItem(DEFAULT_CURRENT_LONGITUDE.doubleValue())));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -244,7 +275,11 @@ public class TelegramDeliveryUserResourceIT {
             .andExpect(jsonPath("$.chatId").value(DEFAULT_CHAT_ID))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
             .andExpect(jsonPath("$.conversationMetaData").value(DEFAULT_CONVERSATION_META_DATA))
-            .andExpect(jsonPath("$.loadedPage").value(DEFAULT_LOADED_PAGE));
+            .andExpect(jsonPath("$.loadedPage").value(DEFAULT_LOADED_PAGE))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()))
+            .andExpect(jsonPath("$.currentBalance").value(DEFAULT_CURRENT_BALANCE.doubleValue()))
+            .andExpect(jsonPath("$.currentLatitude").value(DEFAULT_CURRENT_LATITUDE.doubleValue()))
+            .andExpect(jsonPath("$.currentLongitude").value(DEFAULT_CURRENT_LONGITUDE.doubleValue()));
     }
 
 
@@ -947,6 +982,373 @@ public class TelegramDeliveryUserResourceIT {
 
     @Test
     @Transactional
+    public void getAllTelegramDeliveryUsersByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where status equals to DEFAULT_STATUS
+        defaultTelegramDeliveryUserShouldBeFound("status.equals=" + DEFAULT_STATUS);
+
+        // Get all the telegramDeliveryUserList where status equals to UPDATED_STATUS
+        defaultTelegramDeliveryUserShouldNotBeFound("status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where status not equals to DEFAULT_STATUS
+        defaultTelegramDeliveryUserShouldNotBeFound("status.notEquals=" + DEFAULT_STATUS);
+
+        // Get all the telegramDeliveryUserList where status not equals to UPDATED_STATUS
+        defaultTelegramDeliveryUserShouldBeFound("status.notEquals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where status in DEFAULT_STATUS or UPDATED_STATUS
+        defaultTelegramDeliveryUserShouldBeFound("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS);
+
+        // Get all the telegramDeliveryUserList where status equals to UPDATED_STATUS
+        defaultTelegramDeliveryUserShouldNotBeFound("status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where status is not null
+        defaultTelegramDeliveryUserShouldBeFound("status.specified=true");
+
+        // Get all the telegramDeliveryUserList where status is null
+        defaultTelegramDeliveryUserShouldNotBeFound("status.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentBalanceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentBalance equals to DEFAULT_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldBeFound("currentBalance.equals=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramDeliveryUserList where currentBalance equals to UPDATED_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentBalance.equals=" + UPDATED_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentBalanceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentBalance not equals to DEFAULT_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentBalance.notEquals=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramDeliveryUserList where currentBalance not equals to UPDATED_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldBeFound("currentBalance.notEquals=" + UPDATED_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentBalanceIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentBalance in DEFAULT_CURRENT_BALANCE or UPDATED_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldBeFound("currentBalance.in=" + DEFAULT_CURRENT_BALANCE + "," + UPDATED_CURRENT_BALANCE);
+
+        // Get all the telegramDeliveryUserList where currentBalance equals to UPDATED_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentBalance.in=" + UPDATED_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentBalanceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentBalance is not null
+        defaultTelegramDeliveryUserShouldBeFound("currentBalance.specified=true");
+
+        // Get all the telegramDeliveryUserList where currentBalance is null
+        defaultTelegramDeliveryUserShouldNotBeFound("currentBalance.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentBalanceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentBalance is greater than or equal to DEFAULT_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldBeFound("currentBalance.greaterThanOrEqual=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramDeliveryUserList where currentBalance is greater than or equal to UPDATED_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentBalance.greaterThanOrEqual=" + UPDATED_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentBalanceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentBalance is less than or equal to DEFAULT_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldBeFound("currentBalance.lessThanOrEqual=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramDeliveryUserList where currentBalance is less than or equal to SMALLER_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentBalance.lessThanOrEqual=" + SMALLER_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentBalanceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentBalance is less than DEFAULT_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentBalance.lessThan=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramDeliveryUserList where currentBalance is less than UPDATED_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldBeFound("currentBalance.lessThan=" + UPDATED_CURRENT_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentBalanceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentBalance is greater than DEFAULT_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentBalance.greaterThan=" + DEFAULT_CURRENT_BALANCE);
+
+        // Get all the telegramDeliveryUserList where currentBalance is greater than SMALLER_CURRENT_BALANCE
+        defaultTelegramDeliveryUserShouldBeFound("currentBalance.greaterThan=" + SMALLER_CURRENT_BALANCE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLatitudeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLatitude equals to DEFAULT_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLatitude.equals=" + DEFAULT_CURRENT_LATITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLatitude equals to UPDATED_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLatitude.equals=" + UPDATED_CURRENT_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLatitudeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLatitude not equals to DEFAULT_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLatitude.notEquals=" + DEFAULT_CURRENT_LATITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLatitude not equals to UPDATED_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLatitude.notEquals=" + UPDATED_CURRENT_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLatitudeIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLatitude in DEFAULT_CURRENT_LATITUDE or UPDATED_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLatitude.in=" + DEFAULT_CURRENT_LATITUDE + "," + UPDATED_CURRENT_LATITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLatitude equals to UPDATED_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLatitude.in=" + UPDATED_CURRENT_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLatitudeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLatitude is not null
+        defaultTelegramDeliveryUserShouldBeFound("currentLatitude.specified=true");
+
+        // Get all the telegramDeliveryUserList where currentLatitude is null
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLatitude.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLatitudeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLatitude is greater than or equal to DEFAULT_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLatitude.greaterThanOrEqual=" + DEFAULT_CURRENT_LATITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLatitude is greater than or equal to UPDATED_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLatitude.greaterThanOrEqual=" + UPDATED_CURRENT_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLatitudeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLatitude is less than or equal to DEFAULT_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLatitude.lessThanOrEqual=" + DEFAULT_CURRENT_LATITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLatitude is less than or equal to SMALLER_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLatitude.lessThanOrEqual=" + SMALLER_CURRENT_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLatitudeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLatitude is less than DEFAULT_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLatitude.lessThan=" + DEFAULT_CURRENT_LATITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLatitude is less than UPDATED_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLatitude.lessThan=" + UPDATED_CURRENT_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLatitudeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLatitude is greater than DEFAULT_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLatitude.greaterThan=" + DEFAULT_CURRENT_LATITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLatitude is greater than SMALLER_CURRENT_LATITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLatitude.greaterThan=" + SMALLER_CURRENT_LATITUDE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLongitudeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLongitude equals to DEFAULT_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLongitude.equals=" + DEFAULT_CURRENT_LONGITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLongitude equals to UPDATED_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLongitude.equals=" + UPDATED_CURRENT_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLongitudeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLongitude not equals to DEFAULT_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLongitude.notEquals=" + DEFAULT_CURRENT_LONGITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLongitude not equals to UPDATED_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLongitude.notEquals=" + UPDATED_CURRENT_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLongitudeIsInShouldWork() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLongitude in DEFAULT_CURRENT_LONGITUDE or UPDATED_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLongitude.in=" + DEFAULT_CURRENT_LONGITUDE + "," + UPDATED_CURRENT_LONGITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLongitude equals to UPDATED_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLongitude.in=" + UPDATED_CURRENT_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLongitudeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLongitude is not null
+        defaultTelegramDeliveryUserShouldBeFound("currentLongitude.specified=true");
+
+        // Get all the telegramDeliveryUserList where currentLongitude is null
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLongitude.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLongitudeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLongitude is greater than or equal to DEFAULT_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLongitude.greaterThanOrEqual=" + DEFAULT_CURRENT_LONGITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLongitude is greater than or equal to UPDATED_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLongitude.greaterThanOrEqual=" + UPDATED_CURRENT_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLongitudeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLongitude is less than or equal to DEFAULT_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLongitude.lessThanOrEqual=" + DEFAULT_CURRENT_LONGITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLongitude is less than or equal to SMALLER_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLongitude.lessThanOrEqual=" + SMALLER_CURRENT_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLongitudeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLongitude is less than DEFAULT_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLongitude.lessThan=" + DEFAULT_CURRENT_LONGITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLongitude is less than UPDATED_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLongitude.lessThan=" + UPDATED_CURRENT_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTelegramDeliveryUsersByCurrentLongitudeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
+
+        // Get all the telegramDeliveryUserList where currentLongitude is greater than DEFAULT_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldNotBeFound("currentLongitude.greaterThan=" + DEFAULT_CURRENT_LONGITUDE);
+
+        // Get all the telegramDeliveryUserList where currentLongitude is greater than SMALLER_CURRENT_LONGITUDE
+        defaultTelegramDeliveryUserShouldBeFound("currentLongitude.greaterThan=" + SMALLER_CURRENT_LONGITUDE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllTelegramDeliveryUsersByOrderIsEqualToSomething() throws Exception {
         // Initialize the database
         telegramDeliveryUserRepository.saveAndFlush(telegramDeliveryUser);
@@ -999,7 +1401,11 @@ public class TelegramDeliveryUserResourceIT {
             .andExpect(jsonPath("$.[*].chatId").value(hasItem(DEFAULT_CHAT_ID)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].conversationMetaData").value(hasItem(DEFAULT_CONVERSATION_META_DATA)))
-            .andExpect(jsonPath("$.[*].loadedPage").value(hasItem(DEFAULT_LOADED_PAGE)));
+            .andExpect(jsonPath("$.[*].loadedPage").value(hasItem(DEFAULT_LOADED_PAGE)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].currentBalance").value(hasItem(DEFAULT_CURRENT_BALANCE.doubleValue())))
+            .andExpect(jsonPath("$.[*].currentLatitude").value(hasItem(DEFAULT_CURRENT_LATITUDE.doubleValue())))
+            .andExpect(jsonPath("$.[*].currentLongitude").value(hasItem(DEFAULT_CURRENT_LONGITUDE.doubleValue())));
 
         // Check, that the count call also returns 1
         restTelegramDeliveryUserMockMvc.perform(get("/api/telegram-delivery-users/count?sort=id,desc&" + filter))
@@ -1054,7 +1460,11 @@ public class TelegramDeliveryUserResourceIT {
             .chatId(UPDATED_CHAT_ID)
             .phone(UPDATED_PHONE)
             .conversationMetaData(UPDATED_CONVERSATION_META_DATA)
-            .loadedPage(UPDATED_LOADED_PAGE);
+            .loadedPage(UPDATED_LOADED_PAGE)
+            .status(UPDATED_STATUS)
+            .currentBalance(UPDATED_CURRENT_BALANCE)
+            .currentLatitude(UPDATED_CURRENT_LATITUDE)
+            .currentLongitude(UPDATED_CURRENT_LONGITUDE);
         TelegramDeliveryUserDTO telegramDeliveryUserDTO = telegramDeliveryUserMapper.toDto(updatedTelegramDeliveryUser);
 
         restTelegramDeliveryUserMockMvc.perform(put("/api/telegram-delivery-users")
@@ -1074,6 +1484,10 @@ public class TelegramDeliveryUserResourceIT {
         assertThat(testTelegramDeliveryUser.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testTelegramDeliveryUser.getConversationMetaData()).isEqualTo(UPDATED_CONVERSATION_META_DATA);
         assertThat(testTelegramDeliveryUser.getLoadedPage()).isEqualTo(UPDATED_LOADED_PAGE);
+        assertThat(testTelegramDeliveryUser.isStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testTelegramDeliveryUser.getCurrentBalance()).isEqualTo(UPDATED_CURRENT_BALANCE);
+        assertThat(testTelegramDeliveryUser.getCurrentLatitude()).isEqualTo(UPDATED_CURRENT_LATITUDE);
+        assertThat(testTelegramDeliveryUser.getCurrentLongitude()).isEqualTo(UPDATED_CURRENT_LONGITUDE);
     }
 
     @Test

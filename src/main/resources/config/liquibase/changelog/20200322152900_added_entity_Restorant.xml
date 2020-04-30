@@ -42,6 +42,12 @@
             <column name="status" type="boolean">
                 <constraints nullable="true" />
             </column>
+            <column name="tin_number" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="vat_number" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
     </changeSet>
@@ -74,6 +80,8 @@
             <column name="longtude" type="numeric"/>
             <column name="available_order_cap" type="numeric"/>
             <column name="status" type="boolean"/>
+            <column name="tin_number" type="string"/>
+            <column name="vat_number" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

@@ -13,6 +13,8 @@ export interface IRestorant {
   longtude?: number;
   availableOrderCap?: number;
   status?: boolean;
+  tinNumber?: string;
+  vatNumber?: string;
   foods?: IFood[];
   telegramRestaurantUsers?: ITelegramRestaurantUser[];
   telegramDeliveryUsers?: ITelegramDeliveryUser[];
@@ -30,6 +32,8 @@ export class Restorant implements IRestorant {
     public longtude?: number,
     public availableOrderCap?: number,
     public status?: boolean,
+    public tinNumber?: string,
+    public vatNumber?: string,
     public foods?: IFood[],
     public telegramRestaurantUsers?: ITelegramRestaurantUser[],
     public telegramDeliveryUsers?: ITelegramDeliveryUser[]

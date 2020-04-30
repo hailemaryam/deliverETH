@@ -31,6 +31,12 @@ public class OrderDTO implements Serializable {
 
     private OrderStatus orderStatus;
 
+    private Boolean restaurantPaymentStaus;
+
+    private Boolean transportPaymentStatus;
+
+    private Boolean telegramUserPaymentStatus;
+
 
     private Long telegramUserId;
 
@@ -39,6 +45,10 @@ public class OrderDTO implements Serializable {
     private Long telegramDeliveryUserId;
 
     private String telegramDeliveryUserUserName;
+
+    private Long telegramRestaurantUserId;
+
+    private String telegramRestaurantUserUserName;
     
     public Long getId() {
         return id;
@@ -112,6 +122,30 @@ public class OrderDTO implements Serializable {
         this.orderStatus = orderStatus;
     }
 
+    public Boolean isRestaurantPaymentStaus() {
+        return restaurantPaymentStaus;
+    }
+
+    public void setRestaurantPaymentStaus(Boolean restaurantPaymentStaus) {
+        this.restaurantPaymentStaus = restaurantPaymentStaus;
+    }
+
+    public Boolean isTransportPaymentStatus() {
+        return transportPaymentStatus;
+    }
+
+    public void setTransportPaymentStatus(Boolean transportPaymentStatus) {
+        this.transportPaymentStatus = transportPaymentStatus;
+    }
+
+    public Boolean isTelegramUserPaymentStatus() {
+        return telegramUserPaymentStatus;
+    }
+
+    public void setTelegramUserPaymentStatus(Boolean telegramUserPaymentStatus) {
+        this.telegramUserPaymentStatus = telegramUserPaymentStatus;
+    }
+
     public Long getTelegramUserId() {
         return telegramUserId;
     }
@@ -142,6 +176,22 @@ public class OrderDTO implements Serializable {
 
     public void setTelegramDeliveryUserUserName(String telegramDeliveryUserUserName) {
         this.telegramDeliveryUserUserName = telegramDeliveryUserUserName;
+    }
+
+    public Long getTelegramRestaurantUserId() {
+        return telegramRestaurantUserId;
+    }
+
+    public void setTelegramRestaurantUserId(Long telegramRestaurantUserId) {
+        this.telegramRestaurantUserId = telegramRestaurantUserId;
+    }
+
+    public String getTelegramRestaurantUserUserName() {
+        return telegramRestaurantUserUserName;
+    }
+
+    public void setTelegramRestaurantUserUserName(String telegramRestaurantUserUserName) {
+        this.telegramRestaurantUserUserName = telegramRestaurantUserUserName;
     }
 
     @Override
@@ -177,10 +227,15 @@ public class OrderDTO implements Serializable {
             ", date='" + getDate() + "'" +
             ", additionalNote='" + getAdditionalNote() + "'" +
             ", orderStatus='" + getOrderStatus() + "'" +
+            ", restaurantPaymentStaus='" + isRestaurantPaymentStaus() + "'" +
+            ", transportPaymentStatus='" + isTransportPaymentStatus() + "'" +
+            ", telegramUserPaymentStatus='" + isTelegramUserPaymentStatus() + "'" +
             ", telegramUserId=" + getTelegramUserId() +
             ", telegramUserUserName='" + getTelegramUserUserName() + "'" +
             ", telegramDeliveryUserId=" + getTelegramDeliveryUserId() +
             ", telegramDeliveryUserUserName='" + getTelegramDeliveryUserUserName() + "'" +
+            ", telegramRestaurantUserId=" + getTelegramRestaurantUserId() +
+            ", telegramRestaurantUserUserName='" + getTelegramRestaurantUserUserName() + "'" +
             "}";
     }
 }

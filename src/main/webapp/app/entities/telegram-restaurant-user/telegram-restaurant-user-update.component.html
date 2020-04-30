@@ -68,6 +68,18 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-control-label" for="field_status">Status</label>
+                    <input type="checkbox" class="form-control" name="status" id="field_status"
+                           formControlName="status"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_currentBalance">Current Balance</label>
+                    <input type="number" class="form-control" name="currentBalance" id="field_currentBalance"
+                           formControlName="currentBalance"/>
+                </div>
+
+                <div class="form-group">
                     <label for="field_restorants">Restorant</label>
                     <select class="form-control" id="field_restorants" multiple name="restorants" formControlName="restorants">
                         <option [ngValue]="getSelected(editForm.get('restorants')!.value, restorantOption)" *ngFor="let restorantOption of restorants; trackBy: trackById">{{ restorantOption.name }}</option>

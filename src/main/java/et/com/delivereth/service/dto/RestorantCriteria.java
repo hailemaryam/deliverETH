@@ -38,6 +38,10 @@ public class RestorantCriteria implements Serializable, Criteria {
 
     private BooleanFilter status;
 
+    private StringFilter tinNumber;
+
+    private StringFilter vatNumber;
+
     private LongFilter foodId;
 
     private LongFilter telegramRestaurantUserId;
@@ -55,6 +59,8 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.longtude = other.longtude == null ? null : other.longtude.copy();
         this.availableOrderCap = other.availableOrderCap == null ? null : other.availableOrderCap.copy();
         this.status = other.status == null ? null : other.status.copy();
+        this.tinNumber = other.tinNumber == null ? null : other.tinNumber.copy();
+        this.vatNumber = other.vatNumber == null ? null : other.vatNumber.copy();
         this.foodId = other.foodId == null ? null : other.foodId.copy();
         this.telegramRestaurantUserId = other.telegramRestaurantUserId == null ? null : other.telegramRestaurantUserId.copy();
         this.telegramDeliveryUserId = other.telegramDeliveryUserId == null ? null : other.telegramDeliveryUserId.copy();
@@ -121,6 +127,22 @@ public class RestorantCriteria implements Serializable, Criteria {
         this.status = status;
     }
 
+    public StringFilter getTinNumber() {
+        return tinNumber;
+    }
+
+    public void setTinNumber(StringFilter tinNumber) {
+        this.tinNumber = tinNumber;
+    }
+
+    public StringFilter getVatNumber() {
+        return vatNumber;
+    }
+
+    public void setVatNumber(StringFilter vatNumber) {
+        this.vatNumber = vatNumber;
+    }
+
     public LongFilter getFoodId() {
         return foodId;
     }
@@ -163,6 +185,8 @@ public class RestorantCriteria implements Serializable, Criteria {
             Objects.equals(longtude, that.longtude) &&
             Objects.equals(availableOrderCap, that.availableOrderCap) &&
             Objects.equals(status, that.status) &&
+            Objects.equals(tinNumber, that.tinNumber) &&
+            Objects.equals(vatNumber, that.vatNumber) &&
             Objects.equals(foodId, that.foodId) &&
             Objects.equals(telegramRestaurantUserId, that.telegramRestaurantUserId) &&
             Objects.equals(telegramDeliveryUserId, that.telegramDeliveryUserId);
@@ -178,6 +202,8 @@ public class RestorantCriteria implements Serializable, Criteria {
         longtude,
         availableOrderCap,
         status,
+        tinNumber,
+        vatNumber,
         foodId,
         telegramRestaurantUserId,
         telegramDeliveryUserId
@@ -194,6 +220,8 @@ public class RestorantCriteria implements Serializable, Criteria {
                 (longtude != null ? "longtude=" + longtude + ", " : "") +
                 (availableOrderCap != null ? "availableOrderCap=" + availableOrderCap + ", " : "") +
                 (status != null ? "status=" + status + ", " : "") +
+                (tinNumber != null ? "tinNumber=" + tinNumber + ", " : "") +
+                (vatNumber != null ? "vatNumber=" + vatNumber + ", " : "") +
                 (foodId != null ? "foodId=" + foodId + ", " : "") +
                 (telegramRestaurantUserId != null ? "telegramRestaurantUserId=" + telegramRestaurantUserId + ", " : "") +
                 (telegramDeliveryUserId != null ? "telegramDeliveryUserId=" + telegramDeliveryUserId + ", " : "") +

@@ -5,6 +5,7 @@ import et.com.delivereth.domain.Order;
 import et.com.delivereth.domain.OrderedFood;
 import et.com.delivereth.domain.TelegramUser;
 import et.com.delivereth.domain.TelegramDeliveryUser;
+import et.com.delivereth.domain.TelegramRestaurantUser;
 import et.com.delivereth.repository.OrderRepository;
 import et.com.delivereth.service.OrderService;
 import et.com.delivereth.service.dto.OrderDTO;
@@ -70,6 +71,15 @@ public class OrderResourceIT {
     private static final OrderStatus DEFAULT_ORDER_STATUS = OrderStatus.STARTED;
     private static final OrderStatus UPDATED_ORDER_STATUS = OrderStatus.ORDERED;
 
+    private static final Boolean DEFAULT_RESTAURANT_PAYMENT_STAUS = false;
+    private static final Boolean UPDATED_RESTAURANT_PAYMENT_STAUS = true;
+
+    private static final Boolean DEFAULT_TRANSPORT_PAYMENT_STATUS = false;
+    private static final Boolean UPDATED_TRANSPORT_PAYMENT_STATUS = true;
+
+    private static final Boolean DEFAULT_TELEGRAM_USER_PAYMENT_STATUS = false;
+    private static final Boolean UPDATED_TELEGRAM_USER_PAYMENT_STATUS = true;
+
     @Autowired
     private OrderRepository orderRepository;
 
@@ -105,7 +115,10 @@ public class OrderResourceIT {
             .transportationFee(DEFAULT_TRANSPORTATION_FEE)
             .date(DEFAULT_DATE)
             .additionalNote(DEFAULT_ADDITIONAL_NOTE)
-            .orderStatus(DEFAULT_ORDER_STATUS);
+            .orderStatus(DEFAULT_ORDER_STATUS)
+            .restaurantPaymentStaus(DEFAULT_RESTAURANT_PAYMENT_STAUS)
+            .transportPaymentStatus(DEFAULT_TRANSPORT_PAYMENT_STATUS)
+            .telegramUserPaymentStatus(DEFAULT_TELEGRAM_USER_PAYMENT_STATUS);
         return order;
     }
     /**
@@ -123,7 +136,10 @@ public class OrderResourceIT {
             .transportationFee(UPDATED_TRANSPORTATION_FEE)
             .date(UPDATED_DATE)
             .additionalNote(UPDATED_ADDITIONAL_NOTE)
-            .orderStatus(UPDATED_ORDER_STATUS);
+            .orderStatus(UPDATED_ORDER_STATUS)
+            .restaurantPaymentStaus(UPDATED_RESTAURANT_PAYMENT_STAUS)
+            .transportPaymentStatus(UPDATED_TRANSPORT_PAYMENT_STATUS)
+            .telegramUserPaymentStatus(UPDATED_TELEGRAM_USER_PAYMENT_STATUS);
         return order;
     }
 
@@ -156,6 +172,9 @@ public class OrderResourceIT {
         assertThat(testOrder.getDate()).isEqualTo(DEFAULT_DATE);
         assertThat(testOrder.getAdditionalNote()).isEqualTo(DEFAULT_ADDITIONAL_NOTE);
         assertThat(testOrder.getOrderStatus()).isEqualTo(DEFAULT_ORDER_STATUS);
+        assertThat(testOrder.isRestaurantPaymentStaus()).isEqualTo(DEFAULT_RESTAURANT_PAYMENT_STAUS);
+        assertThat(testOrder.isTransportPaymentStatus()).isEqualTo(DEFAULT_TRANSPORT_PAYMENT_STATUS);
+        assertThat(testOrder.isTelegramUserPaymentStatus()).isEqualTo(DEFAULT_TELEGRAM_USER_PAYMENT_STATUS);
     }
 
     @Test
@@ -197,7 +216,10 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.[*].transportationFee").value(hasItem(DEFAULT_TRANSPORTATION_FEE.doubleValue())))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].additionalNote").value(hasItem(DEFAULT_ADDITIONAL_NOTE.toString())))
-            .andExpect(jsonPath("$.[*].orderStatus").value(hasItem(DEFAULT_ORDER_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].orderStatus").value(hasItem(DEFAULT_ORDER_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].restaurantPaymentStaus").value(hasItem(DEFAULT_RESTAURANT_PAYMENT_STAUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].transportPaymentStatus").value(hasItem(DEFAULT_TRANSPORT_PAYMENT_STATUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].telegramUserPaymentStatus").value(hasItem(DEFAULT_TELEGRAM_USER_PAYMENT_STATUS.booleanValue())));
     }
     
     @Test
@@ -218,7 +240,10 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.transportationFee").value(DEFAULT_TRANSPORTATION_FEE.doubleValue()))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
             .andExpect(jsonPath("$.additionalNote").value(DEFAULT_ADDITIONAL_NOTE.toString()))
-            .andExpect(jsonPath("$.orderStatus").value(DEFAULT_ORDER_STATUS.toString()));
+            .andExpect(jsonPath("$.orderStatus").value(DEFAULT_ORDER_STATUS.toString()))
+            .andExpect(jsonPath("$.restaurantPaymentStaus").value(DEFAULT_RESTAURANT_PAYMENT_STAUS.booleanValue()))
+            .andExpect(jsonPath("$.transportPaymentStatus").value(DEFAULT_TRANSPORT_PAYMENT_STATUS.booleanValue()))
+            .andExpect(jsonPath("$.telegramUserPaymentStatus").value(DEFAULT_TELEGRAM_USER_PAYMENT_STATUS.booleanValue()));
     }
 
 
@@ -767,6 +792,162 @@ public class OrderResourceIT {
 
     @Test
     @Transactional
+    public void getAllOrdersByRestaurantPaymentStausIsEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where restaurantPaymentStaus equals to DEFAULT_RESTAURANT_PAYMENT_STAUS
+        defaultOrderShouldBeFound("restaurantPaymentStaus.equals=" + DEFAULT_RESTAURANT_PAYMENT_STAUS);
+
+        // Get all the orderList where restaurantPaymentStaus equals to UPDATED_RESTAURANT_PAYMENT_STAUS
+        defaultOrderShouldNotBeFound("restaurantPaymentStaus.equals=" + UPDATED_RESTAURANT_PAYMENT_STAUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByRestaurantPaymentStausIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where restaurantPaymentStaus not equals to DEFAULT_RESTAURANT_PAYMENT_STAUS
+        defaultOrderShouldNotBeFound("restaurantPaymentStaus.notEquals=" + DEFAULT_RESTAURANT_PAYMENT_STAUS);
+
+        // Get all the orderList where restaurantPaymentStaus not equals to UPDATED_RESTAURANT_PAYMENT_STAUS
+        defaultOrderShouldBeFound("restaurantPaymentStaus.notEquals=" + UPDATED_RESTAURANT_PAYMENT_STAUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByRestaurantPaymentStausIsInShouldWork() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where restaurantPaymentStaus in DEFAULT_RESTAURANT_PAYMENT_STAUS or UPDATED_RESTAURANT_PAYMENT_STAUS
+        defaultOrderShouldBeFound("restaurantPaymentStaus.in=" + DEFAULT_RESTAURANT_PAYMENT_STAUS + "," + UPDATED_RESTAURANT_PAYMENT_STAUS);
+
+        // Get all the orderList where restaurantPaymentStaus equals to UPDATED_RESTAURANT_PAYMENT_STAUS
+        defaultOrderShouldNotBeFound("restaurantPaymentStaus.in=" + UPDATED_RESTAURANT_PAYMENT_STAUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByRestaurantPaymentStausIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where restaurantPaymentStaus is not null
+        defaultOrderShouldBeFound("restaurantPaymentStaus.specified=true");
+
+        // Get all the orderList where restaurantPaymentStaus is null
+        defaultOrderShouldNotBeFound("restaurantPaymentStaus.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportPaymentStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportPaymentStatus equals to DEFAULT_TRANSPORT_PAYMENT_STATUS
+        defaultOrderShouldBeFound("transportPaymentStatus.equals=" + DEFAULT_TRANSPORT_PAYMENT_STATUS);
+
+        // Get all the orderList where transportPaymentStatus equals to UPDATED_TRANSPORT_PAYMENT_STATUS
+        defaultOrderShouldNotBeFound("transportPaymentStatus.equals=" + UPDATED_TRANSPORT_PAYMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportPaymentStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportPaymentStatus not equals to DEFAULT_TRANSPORT_PAYMENT_STATUS
+        defaultOrderShouldNotBeFound("transportPaymentStatus.notEquals=" + DEFAULT_TRANSPORT_PAYMENT_STATUS);
+
+        // Get all the orderList where transportPaymentStatus not equals to UPDATED_TRANSPORT_PAYMENT_STATUS
+        defaultOrderShouldBeFound("transportPaymentStatus.notEquals=" + UPDATED_TRANSPORT_PAYMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportPaymentStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportPaymentStatus in DEFAULT_TRANSPORT_PAYMENT_STATUS or UPDATED_TRANSPORT_PAYMENT_STATUS
+        defaultOrderShouldBeFound("transportPaymentStatus.in=" + DEFAULT_TRANSPORT_PAYMENT_STATUS + "," + UPDATED_TRANSPORT_PAYMENT_STATUS);
+
+        // Get all the orderList where transportPaymentStatus equals to UPDATED_TRANSPORT_PAYMENT_STATUS
+        defaultOrderShouldNotBeFound("transportPaymentStatus.in=" + UPDATED_TRANSPORT_PAYMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTransportPaymentStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where transportPaymentStatus is not null
+        defaultOrderShouldBeFound("transportPaymentStatus.specified=true");
+
+        // Get all the orderList where transportPaymentStatus is null
+        defaultOrderShouldNotBeFound("transportPaymentStatus.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTelegramUserPaymentStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where telegramUserPaymentStatus equals to DEFAULT_TELEGRAM_USER_PAYMENT_STATUS
+        defaultOrderShouldBeFound("telegramUserPaymentStatus.equals=" + DEFAULT_TELEGRAM_USER_PAYMENT_STATUS);
+
+        // Get all the orderList where telegramUserPaymentStatus equals to UPDATED_TELEGRAM_USER_PAYMENT_STATUS
+        defaultOrderShouldNotBeFound("telegramUserPaymentStatus.equals=" + UPDATED_TELEGRAM_USER_PAYMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTelegramUserPaymentStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where telegramUserPaymentStatus not equals to DEFAULT_TELEGRAM_USER_PAYMENT_STATUS
+        defaultOrderShouldNotBeFound("telegramUserPaymentStatus.notEquals=" + DEFAULT_TELEGRAM_USER_PAYMENT_STATUS);
+
+        // Get all the orderList where telegramUserPaymentStatus not equals to UPDATED_TELEGRAM_USER_PAYMENT_STATUS
+        defaultOrderShouldBeFound("telegramUserPaymentStatus.notEquals=" + UPDATED_TELEGRAM_USER_PAYMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTelegramUserPaymentStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where telegramUserPaymentStatus in DEFAULT_TELEGRAM_USER_PAYMENT_STATUS or UPDATED_TELEGRAM_USER_PAYMENT_STATUS
+        defaultOrderShouldBeFound("telegramUserPaymentStatus.in=" + DEFAULT_TELEGRAM_USER_PAYMENT_STATUS + "," + UPDATED_TELEGRAM_USER_PAYMENT_STATUS);
+
+        // Get all the orderList where telegramUserPaymentStatus equals to UPDATED_TELEGRAM_USER_PAYMENT_STATUS
+        defaultOrderShouldNotBeFound("telegramUserPaymentStatus.in=" + UPDATED_TELEGRAM_USER_PAYMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTelegramUserPaymentStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+
+        // Get all the orderList where telegramUserPaymentStatus is not null
+        defaultOrderShouldBeFound("telegramUserPaymentStatus.specified=true");
+
+        // Get all the orderList where telegramUserPaymentStatus is null
+        defaultOrderShouldNotBeFound("telegramUserPaymentStatus.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllOrdersByOrderedFoodIsEqualToSomething() throws Exception {
         // Initialize the database
         orderRepository.saveAndFlush(order);
@@ -824,6 +1005,26 @@ public class OrderResourceIT {
         defaultOrderShouldNotBeFound("telegramDeliveryUserId.equals=" + (telegramDeliveryUserId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllOrdersByTelegramRestaurantUserIsEqualToSomething() throws Exception {
+        // Initialize the database
+        orderRepository.saveAndFlush(order);
+        TelegramRestaurantUser telegramRestaurantUser = TelegramRestaurantUserResourceIT.createEntity(em);
+        em.persist(telegramRestaurantUser);
+        em.flush();
+        order.setTelegramRestaurantUser(telegramRestaurantUser);
+        orderRepository.saveAndFlush(order);
+        Long telegramRestaurantUserId = telegramRestaurantUser.getId();
+
+        // Get all the orderList where telegramRestaurantUser equals to telegramRestaurantUserId
+        defaultOrderShouldBeFound("telegramRestaurantUserId.equals=" + telegramRestaurantUserId);
+
+        // Get all the orderList where telegramRestaurantUser equals to telegramRestaurantUserId + 1
+        defaultOrderShouldNotBeFound("telegramRestaurantUserId.equals=" + (telegramRestaurantUserId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -839,7 +1040,10 @@ public class OrderResourceIT {
             .andExpect(jsonPath("$.[*].transportationFee").value(hasItem(DEFAULT_TRANSPORTATION_FEE.doubleValue())))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].additionalNote").value(hasItem(DEFAULT_ADDITIONAL_NOTE.toString())))
-            .andExpect(jsonPath("$.[*].orderStatus").value(hasItem(DEFAULT_ORDER_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].orderStatus").value(hasItem(DEFAULT_ORDER_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].restaurantPaymentStaus").value(hasItem(DEFAULT_RESTAURANT_PAYMENT_STAUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].transportPaymentStatus").value(hasItem(DEFAULT_TRANSPORT_PAYMENT_STATUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].telegramUserPaymentStatus").value(hasItem(DEFAULT_TELEGRAM_USER_PAYMENT_STATUS.booleanValue())));
 
         // Check, that the count call also returns 1
         restOrderMockMvc.perform(get("/api/orders/count?sort=id,desc&" + filter))
@@ -894,7 +1098,10 @@ public class OrderResourceIT {
             .transportationFee(UPDATED_TRANSPORTATION_FEE)
             .date(UPDATED_DATE)
             .additionalNote(UPDATED_ADDITIONAL_NOTE)
-            .orderStatus(UPDATED_ORDER_STATUS);
+            .orderStatus(UPDATED_ORDER_STATUS)
+            .restaurantPaymentStaus(UPDATED_RESTAURANT_PAYMENT_STAUS)
+            .transportPaymentStatus(UPDATED_TRANSPORT_PAYMENT_STATUS)
+            .telegramUserPaymentStatus(UPDATED_TELEGRAM_USER_PAYMENT_STATUS);
         OrderDTO orderDTO = orderMapper.toDto(updatedOrder);
 
         restOrderMockMvc.perform(put("/api/orders")
@@ -914,6 +1121,9 @@ public class OrderResourceIT {
         assertThat(testOrder.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testOrder.getAdditionalNote()).isEqualTo(UPDATED_ADDITIONAL_NOTE);
         assertThat(testOrder.getOrderStatus()).isEqualTo(UPDATED_ORDER_STATUS);
+        assertThat(testOrder.isRestaurantPaymentStaus()).isEqualTo(UPDATED_RESTAURANT_PAYMENT_STAUS);
+        assertThat(testOrder.isTransportPaymentStatus()).isEqualTo(UPDATED_TRANSPORT_PAYMENT_STATUS);
+        assertThat(testOrder.isTelegramUserPaymentStatus()).isEqualTo(UPDATED_TELEGRAM_USER_PAYMENT_STATUS);
     }
 
     @Test

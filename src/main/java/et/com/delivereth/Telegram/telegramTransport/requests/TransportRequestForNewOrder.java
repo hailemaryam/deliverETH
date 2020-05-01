@@ -15,6 +15,8 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -25,15 +27,17 @@ public class TransportRequestForNewOrder {
     private final FoodDbUtitility foodDbUtitility;
     private final OrderedFoodDbUtility orderedFoodDbUtility;
     private final TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility;
+    private final TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility;
     private final TelegramUserDbUtility telegramUserDbUtility;
     private final SendSMS sendSMS;
 
-    public TransportRequestForNewOrder(TransportTelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility, TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility, TelegramUserDbUtility telegramUserDbUtility, SendSMS sendSMS) {
+    public TransportRequestForNewOrder(TransportTelegramSender telegramSender, RestorantDbUtitlity restorantDbUtitlity, FoodDbUtitility foodDbUtitility, OrderedFoodDbUtility orderedFoodDbUtility, TelegramDeliveryUserDbUtility telegramDeliveryUserDbUtility, TelegramRestaurantUserDbUtility telegramRestaurantUserDbUtility, TelegramUserDbUtility telegramUserDbUtility, SendSMS sendSMS) {
         this.telegramSender = telegramSender;
         this.restorantDbUtitlity = restorantDbUtitlity;
         this.foodDbUtitility = foodDbUtitility;
         this.orderedFoodDbUtility = orderedFoodDbUtility;
         this.telegramDeliveryUserDbUtility = telegramDeliveryUserDbUtility;
+        this.telegramRestaurantUserDbUtility = telegramRestaurantUserDbUtility;
         this.telegramUserDbUtility = telegramUserDbUtility;
         this.sendSMS = sendSMS;
     }
@@ -41,13 +45,29 @@ public class TransportRequestForNewOrder {
     public void sendNewOrder(OrderDTO orderDTO) {
         List<OrderedFoodDTO> orderedFoodList = orderedFoodDbUtility.getOrderedFoods(orderDTO.getId());
         RestorantDTO restorant = restorantDbUtitlity.getRestorant(foodDbUtitility.getFood(orderedFoodList.get(0).getFoodId()).getRestorantId());
-        List<TelegramDeliveryUserDTO> restaurantUsers = telegramDeliveryUserDbUtility.getDeliveryUser(restorant);
-        for (TelegramDeliveryUserDTO telegramRestaurantUserDTO: restaurantUsers){
-            sendNewOrder(telegramRestaurantUserDTO, restorant, orderedFoodList, orderDTO);
+        List<TelegramDeliveryUserDTO> restaurantDeliveryUsers = telegramDeliveryUserDbUtility.getDeliveryUser(restorant);
+        for (TelegramDeliveryUserDTO telegramRestaurantDeliveryUserDTO: restaurantDeliveryUsers){
+            sendNewOrder(telegramRestaurantDeliveryUserDTO, restorant, orderedFoodList, orderDTO);
+            sendSMS.sendSMS(
+                telegramRestaurantDeliveryUserDTO.getPhone().startsWith("+") ?
+                telegramRestaurantDeliveryUserDTO.getPhone().substring(1) : telegramRestaurantDeliveryUserDTO.getPhone(),
+                StaticText.newOrderForTransportSms);
+        }
+        List<TelegramRestaurantUserDTO> restaurantUsers = telegramRestaurantUserDbUtility.getRestaurantUsers(restorant);
+        for (TelegramRestaurantUserDTO telegramRestaurantUserDTO : restaurantUsers) {
+            String text = "New order!\n" + "Order ID= #" + orderDTO.getId() + "\n";
+            Double total = 0D;
+            for (OrderedFoodDTO orderedFoodDTO : orderedFoodList){
+                FoodDTO foodDTO = foodDbUtitility.getFood(orderedFoodDTO.getFoodId());
+                text = text + orderedFoodDTO.getFoodName() + "X" + orderedFoodDTO.getQuantity() + "---" + (orderedFoodDTO.getQuantity() * foodDTO.getPrice()) + "ETB\n";
+                total+= orderedFoodDTO.getQuantity() * foodDTO.getPrice();
+            }
+            text = text + "Total = " + total + "\n";
+            text = text + "Agelgil Delivery Team";
             sendSMS.sendSMS(
                 telegramRestaurantUserDTO.getPhone().startsWith("+") ?
-                telegramRestaurantUserDTO.getPhone().substring(1) : telegramRestaurantUserDTO.getPhone(),
-                StaticText.newOrderForTransportSms);
+                    telegramRestaurantUserDTO.getPhone().substring(1): telegramRestaurantUserDTO.getPhone() ,
+                URLEncoder.encode(text));
         }
     }
     public void editNewOrder(Update update, OrderDTO orderDTO, Boolean alreadyAccepted, TelegramDeliveryUserDTO telegramDeliveryUserDTO) {

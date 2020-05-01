@@ -3,8 +3,9 @@ package et.com.delivereth.Telegram.Constants;
 public class StaticText {
     public static final String newOrderForRestauratnSms = "You have a new order!\n" +
         "Please check deliverEthRestaurant bot on telegram";
-    public static final String newOrderForTransportSms = "You have a new order!\n" +
-        "Please check deliverEthTransport bot on telegram";
+    public static final String newOrderForTransportSms = "You have a new order! \n" +
+        "Please check ToloDeliveryTransportBot on telegram.\n" +
+        "-TOLO Team";
     public static final String addMore = "➕ Add More";
     public static final String finishOrder = "✅ Finish";
     public static final String cancel = "\uD83D\uDEAB Cancel";
@@ -31,7 +32,7 @@ public class StaticText {
     public static final String chooseRestaurantListTitle = "<b>Choose store from this list</b>";
     public static final String yourOrderListTitle = "<b>Your Order List</b>";
     public static final String noRestaurantListAround = "There are no stores list around you delivering at this time.";
-    public static final String wantToListMoreRestaurant = "Want to list more stores?";
+    public static final String wantToListMoreRestaurant = "<b>Want to list more stores?</b>";
 
     public static final String weNeedYourLocationText = "We need your location for order delivery. If location on your phone is not turned on please turn on and click share location to share your location.";
     public static final String weNeedYourLocationAgainText = "We can't process your order with out knowing your location. " +

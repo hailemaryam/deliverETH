@@ -72,6 +72,7 @@ public class RequestRestorantSelection {
             response.setChatId(update.getCallbackQuery().getMessage().getChatId());
         }
         response.setText(StaticText.wantToListMoreRestaurant);
+        response.setParseMode("HTML");
         try {
             telegramSender.execute(response);
         } catch (TelegramApiException e) {

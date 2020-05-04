@@ -93,7 +93,7 @@ public class DbUtility {
                 restorantDTO.getLongtude().doubleValue()
                 ,0,0);
             double distanceInKillometer = distance / 1000;
-            return (distanceInKillometer * 8) + 35;
+            return (distanceInKillometer * 10) + 35;
         }
         return null;
     }

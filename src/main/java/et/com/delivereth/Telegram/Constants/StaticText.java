@@ -2,10 +2,10 @@ package et.com.delivereth.Telegram.Constants;
 
 public class StaticText {
     public static final String newOrderForRestauratnSms = "You have a new order!\n" +
-        "Please check deliverEthRestaurant bot on telegram";
+        "Please check Agelgil Delivery Restaurant bot on telegram";
     public static final String newOrderForTransportSms = "You have a new order! \n" +
-        "Please check ToloDeliveryTransportBot on telegram.\n" +
-        "-TOLO Team";
+        "Please check Agelgil Delivery Transport on telegram.\n" +
+        "-Agelgil Delivery Team";
     public static final String addMore = "➕ Add More";
     public static final String finishOrder = "✅ Finish";
     public static final String cancel = "\uD83D\uDEAB Cancel";
@@ -17,7 +17,7 @@ public class StaticText {
     public static final String help = "\uD83D\uDCD6 Help";
 
     public static final String shareLocation = "\uD83D\uDCCD Share Location";
-    public static final String shareContact = "☎️ Share Contact";
+    public static final String shareContact = "☎️ Share Your Number";
 
     public static final String acceptOrder = "\uD83D\uDC4D Accept";
     public static final String readyForDeliver = "\uD83D\uDED2 Ready For Delivery";
@@ -50,7 +50,7 @@ public class StaticText {
     public static final String menuText= "<b>We are currently delivering to everywhere in Addis Ababa, Ethiopia \uD83C\uDDEA\uD83C\uDDF9</b>\n";
 
     public static final String userHelp = "<b>\uD83D\uDCD6 Help</b>\n" +
-        "DeliverEth is the first Ethiopian telegram bot to bring you fresh foods where ever you are.\n" +
+        "Agelgil Delivery is the first Ethiopian telegram bot to bring you fresh foods where ever you are.\n" +
         "Order your favorite dish from your favorite store and it will be delivered at your door steps.\n";
     public static final String userErrorCommand = "<b>❗️ Improper Command</b>\n" +
         "Your request could not be processed. you need to choose or write proper commands.";
@@ -63,6 +63,6 @@ public class StaticText {
     public static final String alreadyCanceledByUser = "❗️ This order already canceled by user.";
     public static final String alreadyAccepted = "❗️ This order already accepted by other co-worker.";
     public static final String alreadyProccedByOtherUser = "❗️ This order already processed by other co-worker.";
-    public static final String notifyAccountLinkingNeed = "<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registered. Contact deliverEth admin to link your account to your store</b>\n";
-    public static final String notifyAccountLinkingNeedAgain = "<b>❗️ Before you continue the next step please wait deliverEth admin to link your account with your store.</b>\n";
+    public static final String notifyAccountLinkingNeed = "<b>\uD83D\uDC68\u200D\uD83C\uDF73 Your contact has been successfully registered. Contact Agelgil Delivery admin to link your account to your store</b>\n";
+    public static final String notifyAccountLinkingNeedAgain = "<b>❗️ Before you continue the next step please wait Agelgil Delivery admin to link your account with your store.</b>\n";
 }

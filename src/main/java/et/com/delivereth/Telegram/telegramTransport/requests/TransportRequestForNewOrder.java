@@ -51,23 +51,22 @@ public class TransportRequestForNewOrder {
             sendSMS.sendSMS(
                 telegramRestaurantDeliveryUserDTO.getPhone().startsWith("+") ?
                 telegramRestaurantDeliveryUserDTO.getPhone().substring(1) : telegramRestaurantDeliveryUserDTO.getPhone(),
-                StaticText.newOrderForTransportSms);
+                URLEncoder.encode(StaticText.newOrderForTransportSms));
         }
         List<TelegramRestaurantUserDTO> restaurantUsers = telegramRestaurantUserDbUtility.getRestaurantUsers(restorant);
         for (TelegramRestaurantUserDTO telegramRestaurantUserDTO : restaurantUsers) {
-            String text = "New order!\n" + "Order ID= #" + orderDTO.getId() + "\n";
+            String text = "New%20order%21%0A" + "Order%20ID%3A%20%23" + orderDTO.getId() + "%0A";
             Double total = 0D;
             for (OrderedFoodDTO orderedFoodDTO : orderedFoodList){
                 FoodDTO foodDTO = foodDbUtitility.getFood(orderedFoodDTO.getFoodId());
-                text = text + orderedFoodDTO.getFoodName() + "X" + orderedFoodDTO.getQuantity() + "---" + (orderedFoodDTO.getQuantity() * foodDTO.getPrice()) + "ETB\n";
+                text = text +  URLEncoder.encode(orderedFoodDTO.getFoodName()) + "X" + orderedFoodDTO.getQuantity() + "---" + (orderedFoodDTO.getQuantity() * foodDTO.getPrice()) + "ETB%0A";
                 total+= orderedFoodDTO.getQuantity() * foodDTO.getPrice();
             }
-            text = text + "Total = " + total + "\n";
-            text = text + "Agelgil Delivery Team";
+            text = text + "Total%20%3A%20" + total + "%0A";
+            text = text + "Agelgil%20Delivery%20Team";
             sendSMS.sendSMS(
                 telegramRestaurantUserDTO.getPhone().startsWith("+") ?
-                    telegramRestaurantUserDTO.getPhone().substring(1): telegramRestaurantUserDTO.getPhone() ,
-                URLEncoder.encode(text));
+                    telegramRestaurantUserDTO.getPhone().substring(1): telegramRestaurantUserDTO.getPhone() , text);
         }
     }
     public void editNewOrder(Update update, OrderDTO orderDTO, Boolean alreadyAccepted, TelegramDeliveryUserDTO telegramDeliveryUserDTO) {
@@ -151,6 +150,10 @@ public class TransportRequestForNewOrder {
         invoice = invoice + "Longitude = " + orderDTO.getLongtude()  +" \n";
         invoice = invoice + "\n";
         invoice = invoice +  "<strong>\uD83D\uDCB5 Invoice</strong>\n";
+        for (OrderedFoodDTO orderedFood : orderedFoodList) {
+            FoodDTO food = foodDbUtitility.getFood(orderedFood.getFoodId());
+            invoice = invoice + (orderedFood.getFoodName() + " * " + orderedFood.getQuantity() + " = " + orderedFood.getQuantity() * food.getPrice() + "ETB\n");
+        }
         invoice = invoice + "Food subtotal = " + String.format("%.2f", orderDTO.getTotalPrice())  +" ETB\n";
         invoice = invoice + "Transportation fee = " + String.format("%.2f", orderDTO.getTransportationFee() * 0.91)  +"ETB \n";
         invoice = invoice + "Service charge = " + String.format("%.2f", orderDTO.getTransportationFee() * 0.09)  +"ETB \n";
